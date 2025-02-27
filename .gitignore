@@ -10,3 +10,10 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+src/
+
+# Auto commit scripts
+commit.sh
+
+# git remote add origin https://github.com/NicholasDenholm/chat_with_warhammer_zealot.git
+# git remote set-url origin https://github.com/NicholasDenholm/chat_with_warhammer_zealot.git
