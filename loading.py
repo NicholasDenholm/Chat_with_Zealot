@@ -1,6 +1,6 @@
 
 
-class Loading(file_path):
+class Loading():
 
     def __init__(self, file_path):
         self.file_path = file_path
@@ -23,6 +23,7 @@ class Loading(file_path):
             text = text.lower()  # Convert to lowercase
             text = ''.join([char if char in string.printable else ' ' for char in text])  # Remove non-printable characters
             return text
+
         except FileNotFoundError:
             print(f"Error: The file at {self.file_path} was not found.")
             return None
