@@ -1,5 +1,6 @@
 import os
 import torch
+from test import Testing
 
 # Assuming this is the function for loading your book text (define it if needed)
 def load_data(file_path):
@@ -10,21 +11,10 @@ def load_data(file_path):
 def main():
 
     #text = os.startfile("C\\Users\\")
-    file_path = os.startfile('explorer')
-    
-    text = load_data(file_path) # Replace_file_path
+    #file_path = os.startfile('explorer')
+    #text = load_data(file_path) # Replace_file_path
         
-    data = [1,2,3,4,5,6]
-
-    tensor = torch.tensor(data)
-
-    print((tensor))
-
-    print((tensor.shape))
-
-
-    x = torch.rand(5, 3)
-    print(x)
+    
 
     print("Hello")
 
