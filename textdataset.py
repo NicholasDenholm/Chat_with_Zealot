@@ -1,5 +1,7 @@
+from torch.utils.data import Dataset
+
 class TextDataset(Dataset):
-    
+
     def __init__(self, text, sequence_length):
         self.text = text
         self.sequence_length = sequence_length

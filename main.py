@@ -1,8 +1,4 @@
-import os
-import torch
-from test import Testing
-from textdataset import TextDataset
-from loading import Loading
+import all_imports
 
 def main():
 
@@ -15,7 +11,7 @@ def main():
 
     
     file_path = os.startfile('explorer')
-    text = load_data(file_path) # Replace_file_path
+    #text = load_data(file_path) # Replace_file_path
 
     dataset = TextDataset(text, sequence_length)
         
