@@ -47,11 +47,14 @@ def main():
     
 
     # Generate text after training
-    generator = imp.Generate_Text()
+    #generator = imp.Generate_Text()
     seed_text = "Once upon a time"
-    generated_text = generator.generate_text(model, seed_text, sequence_length, 500, dataset.char_to_idx, dataset.idx_to_char)
+    num_of_generated_chars = 50 # How many characters to generate
+    generated_text = imp.GenerateText.generate_text(model, seed_text, sequence_length, num_of_generated_chars, dataset.char_to_idx, dataset.idx_to_char)
     print(generated_text)
 
+
+    '''
     # Load the model and generate text
     loaded_model = imp.TextModel(vocab_size, hidden_size=256, sequence_length=sequence_length)
     loaded_model.load_state_dict(imp.torch.load('text_model.pth'))
@@ -60,7 +63,7 @@ def main():
     # Generate text from the loaded model
     generated_text = generator.generate_text(loaded_model, seed_text, sequence_length, 500, dataset.char_to_idx, dataset.idx_to_char)
     print(generated_text)
-
+    '''
 
 if __name__ == '__main__':
     main()

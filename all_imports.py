@@ -17,4 +17,4 @@ from textdataset import TextDataset
 from loading import Loading
 from textmodel import TextModel
 from train import Train
-from generate_text import Generate_Text
+from generate_text import GenerateText
