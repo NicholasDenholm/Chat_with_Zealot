@@ -1,5 +1,6 @@
 import easygui as g
 import sys
+import string
 
 class Loading():
 
@@ -26,7 +27,7 @@ class Loading():
         if output_folder:
             #print("Output Folder:", output_folder)
             self.output_folder = output_folder
-            #return output_folder
+            return output_folder
         
         else:
             print("No folder selected. Exiting.")

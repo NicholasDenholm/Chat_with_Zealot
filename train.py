@@ -1,7 +1,8 @@
 import torch.optim as optim
 
-class Train():
+class Train:
 
+    @staticmethod
     def train(model, dataloader, criterion, optimizer, num_epochs):
         for epoch in range(num_epochs):
             model.train()
@@ -22,3 +23,5 @@ class Train():
                 total_loss += loss.item()
             
             print(f'Epoch {epoch+1}/{num_epochs}, Loss: {total_loss / len(dataloader)}')
+        
+        print("Model done training!")

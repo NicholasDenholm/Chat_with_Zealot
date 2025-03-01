@@ -13,23 +13,28 @@ def main():
     
     load_inst = imp.Loading()
     file_path = load_inst.load_data_box()
-
     print(f"Data from: {file_path} was loaded")
 
-    dataset = imp.TextDataset(file_path, sequence_length)
+    text = load_inst.load_n_process_data()
 
+    dataset = imp.TextDataset(text, sequence_length)
+
+    print(len(text))  # Check if the dataset has samples
 
 
     dataloader = imp.torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    vocab_size = len(dataset.chars)
+    
+    # Is this correct?
+    vocab_size = len(dataset)
     
     model = imp.TextModel(vocab_size, hidden_size, sequence_length)
     
     criterion = imp.nn.CrossEntropyLoss()
     optimizer = imp.optim.Adam(model.parameters(), lr=learning_rate)
     
-    trainee = imp.Train()
-    trainee.train(model, dataloader, criterion, optimizer, num_epochs)
+    imp.Train.train(model, dataloader, criterion, optimizer, num_epochs)
+    #trainee = imp.Train()
+    #trainee.train(model, dataloader, criterion, optimizer, num_epochs)
 
     
     # Get the current date to append to the filename so overwrites dont happen
