@@ -2,13 +2,13 @@ import torch
 import torch.nn.functional as F
 
 # Helper function for temperature sampling
-def sample_with_temperature(prob_dist, temperature=1.0):
+def sample_with_temperature(prob_dist, temperature):
     prob_dist = torch.div(prob_dist, temperature)  # Apply temperature scaling
     prob_dist = F.softmax(prob_dist, dim=-1)  # Re-normalize to a valid probability distribution
     return torch.multinomial(prob_dist, 1).item()  # Sample from the distribution
 
 # Helper function for top-k sampling
-def sample_top_k(prob_dist, k=5):
+def sample_top_k(prob_dist, k):
     # Get top-k probabilities and their indices
     top_k_probs, top_k_indices = torch.topk(prob_dist, k)
     top_k_probs = F.softmax(top_k_probs, dim=-1)  # Re-normalize the probabilities
@@ -34,6 +34,7 @@ class GenerateText:
         hidden = None  # Initialize hidden state (if needed by your model)
         generated_text = seed  # Start with the seed text
         temperature = 1.0
+        k = 5
         
         # Generate num_generated_chars characters
         for _ in range(num_generated_chars):
