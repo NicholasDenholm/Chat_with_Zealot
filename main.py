@@ -1,4 +1,4 @@
-import all_imports as i
+import all_imports as imp
 
 def main():
 
@@ -10,10 +10,10 @@ def main():
     learning_rate = 0.001
 
     
-    file_path = i.os.startfile('explorer')
-    #text = load_data(file_path) # Replace_file_path
+    file_path = imp.os.startfile('explorer')
+    text = imp.load_data(file_path) # Replace_file_path
 
-    #dataset = i.TextDataset(text, sequence_length)
+    dataset = imp.TextDataset(text, sequence_length)
         
     
     print("Hello")
