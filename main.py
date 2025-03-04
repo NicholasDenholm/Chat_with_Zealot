@@ -2,12 +2,12 @@ import all_imports as imp
 
 def main():
 
-    # Hyperparameters
-    batch_size = 64
-    sequence_length = 100
-    hidden_size = 256
-    num_epochs = 20
+    batch_size = 4
+    sequence_length = 64
+    hidden_size = 128
+    num_epochs = 3
     learning_rate = 0.001
+    
 
     print("Hello")
     
@@ -21,18 +21,30 @@ def main():
 
     print(len(text))  # Check if the dataset has samples
 
-
-    dataloader = imp.torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    
-    # Is this correct?
+    dataloader = imp.torch.utils.data.DataLoader(dataset, batch_size=batch_size, num_workers=8, shuffle=True)
     vocab_size = len(dataset)
     
-    model = imp.TextModel(vocab_size, hidden_size, sequence_length)
+    if imp.torch.cuda.is_available():
+        device = imp.torch.device('cuda')
+        print(f'CUDA is available. Using device: {imp.torch.cuda.get_device_name(0)}')
+    else:
+        device = imp.torch.device('cpu')
+        print('CUDA is not available. Using CPU.')
     
+    # Check if CUDA is available
+    #device = imp.torch.device('cuda' if imp.torch.cuda.is_available() else 'cpu')
+    #print(f'Using device: {device}')
+    
+    model = imp.TextModel(vocab_size, hidden_size, sequence_length)
+    model = model.to(device)  # Move the model to the correct device (GPU or CPU)
+
+
     criterion = imp.nn.CrossEntropyLoss()
     optimizer = imp.optim.Adam(model.parameters(), lr=learning_rate)
+    scheduler = imp.torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+
     
-    imp.Train.train(model, dataloader, criterion, optimizer, num_epochs)
+    imp.Train.train(model, dataloader, criterion, optimizer, num_epochs, device)
     #trainee = imp.Train()
     #trainee.train(model, dataloader, criterion, optimizer, num_epochs)
 
@@ -66,4 +78,8 @@ def main():
     '''
 
 if __name__ == '__main__':
+    
     main()
+    
+    # Use bottleneck profiling to analyze performance
+    # python -m torch.utils.bottleneck your_training_script.py

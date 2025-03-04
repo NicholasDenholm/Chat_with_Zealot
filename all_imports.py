@@ -10,6 +10,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
+import torch.utils.bottleneck as bottleneck
 
 # Class inheritance
 from test import Testing
