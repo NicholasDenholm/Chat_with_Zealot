@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 import numpy as np
 import string
+import easygui as g
 
 # Torch related
 import torch
@@ -19,3 +20,4 @@ from loading import Loading
 from textmodel import TextModel
 from train import Train
 from generate_text import GenerateText
+from makemodel import ModelTrainer
