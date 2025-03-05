@@ -8,7 +8,7 @@ class Loading():
         self.file_path = None
         self.output_folder = None
 
-    @staticmethod
+    
     def load_data_box(self):
         file_path = g.fileopenbox(msg="Choose your input text file")
 
@@ -21,19 +21,18 @@ class Loading():
             sys.exit(0)
 
     @staticmethod
-    def set_output_folder(self):
+    def set_output_folder():
         
         output_folder = g.diropenbox(msg="Choose the output folder")
 
         if output_folder:
             #print("Output Folder:", output_folder)
-            self.output_folder = output_folder
             return output_folder
-        
         else:
             print("No folder selected. Exiting.")
             sys.exit(0)
-    @staticmethod
+
+    
     def load_data(self):
         """Load only the file"""
         try:
@@ -43,7 +42,7 @@ class Loading():
             print(f"Error file at: {self.file_path} not found")
             return None
         
-    @staticmethod
+    
     def load_n_process_data(self):
         """Load and process the file text"""
         try:

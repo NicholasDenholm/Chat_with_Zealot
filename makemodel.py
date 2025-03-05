@@ -3,7 +3,7 @@ import all_imports as imp
 class ModelTrainer:
     
     @staticmethod
-    def train_and_generate_text(batch_size, sequence_length, hidden_size, num_epochs, learning_rate, dataloader, vocab_size):
+    def train_and_generate_text(batch_size, sequence_length, hidden_size, num_epochs, learning_rate, dataset, dataloader, vocab_size):
         """
         Train a model and generate text after training. This is a static method.
         """
@@ -22,7 +22,7 @@ class ModelTrainer:
         optimizer = imp.optim.Adam(model.parameters(), lr=learning_rate)
         scheduler = imp.torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
-        output_path = load_inst.set_output_folder()
+        output_path = imp.Loading.set_output_folder()
         current_date = imp.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  
 
         # Train the model and save it after each epoch
