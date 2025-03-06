@@ -67,7 +67,7 @@ def main():
     elif choice == "Retrain an Existing Model":
         print("Retraining an existing model...")
 
-        model_path = "C:\\Users\\nickd\\Desktop\\Code\\warhammerbot\\src\\Output\\text_model_2025-03-04_18-48-32.pth"
+        model_path = "C:\\Users\\user\\Desktop\\Code\\warhammerbot\\src\\Output\\text_model_2025-03-04_18-48-32.pth"
 
         output_path = imp.Loading.set_output_folder()
         current_date = imp.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")  
