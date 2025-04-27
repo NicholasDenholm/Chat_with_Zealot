@@ -2,3 +2,8 @@ numpy
 torch
 PyMuPDF
 EbookLib
+
+flask
+flask-cors
+torch
+transformers
