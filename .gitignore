@@ -1,6 +1,8 @@
-# Ignore virtual environment folder
-.venv/
+# Ignore folders
 venv/
+testing/
+models/
+scripts/
 
 # Bytecode files
 __pycache__/
@@ -15,6 +17,3 @@ src/
 
 # Auto commit scripts
 commit.sh
-
-# git remote add origin https://github.com/NicholasDenholm/chat_with_warhammer_zealot.git
-# git remote set-url origin https://github.com/NicholasDenholm/chat_with_warhammer_zealot.git
