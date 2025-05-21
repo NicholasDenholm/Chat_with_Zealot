@@ -19,7 +19,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 # Move the model to the selected device (GPU or CPU)
 model.to(device)
 
-# Function to chat with the model
+# Function to chat with the model over the terminal
 def chat_with_bot(user_input, chat_history_ids=None):
     # Encode the new user input, add the eos_token and return a tensor in Pytorch
     new_user_input_ids = tokenizer.encode(user_input + tokenizer.eos_token, return_tensors='pt')

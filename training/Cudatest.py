@@ -1,7 +1,8 @@
 import torch
 print(torch.__version__)
+print(torch.version.cuda)
 print(torch.cuda.is_available())  # Should return True if CUDA is available
-#print(torch.cuda.get_device_name(0))  # Should show the name of the GPU
+print(torch.cuda.get_device_name(0))  # Should show the name of the GPU
 
 # Attempts
 # Do this: pip install torch==1.12.0+cu118 torchvision==0.13.0+cu117 torchaudio==0.12.0 -f https://download.pytorch.org/whl/torch_stable.html

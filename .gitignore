@@ -15,5 +15,3 @@ dist/
 build/
 src/
 
-# Auto commit scripts
-commit.sh
