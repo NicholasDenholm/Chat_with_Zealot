@@ -61,6 +61,7 @@
             chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to the latest message
 
             // Send the user message along with chat history to the Flask API
+            // Use http://127.0.0.1:5000/chat or http://127.0.0.1:5000/chat-stream
             try {
                 const response = await fetch('http://127.0.0.1:5000/chat', {
                     method: 'POST',

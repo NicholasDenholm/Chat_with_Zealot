@@ -3,8 +3,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  # Add this import
 from flask import render_template
 from transformers import AutoModelForCausalLM, AutoTokenizer
-#from auto_gptq import AutoGPTQForCausalLM
 import torch
+#from auto_gptq import AutoGPTQForCausalLM
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -28,31 +28,6 @@ tokenizer = AutoTokenizer.from_pretrained(model_name, token=token)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
-print(device)
-
-# Function to generate a chatbot response
-def chat_with_bot(user_input, chat_history_ids=None):
-    # Encode the new user input
-    new_user_input_ids = tokenizer.encode(user_input + tokenizer.eos_token, return_tensors='pt')
-
-    # Combine the new input with the previous chat history (if any)
-    bot_input_ids = new_user_input_ids if chat_history_ids is None else torch.cat([chat_history_ids, new_user_input_ids], dim=-1)
-
-    # Generate a response from the model
-    chat_history_ids = model.generate(
-        bot_input_ids,
-        max_length=2000,        # Longer responses
-        pad_token_id=tokenizer.eos_token_id,
-        no_repeat_ngram_size=3, # Avoid repetition
-        temperature=0.8,        # More creativity/randomness
-        #top_p=0.9,              # Use nucleus sampling
-        num_beams=5,            # Beam search for better quality
-        length_penalty=1.2      # Encourage longer responses
-    )
-
-    # Decode the response and return it
-    bot_reply = tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
-    return bot_reply, chat_history_ids
 
 @app.route('/chat', methods=['POST'])
 def chat():
