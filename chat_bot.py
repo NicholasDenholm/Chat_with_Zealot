@@ -1,5 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import pyttsx3
+
 
 
 def get_device() -> torch.device:
@@ -83,6 +85,13 @@ def main():
     device = get_device()
     model, tokenizer = load_model_and_tokenizer(model_name, device)
 
+    # Text-to-Speech setup
+    tts_engine = pyttsx3.init()
+    tts_engine.setProperty('rate', 150)  # Words per minute
+    # Optional: Change voice if needed
+    # voices = tts_engine.getProperty('voices')
+    # tts_engine.setProperty('voice', voices[1].id)  # 0: male, 1: female (may vary by OS)
+
     
     chat_history_ids = None     # Initialize chat history
     max_memory = 3              # Only keep the last 'n' exchanges in chat_history_ids
@@ -95,10 +104,17 @@ def main():
         user_input = input("You: ")
         if user_input.lower() == 'q':
             print("Goodbye!")
+            tts_engine.say("Goodbye!")
+            tts_engine.runAndWait()
             break
 
         bot_reply, chat_history_ids = chat_with_bot(user_input, tokenizer, model, chat_history_ids)
         print(f"Bot: {bot_reply}\n")
+
+        # Speak the bot's reply
+        tts_engine.say(bot_reply)
+        tts_engine.runAndWait()
+        
         chat_history_ids = trim_chat_history(chat_history_ids, tokenizer, max_memory)
 
 
