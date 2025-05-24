@@ -1,0 +1,5 @@
+# For Ollama functionality
+langchain
+langchain-ollama
+langchain-chroma
+pandas
