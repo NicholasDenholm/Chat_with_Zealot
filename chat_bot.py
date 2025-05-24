@@ -43,7 +43,7 @@ def chat_with_bot(user_input: str, tokenizer, model, chat_history_ids=None, devi
         tuple: (bot_reply: str, updated chat_history_ids: torch.Tensor)
     """
     encoded_input = tokenizer.encode(user_input + tokenizer.eos_token, return_tensors="pt").to(device)
-    bot_input_ids = encoded_input if chat_history_ids is None else torch.cat([chat_history_ids, encoded_input], dim=-1)
+    bot_input_ids = encoded_input if chat_history_ids is None else torch.cat([chat_history_ids.to(device), encoded_input], dim=-1)
 
     chat_history_ids = model.generate(
         bot_input_ids,
@@ -167,7 +167,7 @@ def main():
     T5: A versatile transformer model that can also be used for dialogues.
     '''
     # Load the pre-trained model and tokenizer
-    model_name = "microsoft/DialoGPT-medium"
+    model_name = "microsoft/DialoGPT-large"
     device = get_device()
     model, tokenizer = load_model_and_tokenizer(model_name, device)
 
@@ -190,7 +190,7 @@ def main():
             speak_text(tts_engine, "Goodbye!")
             break
 
-        bot_reply, chat_history_ids = chat_with_bot(user_input, tokenizer, model, chat_history_ids)
+        bot_reply, chat_history_ids = chat_with_bot(user_input, tokenizer, model, chat_history_ids, device)
         print(f"Bot: {bot_reply}\n")
 
         # Speak the bot's reply

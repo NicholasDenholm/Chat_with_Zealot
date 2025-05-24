@@ -1,9 +1,9 @@
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 
-model = OllamaLLM(model="llama3.2")
+### -------------- Setup -------------- ###
 
-def setup_prompts(test=False) -> None:
+def setup_prompts(test:bool=False):
     
     try:
         if not (test):
@@ -16,49 +16,7 @@ def setup_prompts(test=False) -> None:
     except ValueError as val_err:
         print("Error:", val_err)
 
-    template = """
-    You are a religious zealot from the Warhammer 40K universe.
-
-    Answer the following question as a devout zealot. Customize your response according to:
-
-        - **Desired Length**: {length}
-        - **Style**: {style}
-        - **Emotional Tone**: {emotionality}
-
-    Question: {question}
-    """
-    
-    run_model(model, template, personality)
-
-def run_model(model, template:str, personality: tuple[str, str, str]) -> None:
-
-    length, style, emotionality = personality
-
-    prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | model
-
-    print("Press q to quit")
-    while True:
-        try:
-            print("\n\n______________________________")
-            question = input("What is your question: ")
-            print("\n\n")
-            if question == 'q':
-                break
-
-            result = chain.invoke({
-                "book": [],  # Replace this with real context (text/a sting) if needed
-                "question": question,
-                "length": length,
-                "style": style,
-                "emotionality": emotionality
-            })
-            
-            print(result)
-
-        except KeyboardInterrupt:
-            print("Exiting goodbye...")
-            break
+    return personality
 
 def set_personality(option:int) -> tuple[str, str, str]:
     '''
@@ -80,9 +38,57 @@ def set_personality(option:int) -> tuple[str, str, str]:
 
     return info["length"], info["style"], info["emotionality"]  
 
+### -------------- Running the model -------------- ###
 
+def run_model(model, template:str, personality: tuple[str, str, str]) -> None:
+
+    length, style, emotionality = personality
+
+    prompt = ChatPromptTemplate.from_template(template)
+    chain = prompt | model
+
+    print("Press q to quit")
+    while True:
+        try:
+            print("\n\n______________________________")
+            question = input("You: ")
+            print("\n\n")
+            if question == 'q':
+                break
+
+            result = chain.invoke({
+                "book": [],  # Replace this with real context (text/a sting) if needed
+                "question": question,
+                "length": length,
+                "style": style,
+                "emotionality": emotionality
+            })
+            
+            print(result)
+
+        except KeyboardInterrupt:
+            print("Exiting goodbye...")
+            break
+
+
+def main():
+
+    model = OllamaLLM(model="llama3.2")
+    personality = setup_prompts()
+    template = """
+    You are a religious zealot from the Warhammer 40K universe.
+
+    Answer the following question as a devout zealot. Customize your response according to:
+
+        - **Desired Length**: {length}
+        - **Style**: {style}
+        - **Emotional Tone**: {emotionality}
+
+    Question: {question}
+    """
+    
+    run_model(model, template, personality)
 
 if __name__ == "__main__":
-    setup_prompts()
-
+    main()
     
