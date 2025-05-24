@@ -3,7 +3,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 model = OllamaLLM(model="llama3.2")
 
-def setup_prompts(test=True) -> None:
+def setup_prompts(test=False) -> None:
     
     try:
         if not (test):
