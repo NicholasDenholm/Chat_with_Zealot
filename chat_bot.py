@@ -87,10 +87,10 @@ def main():
 
     # Text-to-Speech setup
     tts_engine = pyttsx3.init()
-    tts_engine.setProperty('rate', 150)  # Words per minute
+    tts_engine.setProperty('rate', 250)  # Words per minute
     # Optional: Change voice if needed
-    # voices = tts_engine.getProperty('voices')
-    # tts_engine.setProperty('voice', voices[1].id)  # 0: male, 1: female (may vary by OS)
+    #voices = tts_engine.getProperty('voices')
+    #tts_engine.setProperty('voice', voices[1].id)  # 0: male, 1: female (may vary by OS)
 
     
     chat_history_ids = None     # Initialize chat history
@@ -114,7 +114,7 @@ def main():
         # Speak the bot's reply
         tts_engine.say(bot_reply)
         tts_engine.runAndWait()
-        
+
         chat_history_ids = trim_chat_history(chat_history_ids, tokenizer, max_memory)
 
 
