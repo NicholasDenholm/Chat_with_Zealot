@@ -42,8 +42,23 @@
 [] create toggle button so you can hear the bots reply through the website
 
 [] Add speech to text option?
+--> see: https://ollama.com/dimavz/whisper-tiny
+
+[] Get one model to talk to the other
+
+[] Get one model to talk to another that is loaded onto a non local device
 
 
+---------------------------------------------------------------
+## Security
+
+[] Check that input from text box is cleaned
+
+[] verify what port is best to place website on.
+--> 5000 is for testing
+--> 8000 is better?
+
+[] training methods may need to be refactored greatly to limit attack surface
 
 ---------------------------------------------------------------
 ## Bugs
