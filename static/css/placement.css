@@ -1,0 +1,66 @@
+/* placement.css */
+
+.position-corner {
+  position: fixed;
+  z-index: 999;
+}
+
+/* Top Corners */
+.position-corner[data-pos="top-left"] {
+  top: 20px;
+  left: 20px;
+}
+
+.position-corner[data-pos="top-right"] {
+  top: 20px;
+  right: 20px;
+}
+
+/* Bottom Corners */
+.position-corner[data-pos="bottom-left"] {
+  bottom: 20px;
+  left: 20px;
+}
+
+.position-corner[data-pos="bottom-right"] {
+  bottom: 20px;
+  right: 20px;
+}
+
+/* Center Top/Bottom */
+.position-corner[data-pos="top-center"] {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.position-corner[data-pos="bottom-center"] {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* --------- Edge Safety --------- */
+
+.position-corner[data-pos="center"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Safe margin for large elements like <h1> */
+.position-corner[data-pos^="top"] {
+  margin-top: 1rem;
+}
+
+.position-corner[data-pos^="bottom"] {
+  margin-bottom: 1rem;
+}
+
+.position-corner[data-pos$="left"] {
+  margin-left: 1rem;
+}
+
+.position-corner[data-pos$="right"] {
+  margin-right: 1rem;
+}

@@ -1,0 +1,59 @@
+/* --------- Theme Variables --------- */
+
+:root {
+    --bg-color: #f4f4f4;
+    --text-color: #111;
+    --user-color: #1a73e8;
+    --bot-color: #34a853;
+    --input-bg: #fff;
+    --input-border: #ccc;
+    --button-bg: #1a73e8;
+    --button-text: #fff;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1e1e1e;
+    --text-color: #f4f4f4;
+    --input-bg: #2c2c2c;
+    --input-border: #444;
+    --button-bg: #3a78ff;
+    --button-text: #fff;
+}
+
+[data-theme="light"] {
+    --bg-color: #f4f4f4;
+    --text-color: #111;
+    --user-color: #1a73e8;
+    --bot-color: #31882d;
+    --input-bg: #fff;
+    --input-border: #ccc;
+    --button-bg: #1a73e8;
+    --button-text: #fff;
+}
+
+/* --------- Theme Toggle Button --------- */
+.theme-toggle-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background: var(--toggle-bg, #f0f0f0);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#themeToggleBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+#themeToggleBtn:hover {
+  background-color: #ddd;
+}

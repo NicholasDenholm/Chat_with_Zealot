@@ -1,0 +1,88 @@
+/* --------- Global Reset & Base Styles --------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
+    
+    min-height: 100vh;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --------- Chat Container --------- */
+#chatContainer {
+    width: 80%;
+    max-width: 600px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* --------- Chat Box --------- */
+#chatBox {
+    width: 80%;
+    height: 80%;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--input-border);
+    background-color: var(--bg-color);
+}
+
+/* --------- Messages --------- */
+.message {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.user-message {
+    color: var(--user-color);
+}
+
+.bot-message {
+    color: var(--bot-color);
+}
+
+/* --------- Form --------- */
+#chatForm {
+    display: flex;
+    gap: 10px;
+}
+
+#userInput {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: darken(var(--button-bg), 10%);
+}
