@@ -75,7 +75,7 @@
 
 ---------------------------------------------------------------
 ## Refactor / Cleanup
-
+x
 [x] Refactor prebuilt into reusable functions  
 
 [x] Refactor ollama into reusable functions
