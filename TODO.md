@@ -7,6 +7,8 @@
 # Ollama
 [] Add text to speech to Ollama
 [] add tts library to requirements_O.txt
+[] create lobotomy function that clears personality
+[] create function that updates personality
 
 # Training
 [] training method: save model during training 
@@ -44,7 +46,9 @@
 [x] Add speech to text option?
 --> see: https://ollama.com/dimavz/whisper-tiny
 
-[] Get one model to talk to the other
+[x] Get one model to talk to the other
+[] be able to change dumb models memory cutoff
+[] test other dumb models
 
 [] Get one model to talk to another that is loaded onto a non local device
 
