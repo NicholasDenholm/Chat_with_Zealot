@@ -24,6 +24,43 @@ async function sendMessageToAPI(message, history) {
     return await response.json();
 }
 
+// Speak text using browser TTS (defined in tts.js)
+function speak(text) {
+    speakText(text);  // Delegates to tts.js
+}
+
+// Process the user's input and update the chat
+async function processUserMessage(userInput) {
+    displayMessage("You", userInput, "user-message");
+
+    try {
+        const data = await sendMessageToAPI(userInput, chatHistoryIds);
+        displayMessage("Bot", data.response, "bot-message");
+
+        chatHistoryIds = data.chat_history_ids;
+
+        // Trigger TTS
+        speak(data.response);
+
+    } catch (error) {
+        displayMessage("Error", error.message, "bot-message");
+    }
+}
+
+/* */
+// Handle form submission
+function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const userInput = inputField.value.trim();
+    if (!userInput) return;
+
+    inputField.value = "";
+    processUserMessage(userInput);
+}
+
+
+/*
 // Handle form submission
 async function handleFormSubmit(event) {
     event.preventDefault();
@@ -42,6 +79,11 @@ async function handleFormSubmit(event) {
         displayMessage("Error", error.message, "bot-message");
     }
 }
+*/
+
+
+
+
 
 // Attach event listener
 form.addEventListener('submit', handleFormSubmit);

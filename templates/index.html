@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    <!-- Text to speech -->
+    
+    <!--<script src="{{ url_for('static', filename='js/chat.js') }}"></script>-->
     
 </head>
 <body>
@@ -31,7 +34,17 @@
         <button id="themeToggleBtn" title="Toggle theme">🌓</button>
     </div>
 
+    <!-- Voice selector box setup-->
+    <div class="voice-select-box position-corner" data-pos="bottom-left">
+        <label for="voiceSelect">🎙️ Voice:</label>
+        <select id="voiceSelect"></select>
+    </div>
 
+    
+    <!-- Voice selector reference-->
+    <script src="{{ url_for('static', filename='js/selectVoice.js') }}"></script>
+    <!-- Text to Speech reference-->
+    <script src="{{ url_for('static', filename='js/tts.js') }}"></script>
     <!-- chatbox functions reference -->
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
     <!-- Load the theme toggle script -->
