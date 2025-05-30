@@ -3,6 +3,20 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import pyttsx3
 
+def init_chat_state(model_name:str='microsoft/DialoGPT-medium'):
+    device = get_device()
+    model, tokenizer = load_model_and_tokenizer(model_name, device)
+    tts_engine = init_tts_engine(0, rate=200)
+
+    return {
+        "model": model,
+        "tokenizer": tokenizer,
+        "device": device,
+        "tts_engine": tts_engine,
+        "chat_history_ids": None,
+        "max_memory": 3
+    }
+
 ### -------------- Setup -------------- ###
 
 def get_device() -> torch.device:
@@ -34,20 +48,6 @@ def load_chat_model(device, model_name="microsoft/DialoGPT-large"):
     model.to(device)
     return model, tokenizer
 
-def init_chat_state():
-    model_name = "microsoft/DialoGPT-large"
-    device = get_device()
-    model, tokenizer = load_model_and_tokenizer(model_name, device)
-    tts_engine = init_tts_engine(0, rate=250)
-
-    return {
-        "model": model,
-        "tokenizer": tokenizer,
-        "device": device,
-        "tts_engine": tts_engine,
-        "chat_history_ids": None,
-        "max_memory": 3
-    }
 
 ### -------------- Chating -------------- ###
 
@@ -206,26 +206,30 @@ def speak_text(engine, text: str):
 
 def main():
     '''
-    DialoGPT: A model fine-tuned for conversational purposes.
+    This runs the model in the terminal, and generates textpyttsx3 to be installed.
+
+    DialoGPT-(smallmedium/large): A model fine-tuned for conversational purposes.
     GPT-2: More general-purpose text generation.
     BART: Another good option for conversational tasks.
     T5: A versatile transformer model that can also be used for dialogues.
     '''
-    # Load the pre-trained model and tokenizer
-    model_name = "microsoft/DialoGPT-large"
+    
+    model_name = "microsoft/DialoGPT-large"     # Choose the pre-trained model from above list.
+    max_memory = 3                              # Only keep the last 'n' exchanges, lower number reduces logic loops.
+    
     device = get_device()
     model, tokenizer = load_model_and_tokenizer(model_name, device)
 
     # uncomment and run if you want to see the available voices you have on your machine
     #test_all_voices()
     # Text-to-Speech setup, rate is words per minute
-    tts_engine = init_tts_engine(0, rate=250)
+
+    tts_engine = init_tts_engine(0, rate=150)
 
     chat_history_ids = None     # Initialize chat history
-    max_memory = 3              # Only keep the last 'n' exchanges in chat_history_ids
 
-    print("\n---------------------")
-    print("\nChat initialized. Type 'q' to quit.")
+    print("\n---------------------\nChat initialized. Type 'q' to quit.")
+    #print()
     
     # Start chatting with the bot
     while True:

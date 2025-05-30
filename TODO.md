@@ -41,7 +41,7 @@
 
 [] create toggle button so you can hear the bots reply through the website
 
-[] Add speech to text option?
+[x] Add speech to text option?
 --> see: https://ollama.com/dimavz/whisper-tiny
 
 [] Get one model to talk to the other
@@ -66,7 +66,17 @@
 [x] prebuilt stops replying after some time
 --> after ~3 messages remove older memory so it doesnt get stuck
 
-[] **Write test methods** for testing/ollama/prebuilt
+[] **Write test methods** for training/ollama/prebuilt
+
+[] Prebuilt Test methods
+--> make init so that tests can be a python module  [x] 
+--> chat bot  4/11
+--> routes   2/2
+--> run      4/1
+
+[] Ollama test methods
+
+[] training test methods
 
 
 [] fix/text retraining option in ./training/main.py
@@ -83,7 +93,7 @@ x
 - Split the traing, ollama and prebuilt files into their own folders
 [x] training
 [] ollama
-[] prebuilt
+[x] prebuilt
 
 - Clean up training
 [] remove unused and repeated methods/functions
