@@ -73,7 +73,8 @@ def run_model(model, template:str, personality: tuple[str, str, str]) -> None:
 
 def main():
 
-    model = OllamaLLM(model="llama3.2")
+    #model = OllamaLLM(model="llama3.2")
+    model = OllamaLLM(model="codellama:7b")
     personality = setup_prompts()
     template = """
     You are a religious zealot from the Warhammer 40K universe.

@@ -7,6 +7,7 @@
 # Ollama
 [] Add text to speech to Ollama
 [] add tts library to requirements_O.txt
+
 [] create lobotomy function that clears personality
 [] create function that updates personality
 
@@ -18,6 +19,8 @@
 [] training model: stop model when error doesnt improve
 --> when error rate stops changing, save and stop the model.
 
+[] Test out quantize.py file
+
 
 
 ---------------------------------------------------------------
@@ -26,9 +29,9 @@
 # Web
 
 [] Improve look of the website
---> Make a proper header?
+[x] Make a proper header?
 --> Make a chat link? 
---> change how the text is displayed on the screen
+[x] change how the text is displayed on the screen
 
 [] Change look of text
 --> display the text as blocks ie: chatgpt style?
@@ -41,6 +44,7 @@
 
 [] Add a check-able button to the screen
 
+[x] Add tts to the browser bot
 [] create toggle button so you can hear the bots reply through the website
 
 [x] Add speech to text option?
@@ -50,6 +54,8 @@
 [] be able to change dumb models memory cutoff
 [] test other dumb models
 
+[x] talk to model from non local device
+[] Load one model onto non local device and run convo between them 
 [] Get one model to talk to another that is loaded onto a non local device
 
 

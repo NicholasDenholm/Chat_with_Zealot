@@ -21,7 +21,19 @@ def run_conversation(dumb, smart, start_message, rounds, log_to_file=True, exten
 
     if log_to_file:
         try:
-            log_path, file_type = get_log_path(log_to_file=log_to_file,log_dir="./bots/log",extension=extension)
+            # TODO add all of this to the get_log_path method!
+            
+            print("Current working directory:", os.getcwd())
+            log_path, file_type = get_log_path(extension=extension)
+            
+            #base_dir = os.path.dirname(os.path.abspath(__file__))  # directory of this script
+            #log_dir = os.path.join(base_dir, "bots", "log")       # project-relative log directory
+            #os.makedirs(log_dir, exist_ok=True)                    # make sure it exists
+
+            #log_path = os.path.join(log_dir, f"conversation.{extension}")
+            #file_type = extension
+            print(f"Logging to: {log_path}")
+
         except ValueError as e:
             print(f"Error: {e}")
             return
@@ -47,38 +59,8 @@ def main():
     log_to_file = False
     log_extension = "md"  # Options: 'md', 'txt', 'db'
 
-    run_conversation(dumb=dumb,smart=smart,start_message=start_message,rounds=rounds,log_to_file=log_to_file,extension=log_extension)
+    run_conversation(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
 
-    '''
-    dumb = Dumb_Bot('microsoft/DialoGPT-large')
-
-    personality = setup_prompts(test=True)      # test=True chooses first option
-    smart = Smart_Bot(model_name="llama3.2", personality=personality)
-
-    start_message = "What heresy do you bring?"
-    rounds = 6
-
-    # Set to true if you want to save the conversation
-    log_to_file = True
-    
-    if log_to_file:
-        # Change extension to txt, md, db
-        log_path, extension = get_log_path(log_to_file, '.bots\log', extension='md')
-        if extension == "md":
-            converse(dumb, smart, rounds=rounds, start_message=start_message, log_to_file=log_to_file, log_path=log_path, extension=extension)
-        elif extension == "txt":
-            converse(dumb, smart, rounds=rounds, start_message=start_message, log_to_file=log_to_file, log_path=log_path, extension=extension)
-        elif extension == "db":
-            print("db choosen")
-        else:
-            print("Choose from logging file types, txt, md, db")
-    else: 
-        log_path = None
-        # Start converstation
-        converse(dumb, smart, rounds=rounds, start_message=start_message, log_to_file=log_to_file, log_path=log_path)
-
-    converse_md(dumb, smart, rounds=rounds, start_message=start_message, log_to_file=log_to_file, log_path=log_path)
-    '''
 
 if __name__ == "__main__":
     main()

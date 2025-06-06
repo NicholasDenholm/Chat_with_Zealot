@@ -1,5 +1,9 @@
 let chatHistoryIds = null;
 
+// Change to Flask port number
+const PORT_NUM = '5000';
+const SERVER_URL = `${window.location.protocol}//${window.location.hostname}:${PORT_NUM}`;
+
 const chatBox = document.getElementById('chatBox');
 const form = document.getElementById('chatForm');
 const inputField = document.getElementById('userInput');
@@ -12,8 +16,10 @@ function displayMessage(sender, text, className) {
 
 // Send the message to the backend and get a response
 async function sendMessageToAPI(message, history) {
-    // Use http://127.0.0.1:5000/chat or http://127.0.0.1:5000/chat-stream
-    const response = await fetch('http://127.0.0.1:5000/chat', {
+    // Use http://xxx.x.x.xx:PORT/chat or http://xxx.x.x.xx:PORT/chat-stream
+    // need to concat str ex: fetch(serverUrl + '/chat', { ... });
+    // or us `` not: '' . Then {} not ()
+    const response = await fetch(`${SERVER_URL}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, chat_history_ids: history })
@@ -58,32 +64,6 @@ function handleFormSubmit(event) {
     inputField.value = "";
     processUserMessage(userInput);
 }
-
-
-/*
-// Handle form submission
-async function handleFormSubmit(event) {
-    event.preventDefault();
-
-    const userInput = inputField.value.trim();
-    if (!userInput) return;
-
-    inputField.value = ""; // Clear the input box
-    displayMessage("You", userInput, "user-message");
-
-    try {
-        const data = await sendMessageToAPI(userInput, chatHistoryIds);
-        displayMessage("Bot", data.response, "bot-message");
-        chatHistoryIds = data.chat_history_ids;
-    } catch (error) {
-        displayMessage("Error", error.message, "bot-message");
-    }
-}
-*/
-
-
-
-
 
 // Attach event listener
 form.addEventListener('submit', handleFormSubmit);

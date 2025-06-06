@@ -9,8 +9,14 @@ def get_log_path(log_to_file:bool=True, log_path=None, extension:str='txt') -> s
     if log_path is not None:
         return log_path 
     # Ensure the log directory exists
-    log_dir = os.path.join("bots", "log")
-    os.makedirs(log_dir, exist_ok=True)
+    #log_dir = os.path.join("bots", "log")
+    #os.makedirs(log_dir, exist_ok=True)
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # directory of this script
+    log_dir = os.path.join(base_dir, "bots", "log")       # project-relative log directory
+    os.makedirs(log_dir, exist_ok=True)                    # make sure it exists
+
+    #log_path = os.path.join(log_dir, f"conversation.{extension}")
 
     # Otherwise create timestamped name and set log path
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -49,7 +55,8 @@ def converse(bot1, bot2, rounds=6, start_message="Hello", log_to_file=True, log_
 
     if log_to_file:
         rounds_str = str(rounds)
-        make_header(log_path, start_message, rounds_str, extension)
+        if log_path:
+            make_header(log_path, start_message, rounds_str, extension)
 
 
     for i in range(rounds):

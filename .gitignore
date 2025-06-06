@@ -8,6 +8,7 @@ temp/
 
 # Bytecode files
 __pycache__/
+*.pytest
 *.pyc
 *.pyo
 
