@@ -1,3 +1,4 @@
+import os
 from bots.dumb_bot import Dumb_Bot
 from bots.smart_bot import Smart_Bot
 from Ollama.personality import setup_prompts
