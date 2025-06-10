@@ -8,9 +8,6 @@ def get_log_path(log_to_file:bool=True, log_path=None, extension:str='txt') -> s
         return None
     if log_path is not None:
         return log_path 
-    # Ensure the log directory exists
-    #log_dir = os.path.join("bots", "log")
-    #os.makedirs(log_dir, exist_ok=True)
 
     base_dir = os.path.dirname(os.path.abspath(__file__))  # directory of this script
     log_dir = os.path.join(base_dir, "bots", "log")       # project-relative log directory
@@ -22,10 +19,12 @@ def get_log_path(log_to_file:bool=True, log_path=None, extension:str='txt') -> s
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     return os.path.join(log_dir, f"conversation_log_{timestamp}.{extension}"), extension
 
-
-def make_header(log_path: str, start_message: str, rounds:str, extension:str):
+def make_header(log_path: str, start_message: str, rounds:str, extension:str, bots:list):
     if not log_path:
         raise ValueError("log_path must be provided to create the log header.")
+
+    # Unpack the bots
+    bot1, bot2 = bots
 
     # Ensure the directory exists
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
@@ -33,6 +32,8 @@ def make_header(log_path: str, start_message: str, rounds:str, extension:str):
         with open(log_path, "w", encoding="utf-8") as f:
             f.write("Bot-to-Bot Conversation Log\n")
             f.write(f"Start Time: {datetime.datetime.now()}\n")
+            f.write(f"Bot 1: {describe_bot(bot1)}\n")
+            f.write(f"Bot 2: {describe_bot(bot2)}\n")
             f.write(f"Number of rounds: {rounds}\n")
             f.write(f"Starting message: {start_message}\n")
             f.write(f"________________________________________")
@@ -41,11 +42,20 @@ def make_header(log_path: str, start_message: str, rounds:str, extension:str):
     if extension == "md":
         with open(log_path, "w", encoding="utf-8") as f:
             f.write(f"# Bot-to-Bot Conversation Log\n")
-            f.write(f"**Start Time**: {datetime.datetime.now()}\n")
-            f.write(f"**Starting message:**: `{start_message}`\n")
+            f.write(f"# Start Time: {datetime.datetime.now()}\n")
+            f.write(f"# Bot 1: {describe_bot(bot1)}\n")
+            f.write(f"# Bot 2: {describe_bot(bot2)}\n")
+            f.write(f"# Number of rounds: {rounds}\n")
+            f.write(f"# Starting message: `{start_message}`\n")
             f.write(f"________________________________________")
             f.write(f"\n\n")
         
+def describe_bot(bot):
+        name = getattr(bot, "model_name", "unknown_model")
+        persona = getattr(bot, "personality", None)
+        if isinstance(persona, tuple):
+            persona = ", ".join(persona)
+        return f"{bot.__class__.__name__} (model: {name}, personality: {persona})"
 
 ### --------------- Chatting --------------- ###
 
@@ -56,7 +66,8 @@ def converse(bot1, bot2, rounds=6, start_message="Hello", log_to_file=True, log_
     if log_to_file:
         rounds_str = str(rounds)
         if log_path:
-            make_header(log_path, start_message, rounds_str, extension)
+            bots = [bot1, bot2]
+            make_header(log_path, start_message, rounds_str, extension, bots)
 
 
     for i in range(rounds):
@@ -81,3 +92,31 @@ def converse(bot1, bot2, rounds=6, start_message="Hello", log_to_file=True, log_
         current_bot = bot2 if current_bot == bot1 else bot1
 
     return messages
+
+def converse_streaming(bot1, bot2, rounds=6, start_message="Hello", log_to_file=True, log_path=None, extension='txt'):
+    """Stream a bot-to-bot conversation in real-time via generator."""
+    current_bot = bot1
+    message = start_message
+
+    if log_to_file and log_path:
+        rounds_str = str(rounds)
+        make_header(log_path, start_message, rounds_str, extension)
+
+    yield {"sender": "user", "message": start_message}
+
+    for i in range(rounds):
+        response = current_bot.reply(message)
+        sender_name = current_bot.__class__.__name__
+
+        yield {"sender": sender_name, "message": response}
+
+        if log_to_file and log_path:
+            with open(log_path, "a", encoding="utf-8") as f:
+                if extension == "txt":
+                    f.write(f"{sender_name}: {response}\n\n")
+                elif extension == "md":
+                    f.write(f"### {sender_name}\n> {response.strip()}\n\n")
+
+        # Prepare for next round
+        message = response
+        current_bot = bot2 if current_bot == bot1 else bot1

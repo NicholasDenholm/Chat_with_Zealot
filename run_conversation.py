@@ -1,21 +1,118 @@
 import os
+import random
 from bots.dumb_bot import Dumb_Bot
 from bots.smart_bot import Smart_Bot
-from Ollama.personality import setup_prompts
-from conversation_engine import converse, get_log_path
+from bots.zealot_bot import Zealot_Bot
+from Ollama.personality import setup_prompts, setup_named_personality, get_all_personality_names, validate_personality_name
+from conversation_engine import get_log_path, converse, converse_streaming
 
+# -------------- Bot Builders -------------- #
 
 def build_bots():
     """Initialize and return the two bot instances."""
     dumb = Dumb_Bot("microsoft/DialoGPT-large")
 
-    personality = setup_prompts(test=True)
-    smart = Smart_Bot(model_name="llama3.2", personality=personality)
+    choice_of_personalities = get_all_personality_names()
+    print("List of personalities: ", choice_of_personalities)
 
+    #personality1 = setup_prompts(test=True)
+    #personality2 = setup_named_personality('nice_person')
+    personality3 = setup_named_personality('expert_coder')
+    smart = Smart_Bot(model_name="llama3.2", personality=personality3)
+
+    print("Returning dumb and smart")
     return dumb, smart
 
+def build_dumb_bot(name:str):
+    """
+    Builds a simple prebuilt chatbot using Hugging Face models.
+    Available models:
+        - "microsoft/DialoGPT-small"
+        - "microsoft/DialoGPT-medium"
+        - "microsoft/DialoGPT-large"
+    """
+    supported_models = ["microsoft/DialoGPT-small", "microsoft/DialoGPT-medium", "microsoft/DialoGPT-large"]
+    if name not in supported_models:
+        print(f"{name} not currently supported falling back to default")
+        name = "microsoft/DialoGPT-medium"
+    return Dumb_Bot(name)
 
-def run_conversation(dumb, smart, start_message, rounds, log_to_file=True, extension="md"):
+def build_smart_bot(name:str, personality:str='nice_person'):
+    """
+    Builds a smart bot using Ollama or other supported LLMs.
+    Available models:
+        - "llama3.2" (default)
+        - "mistral", "gemma", "phi3", etc. (extend as needed)
+    Personality options (name or tuple supported):
+        - "fanatic", "nice_person", "expert_coder", "mean_man", etc.
+    """
+    personality = validate_personality_name(personality, fallback="nice_person")
+    return Smart_Bot(model_name="llama3.2", personality=personality)
+
+def build_zealot_bot(name:str, personality:str='fanatic'):
+    """
+    Initializes a Zealot-themed chat bot using an Ollama model.
+
+    Model options:
+        - "llama3.2" (default)
+        - Extend with others if supported (e.g., "mistral", "phi3", etc.)
+
+    Personality options (name or tuple):
+        - "fanatic", "preacher", "sermon-lite"
+        - Or use a custom personality tuple (length, style, emotionality)
+    """
+    personality = validate_personality_name(personality, fallback="fanatic")
+    return Zealot_Bot(model_name="llama3.2", personality=personality)
+
+def get_bot_combos():
+    return {
+        "dumb_vs_smart": (
+            lambda: build_dumb_bot("microsoft/DialoGPT-medium"),
+            lambda: build_smart_bot("llama3.2", "nice_person")
+        ),
+        "dumb_vs_dumb": (
+            lambda: build_dumb_bot("microsoft/DialoGPT-medium"),
+            lambda: build_dumb_bot("microsoft/DialoGPT-large")
+        ),
+        "smart_vs_zealot": (
+            lambda: build_smart_bot("llama3.2", "nice_person"),
+            lambda: build_zealot_bot("llama3.2", personality="fanatic")
+        ),
+        "fanatic_vs_preacher": (
+            lambda: build_zealot_bot("llama3.2", personality="preacher"),
+            lambda: build_zealot_bot("llama3.2", personality="fanatic")
+        ),
+        "expert_vs_mean": (
+            lambda: build_smart_bot("llama3.2", "expert_coder"),
+            lambda: build_smart_bot("llama3.2", "mean_man")
+        ),
+        "smart_vs_smart": (
+            lambda: build_smart_bot("llama3.2", "nice_person"),
+            lambda: build_smart_bot("llama3.2", "expert_coder")
+        ),
+        "zealot_vs_dumb": (
+            lambda: build_zealot_bot("llama3.2", personality="fanatic"),
+            lambda: build_dumb_bot("microsoft/DialoGPT-medium")
+        ),
+        "zealot_vs_smart": (
+            lambda: build_zealot_bot("llama3.2", personality="sermon-lite"),
+            lambda: build_smart_bot("llama3.2", "expert_coder")
+        ),
+        "mean_vs_nice": (
+            lambda: build_smart_bot("llama3.2", "mean_man"),
+            lambda: build_smart_bot("llama3.2", "nice_person")
+        ),
+        "sermon_vs_expert": (
+            lambda: build_zealot_bot("llama3.2", personality="sermon-lite"),
+            lambda: build_smart_bot("llama3.2", "expert_coder")
+        )
+        # Add more combos here
+    }
+
+
+# -------------- Conversation -------------- #
+
+def run_conversation(bot1, bot2, start_message, rounds, log_to_file=True, extension="md"):
     """Run a bot-to-bot conversation with optional logging."""
     log_path = None
 
@@ -39,9 +136,9 @@ def run_conversation(dumb, smart, start_message, rounds, log_to_file=True, exten
             return
 
         if file_type == "md":
-            converse(dumb, smart, rounds=rounds, start_message=start_message, log_to_file=True, log_path=log_path, extension=extension)
+            converse(bot1, bot2, rounds=rounds, start_message=start_message, log_to_file=True, log_path=log_path, extension=extension)
         elif file_type == "txt":
-            converse(dumb, smart, rounds=rounds, start_message=start_message, log_to_file=True, log_path=log_path, extension=extension)
+            converse(bot1, bot2, rounds=rounds, start_message=start_message, log_to_file=True, log_path=log_path, extension=extension)
         elif file_type == "db":
             print("Database logging selected — not implemented yet.")
             # TODO: Add DB conversation function here
@@ -49,18 +146,182 @@ def run_conversation(dumb, smart, start_message, rounds, log_to_file=True, exten
             print("Invalid extension type. Use 'txt', 'md', or 'db'.")
             return
     else:
-        converse(dumb, smart, rounds=rounds, start_message=start_message)
+        converse(bot1, bot2, rounds=rounds, start_message=start_message)
 
+def stream_conversation(dumb, smart, start_message, rounds, stream=True, log_to_file=False, extension="md"):
+    """Run a bot-to-bot conversation with optional live streaming and logging."""
+    log_path = None
+
+    if log_to_file:
+        try:
+            print("Current working directory:", os.getcwd())
+            log_path, file_type = get_log_path(extension=extension)
+            print(f"Logging {file_type} file to: {log_path}")
+        except ValueError as e:
+            print(f"Error: {e}")
+            return
+    else:
+        file_type = extension
+
+    # Run conversation (this already logs + prints responses)
+    messages = converse(
+        dumb,
+        smart,
+        rounds=rounds,
+        start_message=start_message,
+        log_to_file=log_to_file,
+        log_path=log_path,
+        extension=extension
+    )
+
+    # If streaming is requested, print a clean, readable stream summary
+    if stream:
+        print_conversation_stream(messages)
+
+def print_conversation_stream(messages, header=True):
+    """Print a clean, readable stream of conversation messages."""
+    if header:
+        print("\n--- Conversation Stream Recap ---\n")
+    for message in messages:
+        sender = message["sender"]
+        content = message["message"]
+        print(f"{sender}: {content}\n")
+
+def stream_conversation_live(dumb, smart, start_message, rounds, log_to_file=False, extension="md"):
+    """Stream conversation live to console while optionally logging."""
+    log_path = None
+
+    if log_to_file:
+        try:
+            print("Current working directory:", os.getcwd())
+            log_path, file_type = get_log_path(extension=extension)
+            print(f"Logging to: {log_path}")
+        except ValueError as e:
+            print(f"Error: {e}")
+            return
+
+    print("\n--- Live Conversation Stream ---\n")
+    for message in converse_streaming(
+        dumb, smart, rounds=rounds,
+        start_message=start_message,
+        log_to_file=log_to_file,
+        log_path=log_path,
+        extension=extension
+    ):
+        sender = message["sender"]
+        content = message["message"]
+        print(f"{sender}: {content}\n")
+
+# -------------- Testing -------------- #
+
+def test_all_combos():
+    combos = get_bot_combos()
+    for combo_name, (build_bot1, build_bot2) in combos.items():
+        print(f"\n=== Running combo: {combo_name} ===")
+        bot1 = build_bot1()
+        bot2 = build_bot2()
+        start_message = "Begin the conversation."
+        run_conversation(
+            bot1=bot1,
+            bot2=bot2,
+            start_message=start_message,
+            rounds=10,
+            log_to_file=True,
+            extension="md"
+        )
+
+def choose_combo():
+    combos = get_bot_combos()
+    names = list(combos.keys())
+
+    print("Choose a bot combo:")
+    for i, name in enumerate(names, 1):
+        print(f"{i}. {name}")
+    
+    try:
+        choice = int(input("Enter a number: ")) - 1
+        if 0 <= choice < len(names):
+            combo_name = names[choice]
+            build_bot1, build_bot2 = combos[combo_name]
+            bot1 = build_bot1()
+            bot2 = build_bot2()
+            run_conversation(
+                bot1=bot1,
+                bot2=bot2,
+                start_message="Begin the test!",
+                rounds=10,
+                log_to_file=True,
+                extension="md"
+            )
+        else:
+            print("Invalid selection.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+def test_random_combo():
+    combos = get_bot_combos()
+    combo_name, (build_bot1, build_bot2) = random.choice(list(combos.items()))
+    print(f"Running random combo: {combo_name}")
+    bot1 = build_bot1()
+    bot2 = build_bot2()
+    run_conversation(
+        bot1=bot1,
+        bot2=bot2,
+        start_message="Randomly selected conversation.",
+        rounds=10,
+        log_to_file=False
+    )
+
+# -------------- Main -------------- #
+
+def main_options(mode="choose"):
+    combos = get_bot_combos()
+
+    if mode == "choose":
+        choose_combo()  # Interactive selection
+    elif mode == "random":
+        test_random_combo()
+    elif mode == "all":
+        test_all_combos()
+    elif mode in combos:
+        # Directly run a specific combo by name
+        print(f"Running specific combo: {mode}")
+        build_bot1, build_bot2 = combos[mode]
+        bot1 = build_bot1()
+        bot2 = build_bot2()
+        run_conversation(bot1=bot1, bot2=bot2, start_message="Begin the conversation.", rounds=10, log_to_file=True, extension="md")
+    else:
+        print(f"[Error] Invalid mode or combo name: '{mode}'")
+        print(f"Valid options: 'choose', 'random', 'all', or one of: {list(combos.keys())}")
 
 def main():
-    dumb, smart = build_bots()
-    start_message = "What heresy do you bring?"
-    rounds = 6
-    log_to_file = False
+    bot_combos = get_bot_combos()
+
+    combo_name = "dumb_vs_smart"
+
+    if combo_name not in bot_combos:
+        raise ValueError(f"Unknown combo: {combo_name}")
+
+    build_bot1, build_bot2 = bot_combos[combo_name]
+    bot1 = build_bot1()
+    bot2 = build_bot2()
+    
+    #start_message = "What heresy do you bring?"
+    start_message = "Talk about how silly people are."
+    rounds = 15
+    log_to_file = True
     log_extension = "md"  # Options: 'md', 'txt', 'db'
 
-    run_conversation(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
+    run_conversation(dumb=bot1, smart=bot2, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
+
+    # TODO: test these:
+    #stream_conversation(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
+    #stream_conversation_live(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
 
 
 if __name__ == "__main__":
-    main()
+    #main()  # old methodology
+    #main_options("choose")         # Opens CLI menu
+    # main_options("random")       # Runs a random combo
+    # main_options("all")          # Tests all combos
+    main_options("smart_vs_zealot")  # Runs that specific combo
