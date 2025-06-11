@@ -62,6 +62,10 @@ def run_model(model, template:str, personality: tuple[str, str, str], book_path:
             if question == 'q':
                 break
 
+            book_content = handle_dynamic_file_loading(question, book_content)
+            if question.lower().startswith("read:"):
+                continue
+
             result = chain.invoke({
                 "book": book_content,  
                 "question": question,
@@ -76,12 +80,42 @@ def run_model(model, template:str, personality: tuple[str, str, str], book_path:
             print("Exiting goodbye...")
             break
 
+
+# --------------- File loading --------------- #
+
 def load_book_text(book_path: str) -> str:
     if not os.path.exists(book_path):
         raise FileNotFoundError(f"Book path not found {book_path}")
     
     with open(book_path, 'r', encoding='utf8') as f:
         return f.read()
+
+def make_book_path(file_name:str, dir:str) -> str:
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # directory of this script
+    book_path = os.path.join(base_dir, dir, file_name)     # project-relative file
+    return book_path
+
+def handle_dynamic_file_loading(command: str, current_book: str) -> str:
+    """
+    Handles the dynamic loading of a new text file if the user issues a 'read:' command.
+
+    Args:
+        command (str): The user's input.
+        current_book (str): The current book content.
+
+    Returns:
+        str: Updated book content if a file was successfully read, otherwise the original content.
+    """
+    if command.lower().startswith("read:"):
+        new_path = command[5:].strip()
+        try:
+            new_path = make_book_path(new_path, "book")
+            new_content = load_book_text(new_path)
+            print(f"[INFO] Loaded new content from: '{new_path}'")
+            return new_content
+        except FileNotFoundError as e:
+            print(f"[ERROR] {e}")
+    return current_book
 
 
 # --------------- Templates --------------- #
