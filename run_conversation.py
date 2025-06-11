@@ -37,7 +37,7 @@ def build_dumb_bot(name:str):
         name = "microsoft/DialoGPT-medium"
     return Dumb_Bot(name)
 
-def build_smart_bot(name:str, personality:str='nice_person'):
+def build_smart_bot(name:str, personality:str):
     """
     Builds a smart bot using Ollama or other supported LLMs.
     Available models:
@@ -49,7 +49,7 @@ def build_smart_bot(name:str, personality:str='nice_person'):
     personality = validate_personality_name(personality, fallback="nice_person")
     return Smart_Bot(model_name="llama3.2", personality=personality)
 
-def build_zealot_bot(name:str, personality:str='fanatic'):
+def build_zealot_bot(name:str, personality:str):
     """
     Initializes a Zealot-themed chat bot using an Ollama model.
 
@@ -84,7 +84,7 @@ def get_bot_combos():
         ),
         "expert_vs_mean": (
             lambda: build_smart_bot("llama3.2", "expert_coder"),
-            lambda: build_smart_bot("llama3.2", "mean_man")
+            lambda: build_smart_bot("llama3.2", "mean_person")
         ),
         "smart_vs_smart": (
             lambda: build_smart_bot("llama3.2", "nice_person"),
@@ -99,7 +99,7 @@ def get_bot_combos():
             lambda: build_smart_bot("llama3.2", "expert_coder")
         ),
         "mean_vs_nice": (
-            lambda: build_smart_bot("llama3.2", "mean_man"),
+            lambda: build_smart_bot("llama3.2", "mean_person"),
             lambda: build_smart_bot("llama3.2", "nice_person")
         ),
         "sermon_vs_expert": (
@@ -146,9 +146,9 @@ def run_conversation(bot1, bot2, start_message, rounds, log_to_file=True, extens
             print("Invalid extension type. Use 'txt', 'md', or 'db'.")
             return
     else:
-        converse(bot1, bot2, rounds=rounds, start_message=start_message)
+        converse(bot1, bot2, rounds=rounds, start_message=start_message, log_to_file=False, log_path='', extension='')
 
-def stream_conversation(dumb, smart, start_message, rounds, stream=True, log_to_file=False, extension="md"):
+def stream_conversation(bot1, bot2, start_message, rounds, stream=True, log_to_file=False, extension="md"):
     """Run a bot-to-bot conversation with optional live streaming and logging."""
     log_path = None
 
@@ -165,8 +165,8 @@ def stream_conversation(dumb, smart, start_message, rounds, stream=True, log_to_
 
     # Run conversation (this already logs + prints responses)
     messages = converse(
-        dumb,
-        smart,
+        bot1,
+        bot2,
         rounds=rounds,
         start_message=start_message,
         log_to_file=log_to_file,
@@ -187,7 +187,7 @@ def print_conversation_stream(messages, header=True):
         content = message["message"]
         print(f"{sender}: {content}\n")
 
-def stream_conversation_live(dumb, smart, start_message, rounds, log_to_file=False, extension="md"):
+def stream_conversation_live(bot1, bot2, start_message, rounds, log_to_file=False, extension="md"):
     """Stream conversation live to console while optionally logging."""
     log_path = None
 
@@ -202,7 +202,7 @@ def stream_conversation_live(dumb, smart, start_message, rounds, log_to_file=Fal
 
     print("\n--- Live Conversation Stream ---\n")
     for message in converse_streaming(
-        dumb, smart, rounds=rounds,
+        bot1, bot2, rounds=rounds,
         start_message=start_message,
         log_to_file=log_to_file,
         log_path=log_path,
@@ -212,7 +212,7 @@ def stream_conversation_live(dumb, smart, start_message, rounds, log_to_file=Fal
         content = message["message"]
         print(f"{sender}: {content}\n")
 
-# -------------- Testing -------------- #
+# -------------- Selctiing combos -------------- #
 
 def test_all_combos():
     combos = get_bot_combos()
@@ -225,12 +225,12 @@ def test_all_combos():
             bot1=bot1,
             bot2=bot2,
             start_message=start_message,
-            rounds=10,
-            log_to_file=True,
+            rounds=5,
+            log_to_file=False,
             extension="md"
         )
 
-def choose_combo():
+def choose_combo(start_message:str, rounds:int, log_to_file:bool, extension:str):
     combos = get_bot_combos()
     names = list(combos.keys())
 
@@ -248,9 +248,9 @@ def choose_combo():
             run_conversation(
                 bot1=bot1,
                 bot2=bot2,
-                start_message="Begin the test!",
-                rounds=10,
-                log_to_file=True,
+                start_message=start_message,
+                rounds=rounds,
+                log_to_file=log_to_file,
                 extension="md"
             )
         else:
@@ -258,29 +258,38 @@ def choose_combo():
     except ValueError:
         print("Please enter a valid number.")
 
-def test_random_combo():
+def test_random_combo(start_message:str, rounds:int, log_to_file:bool, extension:str):
     combos = get_bot_combos()
-    combo_name, (build_bot1, build_bot2) = random.choice(list(combos.items()))
+    #combo_name, (build_bot1, build_bot2) = random.choice(list(combos.items()))
+    rand_combo = random.choice(list(combos.items()))
+    combo_name = rand_combo[0]
     print(f"Running random combo: {combo_name}")
+    build_bot1, build_bot2 = combos[combo_name]
     bot1 = build_bot1()
     bot2 = build_bot2()
     run_conversation(
         bot1=bot1,
         bot2=bot2,
-        start_message="Randomly selected conversation.",
-        rounds=10,
-        log_to_file=False
+        start_message=start_message,
+        rounds=rounds,
+        log_to_file=log_to_file,
+        extension=extension
     )
 
 # -------------- Main -------------- #
 
-def main_options(mode="choose"):
+def main(mode="choose"):
     combos = get_bot_combos()
 
+    start_message = "What heresy do you bring?"
+    rounds = 5
+    log_to_file = True
+    extension = 'md'
+
     if mode == "choose":
-        choose_combo()  # Interactive selection
+        choose_combo(start_message, rounds, log_to_file, extension)  # Interactive selection
     elif mode == "random":
-        test_random_combo()
+        test_random_combo(start_message, rounds, log_to_file, extension) # Random selection
     elif mode == "all":
         test_all_combos()
     elif mode in combos:
@@ -290,38 +299,17 @@ def main_options(mode="choose"):
         bot1 = build_bot1()
         bot2 = build_bot2()
         run_conversation(bot1=bot1, bot2=bot2, start_message="Begin the conversation.", rounds=10, log_to_file=True, extension="md")
+        # TODO: test these:
+        #stream_conversation(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
+        #stream_conversation_live(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
     else:
-        print(f"[Error] Invalid mode or combo name: '{mode}'")
+        print(f"[Error] Invalid mode or combo name: '{mode}'") # Options: 'md', 'txt', 'db'
         print(f"Valid options: 'choose', 'random', 'all', or one of: {list(combos.keys())}")
-
-def main():
-    bot_combos = get_bot_combos()
-
-    combo_name = "dumb_vs_smart"
-
-    if combo_name not in bot_combos:
-        raise ValueError(f"Unknown combo: {combo_name}")
-
-    build_bot1, build_bot2 = bot_combos[combo_name]
-    bot1 = build_bot1()
-    bot2 = build_bot2()
-    
-    #start_message = "What heresy do you bring?"
-    start_message = "Talk about how silly people are."
-    rounds = 15
-    log_to_file = True
-    log_extension = "md"  # Options: 'md', 'txt', 'db'
-
-    run_conversation(dumb=bot1, smart=bot2, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
-
-    # TODO: test these:
-    #stream_conversation(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
-    #stream_conversation_live(dumb=dumb, smart=smart, start_message=start_message, rounds=rounds, log_to_file=log_to_file, extension=log_extension)
 
 
 if __name__ == "__main__":
     #main()  # old methodology
-    #main_options("choose")         # Opens CLI menu
-    # main_options("random")       # Runs a random combo
-    # main_options("all")          # Tests all combos
-    main_options("smart_vs_zealot")  # Runs that specific combo
+    main("choose")         # Opens CLI menu
+    #main("random")       # Runs a random combo
+    #main("all")          # Tests all combos
+    #main("smart_vs_zealot")  # Runs that specific combo

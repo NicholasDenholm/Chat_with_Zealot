@@ -66,8 +66,11 @@ def chat_with_bot(user_input: str, tokenizer, model, chat_history_ids=None, devi
         tuple: (bot_reply: str, updated chat_history_ids: torch.Tensor)
     """
     encoded_input = tokenizer.encode(user_input + tokenizer.eos_token, return_tensors="pt").to(device)
-    bot_input_ids = encoded_input if chat_history_ids is None else torch.cat([chat_history_ids.to(device), encoded_input], dim=-1)
 
+    MAX_INPUT_LENGTH = 1024  # or model.config.n_positions
+
+    #bot_input_ids = encoded_input if chat_history_ids is None else torch.cat([chat_history_ids.to(device), encoded_input], dim=-1)
+    '''
     chat_history_ids = model.generate(
         bot_input_ids,
         max_length=2000,
@@ -78,8 +81,28 @@ def chat_with_bot(user_input: str, tokenizer, model, chat_history_ids=None, devi
         num_beams=5,
         length_penalty=1.2,
         do_sample=True
+    )'''
+
+
+    if chat_history_ids is None:
+        bot_input_ids = encoded_input
+    else:
+        combined = torch.cat([chat_history_ids.to(device), encoded_input], dim=-1)
+        bot_input_ids = combined[:, -MAX_INPUT_LENGTH:]
+
+    chat_history_ids = model.generate(
+        bot_input_ids,
+        max_length=bot_input_ids.shape[-1] + 150,
+        pad_token_id=tokenizer.eos_token_id,
+        no_repeat_ngram_size=3,
+        temperature=0.8,
+        top_p=0.9,
+        num_beams=5,
+        length_penalty=1.2,
+        do_sample=True
     )
 
+    
     response = tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
     return response, chat_history_ids
 

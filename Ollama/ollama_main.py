@@ -1,48 +1,54 @@
+import os
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
+from personality import setup_named_personality, get_all_personality_names
 
 ### -------------- Setup -------------- ###
 
 def setup_prompts(test:bool=False):
-    
     try:
+        personalities = get_all_personality_names()
+        enum_personality_options(personalities)
         if not (test):
-            option = int(input("Choose personality (1: fanatic, 2: preacher, 3: sermon-lite): "))
-            personality = set_personality(option)
+            option = int(input("Choose from list: "))
+            
+            choice = personalities[option - 1]
+            if choice not in personalities:
+                raise ValueError("setuping prompts failed, choice is not in options")
+            
+            personality = setup_named_personality(choice)
             length, style, emotionality = personality
             print("Using settings:", length, style, emotionality)
         else:
-            personality = set_personality(1)
+            personalities = get_all_personality_names()
+            personality = personalities[0]
+            personality = setup_named_personality("expert_coder")
     except ValueError as val_err:
         print("Error:", val_err)
 
     return personality
 
-def set_personality(option:int) -> tuple[str, str, str]:
-    '''
-    Arguments: recieves option: 1 - 3 corresponding to different personas
-    1 | fanatic : medium aggressive and wrathful
-    2 | preacher : long formal and passionate
-    3 | sermon-lite : short poetic and calm
-
-    returns a tuple of (length, style, emotionality)
-    '''
-    presets = {1: {"length": "medium", "style": "aggressive", "emotionality": "wrathful"}, 
-                2: {"length": "long", "style": "formal", "emotionality": "passionate"},
-                3: {"length": "short", "style": "poetic", "emotionality": "calm"}
-    }
-    if option not in presets:
-        raise ValueError("Invalid input error, Choose 1 (fanatic), 2 (preacher), or 3 (sermon-lite)")
-
-    info = presets[option]
-
-    return info["length"], info["style"], info["emotionality"]  
+def enum_personality_options(options:list):
+    print("Choose a personality:")
+    for i, name in enumerate(options, 1):
+        print(f"{i}. {name}")
 
 ### -------------- Running the model -------------- ###
 
-def run_model(model, template:str, personality: tuple[str, str, str]) -> None:
+def run_model(model, template:str, personality: tuple[str, str, str], book_path: str) -> None:
+    """
+    Run an interactive chatbot session with context loaded from a text file.
 
+    Args:
+        model: The language model to use in the chain.
+        template (str): Prompt template string with placeholders like {book}, {question}, etc.
+        personality (tuple): (length, style, emotionality) for prompt control.
+        book_path (str): Path to a .txt file containing the book or reference content.
+    """
     length, style, emotionality = personality
+
+    # Load book content via helper
+    book_content = load_book_text(book_path)
 
     prompt = ChatPromptTemplate.from_template(template)
     chain = prompt | model
@@ -57,7 +63,7 @@ def run_model(model, template:str, personality: tuple[str, str, str]) -> None:
                 break
 
             result = chain.invoke({
-                "book": [],  # Replace this with real context (text/a sting) if needed
+                "book": book_content,  
                 "question": question,
                 "length": length,
                 "style": style,
@@ -70,12 +76,17 @@ def run_model(model, template:str, personality: tuple[str, str, str]) -> None:
             print("Exiting goodbye...")
             break
 
+def load_book_text(book_path: str) -> str:
+    if not os.path.exists(book_path):
+        raise FileNotFoundError(f"Book path not found {book_path}")
+    
+    with open(book_path, 'r', encoding='utf8') as f:
+        return f.read()
 
-def main():
 
-    #model = OllamaLLM(model="llama3.2")
-    model = OllamaLLM(model="codellama:7b")
-    personality = setup_prompts()
+# --------------- Templates --------------- #
+
+def warhammer_template() -> str:
     template = """
     You are a religious zealot from the Warhammer 40K universe.
 
@@ -87,8 +98,39 @@ def main():
 
     Question: {question}
     """
+    return template
+
+def rag_template() -> str:
+    template = """
+    You are an AI trained on the following book content:
+
+    {book}
+
+    Answer the user's question based on the content above. Be {style}, write with {emotionality} emotionality, and keep it {length} in length.
+
+    User: {question}
+    AI:
+    """
+    return template
+
+
+# --------------- Main --------------- #
+
+def main():
+
+    #model = OllamaLLM(model="llama3.2")
+    model = OllamaLLM(model="codellama:7b")
+    personality = setup_prompts()
+
+
+    file_name = "book.txt"
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # directory of this script
+    book_path = os.path.join(base_dir, "book", file_name)       # project-relative file
     
-    run_model(model, template, personality)
+    #template = warhammer_template()
+    template = rag_template()
+
+    run_model(model, template, personality, book_path)
 
 if __name__ == "__main__":
     main()

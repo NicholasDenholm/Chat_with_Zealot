@@ -1,14 +1,16 @@
 from bots.interface import ChatBotInterface
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
-from Ollama.personality import get_personality_by_name, get_all_personality_names
+from Ollama.personality import get_personality_by_name, get_all_personality_names, resolve_personality
 
 class Zealot_Bot(ChatBotInterface):
-    def __init__(self, model_name="llama3.2", personality=None):
+    def __init__(self, model_name:str, personality:str):
         self.model_name = model_name
         self.model = OllamaLLM(model=model_name)
 
-        self.length, self.style, self.emotionality, personality_name = self.resolve_personality(personality)
+        self.length, self.style, self.emotionality, personality_name = resolve_personality(personality, "fanatic")
+        # Only set if resolved
+        self.personality = personality_name
 
         self.prompt_template = ChatPromptTemplate.from_template(f"""
         You are a religious zealot from the Warhammer 40K universe.

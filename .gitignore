@@ -5,6 +5,7 @@ models/
 scripts/
 log/
 temp/
+book/
 
 # Bytecode files
 __pycache__/

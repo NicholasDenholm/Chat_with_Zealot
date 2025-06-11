@@ -59,7 +59,7 @@ def describe_bot(bot):
 
 ### --------------- Chatting --------------- ###
 
-def converse(bot1, bot2, rounds=6, start_message="Hello", log_to_file=True, log_path=None, extension:str='txt'):
+def converse(bot1, bot2, rounds:int, start_message:str, log_to_file:str, log_path:str, extension:str):
     messages = [{"sender": "user", "message": start_message}]
     current_bot = bot1
 

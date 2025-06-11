@@ -11,16 +11,6 @@ def personality_presets() -> dict[str, tuple[str, str, str]]:
         "mean_person": ("medium", "rude", "irritable"),
     }
 
-def validate_personality_name(personality: str, fallback: str = "nice_person") -> str:
-    """
-    Checks if the given personality name exists. If not, returns the fallback.
-    """
-    available = get_all_personality_names()
-    if personality not in available:
-        print(f"[Warning] Personality '{personality}' not found. Falling back to '{fallback}'.")
-        return fallback
-    return personality
-
 
 # ----------------- Setup ----------------- #
 
@@ -99,3 +89,41 @@ def get_personality_by_name(name: str) -> tuple[str, str, str]:
         raise ValueError(f"Invalid personality name: {name}. Available: {', '.join(presets)}")
 
     return presets[name]
+
+# ----------------- Validation ----------------- #
+
+
+def validate_personality_name(personality: str, fallback: str = "short_answers") -> str:
+    """
+    Checks if the given personality name exists. If not, returns the fallback.
+    """
+    available = get_all_personality_names()
+    if personality not in available:
+        print(f"[Warning] Personality '{personality}' not found. Falling back to '{fallback}'.")
+        return fallback
+    return personality
+
+
+
+def resolve_personality(personality_input, fallback_name:str) -> tuple[str, str, str, str]:
+        """
+        Resolves a personality input (string or tuple) to a standard format:
+        (length, style, emotionality, personality_name)
+        """
+        if isinstance(personality_input, tuple) and len(personality_input) == 3:
+            length, style, emotionality = personality_input
+            return length, style, emotionality, "custom"
+        
+        elif isinstance(personality_input, str):
+            try:
+                length, style, emotionality = get_personality_by_name(personality_input)
+                return length, style, emotionality, personality_input
+            except ValueError:
+                print(f"[Warning] Unknown personality '{personality_input}.")
+        
+        # Fallback to first in list
+        #fallback_name = get_all_personality_names()[0]
+
+        length, style, emotionality = get_personality_by_name(fallback_name)
+        print(f"[Fallback] Using default personality '{fallback_name}'.")
+        return length, style, emotionality, fallback_name
