@@ -81,14 +81,16 @@ def get_all_personality_names() -> list[str]:
 
 def get_personality_by_name(name: str) -> tuple[str, str, str]:
     presets = personality_presets()
-    #print(type(name))
     name = name.lower()
-    #print(name, "\n-------\n")
 
     if name not in presets:
         raise ValueError(f"Invalid personality name: {name}. Available: {', '.join(presets)}")
-
     return presets[name]
+
+def enum_personality_options(options:list):
+    print("Choose a personality:")
+    for i, name in enumerate(options, 1):
+        print(f"{i}. {name}")
 
 # ----------------- Validation ----------------- #
 
@@ -102,8 +104,6 @@ def validate_personality_name(personality: str, fallback: str = "short_answers")
         print(f"[Warning] Personality '{personality}' not found. Falling back to '{fallback}'.")
         return fallback
     return personality
-
-
 
 def resolve_personality(personality_input, fallback_name:str) -> tuple[str, str, str, str]:
         """

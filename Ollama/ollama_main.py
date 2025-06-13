@@ -1,11 +1,13 @@
 import os
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
-from personality import setup_named_personality, get_all_personality_names
+from personality import setup_named_personality, get_all_personality_names, enum_personality_options
+from book_retrival import load_all_books, handle_dynamic_file_loading, get_script_directory, read_content, make_dir_path, read_from_list
+from prompt import warhammer_template, rag_template 
 
 ### -------------- Setup -------------- ###
 
-def setup_prompts(test:bool=False):
+def setup_modifiers(test:bool=False):
     try:
         personalities = get_all_personality_names()
         enum_personality_options(personalities)
@@ -28,14 +30,17 @@ def setup_prompts(test:bool=False):
 
     return personality
 
-def enum_personality_options(options:list):
-    print("Choose a personality:")
-    for i, name in enumerate(options, 1):
-        print(f"{i}. {name}")
 
 ### -------------- Running the model -------------- ###
 
-def run_model(model, template:str, personality: tuple[str, str, str], book_path: str) -> None:
+#TODO make the model be able to add on to the content it has pre-read
+def add_content(question):
+    book_content = handle_dynamic_file_loading(question, book_content)
+    if question.lower().startswith("read:"):
+        return
+
+
+def run_model(model, template:str, personality: tuple[str, str, str], content: str) -> None:
     """
     Run an interactive chatbot session with context loaded from a text file.
 
@@ -48,7 +53,7 @@ def run_model(model, template:str, personality: tuple[str, str, str], book_path:
     length, style, emotionality = personality
 
     # Load book content via helper
-    book_content = load_book_text(book_path)
+    #book_content = read_content(book_path)
 
     prompt = ChatPromptTemplate.from_template(template)
     chain = prompt | model
@@ -62,12 +67,8 @@ def run_model(model, template:str, personality: tuple[str, str, str], book_path:
             if question == 'q':
                 break
 
-            book_content = handle_dynamic_file_loading(question, book_content)
-            if question.lower().startswith("read:"):
-                continue
-
             result = chain.invoke({
-                "book": book_content,  
+                "book": content,  
                 "question": question,
                 "length": length,
                 "style": style,
@@ -81,90 +82,25 @@ def run_model(model, template:str, personality: tuple[str, str, str], book_path:
             break
 
 
-# --------------- File loading --------------- #
-
-def load_book_text(book_path: str) -> str:
-    if not os.path.exists(book_path):
-        raise FileNotFoundError(f"Book path not found {book_path}")
-    
-    with open(book_path, 'r', encoding='utf8') as f:
-        return f.read()
-
-def make_book_path(file_name:str, dir:str) -> str:
-    base_dir = os.path.dirname(os.path.abspath(__file__))  # directory of this script
-    book_path = os.path.join(base_dir, dir, file_name)     # project-relative file
-    return book_path
-
-def handle_dynamic_file_loading(command: str, current_book: str) -> str:
-    """
-    Handles the dynamic loading of a new text file if the user issues a 'read:' command.
-
-    Args:
-        command (str): The user's input.
-        current_book (str): The current book content.
-
-    Returns:
-        str: Updated book content if a file was successfully read, otherwise the original content.
-    """
-    if command.lower().startswith("read:"):
-        new_path = command[5:].strip()
-        try:
-            new_path = make_book_path(new_path, "book")
-            new_content = load_book_text(new_path)
-            print(f"[INFO] Loaded new content from: '{new_path}'")
-            return new_content
-        except FileNotFoundError as e:
-            print(f"[ERROR] {e}")
-    return current_book
-
-
-# --------------- Templates --------------- #
-
-def warhammer_template() -> str:
-    template = """
-    You are a religious zealot from the Warhammer 40K universe.
-
-    Answer the following question as a devout zealot. Customize your response according to:
-
-        - **Desired Length**: {length}
-        - **Style**: {style}
-        - **Emotional Tone**: {emotionality}
-
-    Question: {question}
-    """
-    return template
-
-def rag_template() -> str:
-    template = """
-    You are an AI trained on the following book content:
-
-    {book}
-
-    Answer the user's question based on the content above. Be {style}, write with {emotionality} emotionality, and keep it {length} in length.
-
-    User: {question}
-    AI:
-    """
-    return template
-
-
 # --------------- Main --------------- #
 
 def main():
 
     #model = OllamaLLM(model="llama3.2")
     model = OllamaLLM(model="codellama:7b")
-    personality = setup_prompts()
+    personality = setup_modifiers()
 
-
-    file_name = "book.txt"
-    base_dir = os.path.dirname(os.path.abspath(__file__))  # directory of this script
-    book_path = os.path.join(base_dir, "book", file_name)       # project-relative file
+    look_in = "book"                    # Directory to look for txt files in
+    base_dir = get_script_directory()   # gets directory of this script
+    target_dir = make_dir_path(look_in, base_dir)
+    book_list = load_all_books(target_dir)
+    
+    content = read_from_list(book_list)
     
     #template = warhammer_template()
     template = rag_template()
 
-    run_model(model, template, personality, book_path)
+    run_model(model, template, personality, content)
 
 if __name__ == "__main__":
     main()
