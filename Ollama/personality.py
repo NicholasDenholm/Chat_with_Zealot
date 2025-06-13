@@ -81,9 +81,9 @@ def get_all_personality_names() -> list[str]:
 
 def get_personality_by_name(name: str) -> tuple[str, str, str]:
     presets = personality_presets()
-    print(type(name))
+    #print(type(name))
     name = name.lower()
-    print(name, "\n-------\n")
+    #print(name, "\n-------\n")
 
     if name not in presets:
         raise ValueError(f"Invalid personality name: {name}. Available: {', '.join(presets)}")
