@@ -1,3 +1,13 @@
+## Ideas
+
+[] Create method to get the model(s) to think, reason, then answer
+think -> generate context, look at options
+reason -> which option is best?
+answer -> explore that best option.
+
+
+
+
 ## Backend Features
 
 # Prebuilt
