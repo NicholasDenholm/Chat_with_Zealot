@@ -106,7 +106,6 @@ def chat_with_bot(user_input: str, tokenizer, model, chat_history_ids=None, devi
     response = tokenizer.decode(chat_history_ids[:, bot_input_ids.shape[-1]:][0], skip_special_tokens=True)
     return response, chat_history_ids
 
-
 def trim_chat_history(chat_history_ids, tokenizer, max_turns:int):
     """
     Trims the chat history to only keep the last `max_turns` user-bot exchanges.
@@ -119,7 +118,6 @@ def trim_chat_history(chat_history_ids, tokenizer, max_turns:int):
     segments = decoded.split(tokenizer.eos_token)
     trimmed = tokenizer.encode(tokenizer.eos_token.join(segments[-2 * max_turns:]) + tokenizer.eos_token, return_tensors='pt')
     return trimmed
-
 
 def chat_with_speech(user_input, state):
     bot_reply, state['chat_history_ids'] = chat_with_bot(
@@ -138,7 +136,6 @@ def chat_with_speech(user_input, state):
     )
     
     return bot_reply
-
 
 
 ### -------------- Text to Speech -------------- ###
