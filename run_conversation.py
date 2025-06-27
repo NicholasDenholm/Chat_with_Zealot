@@ -3,6 +3,7 @@ import random
 from bots.dumb_bot import Dumb_Bot
 from bots.smart_bot import Smart_Bot
 from bots.zealot_bot import Zealot_Bot
+from bots.multimodal_bot import Multimodal_Bot
 from Ollama.personality import setup_prompts, setup_named_personality, get_all_personality_names, validate_personality_name
 from conversation_engine import get_log_path, converse, converse_streaming
 
@@ -63,6 +64,23 @@ def build_zealot_bot(name:str, personality:str):
     """
     personality = validate_personality_name(personality, fallback="fanatic")
     return Zealot_Bot(model_name="llama3.2", personality=personality)
+
+#TODO Fix the setup format for the multimodal bot
+def build_multimodal_bot(model_name: str = "llava-hf/llava-1.5-7b-hf", personality: str = "fanatic"):
+    """
+    Builds a multimodal bot with the specified model and personality.
+
+    Available models (examples):
+        - "llava-hf/llava-1.5-7b-hf" (default)
+        - "llava-hf/llava-1.6-7b-hf"
+        - "liuhaotian/llava-v1.5-13b"
+        - Add more supported models as needed
+
+    Personality options (validated via `validate_personality_name`):
+        - "fanatic", "nice_person", "expert_coder", "mean_man", etc.
+    """
+    personality = validate_personality_name(personality, fallback="fanatic")
+    return Multimodal_Bot(model_name=model_name, personality=personality)
 
 def get_bot_combos():
     return {

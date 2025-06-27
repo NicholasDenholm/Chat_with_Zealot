@@ -11,6 +11,18 @@ def load_all_books(book_dir:str) -> list[str]:
         book_paths.append(full_path)
     return book_paths
 
+def load_images(data_dir: str) -> list[str]:
+    supported_extensions = {'.jpg', '.jpeg', '.png', '.bmp'}
+    file_paths = []
+    
+    for file in os.listdir(data_dir):
+        ext = os.path.splitext(file)[1].lower()
+        if ext in supported_extensions:
+            full_path = os.path.join(data_dir, file)
+            file_paths.append(full_path)
+    
+    return file_paths
+
 def handle_dynamic_file_loading(command: str, current_book: str) -> str:
     """
     Handles the dynamic loading of a new text file if the user issues a 'read: story.txt' command.
