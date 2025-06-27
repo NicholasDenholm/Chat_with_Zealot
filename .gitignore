@@ -7,9 +7,11 @@ log/
 temp/
 book/
 images/
+audio/
 
 # Bytecode files
 __pycache__/
+.pytest_cache
 *.pytest
 *.pyc
 *.pyo

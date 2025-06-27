@@ -21,6 +21,21 @@ answer -> explore that best option.
 [] create lobotomy function that clears personality
 [] create function that updates personality
 
+Make a multimodal bot
+[x] do basic 1 image recog
+[] Fix personality setup and standardize the prompt setup for its personality
+[] make it able to recognize stream or video?
+[] make it callable by basic text command "What is this image?"
+
+
+Make a whisper/speech recog bot
+[] make device chooseer
+
+[x] make language chooser for a models options
+[x] add language choice to model?
+
+
+
 # Training
 
 [] Create a emmbeding bot? that emmbeds the training data when the bots go to 'sleep'
@@ -33,7 +48,6 @@ answer -> explore that best option.
 --> when error rate stops changing, save and stop the model.
 
 [] Test out quantize.py file
-
 
 
 ---------------------------------------------------------------
