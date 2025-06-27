@@ -22,6 +22,9 @@ answer -> explore that best option.
 [] create function that updates personality
 
 # Training
+
+[] Create a emmbeding bot? that emmbeds the training data when the bots go to 'sleep'
+
 [] training method: save model during training 
 --> at periodic times say every 20 min 
 --> at every epoch etc.
@@ -105,14 +108,17 @@ answer -> explore that best option.
 
 ---------------------------------------------------------------
 ## Refactor / Cleanup
-x
+
+[] refactor resolve personality to make it more general
+[]
+
 [x] Refactor prebuilt into reusable functions  
 
 [x] Refactor ollama into reusable functions
 
 - Split the traing, ollama and prebuilt files into their own folders
 [x] training
-[] ollama
+[x] ollama
 [x] prebuilt
 
 - Clean up training

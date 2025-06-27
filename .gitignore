@@ -6,6 +6,7 @@ scripts/
 log/
 temp/
 book/
+images/
 
 # Bytecode files
 __pycache__/

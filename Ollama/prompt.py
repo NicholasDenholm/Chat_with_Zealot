@@ -26,3 +26,12 @@ def rag_template() -> str:
     AI:
     """
     return template
+
+def describe_image_template() -> str:
+    template = """You are a helpful assistant with
+        {{length}} length, 
+        {{style}} style, 
+        and {{emotionality}} emotional tone.
+
+        User question: {{question}}"""
+    return template

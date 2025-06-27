@@ -14,7 +14,6 @@ def personality_presets() -> dict[str, tuple[str, str, str]]:
 
 # ----------------- Setup ----------------- #
 
-
 def setup_named_personality(name:str, test:bool = False) -> tuple[str, str, str]:
     """Setup a bot's personality by string label, like 'fanatic', 'preacher', 'sermon-lite', or 'nice_person'."""
     try:
