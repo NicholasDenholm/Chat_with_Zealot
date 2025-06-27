@@ -55,7 +55,7 @@ Make a whisper/speech recog bot
 
 # Web
 
-[] Improve look of the website
+[x] Improve look of the website
 [x] Make a proper header?
 --> Make a chat link? 
 [x] change how the text is displayed on the screen
@@ -66,6 +66,13 @@ Make a whisper/speech recog bot
 
 [] improve history function
 --> change how the history is brought up when typing into the text box.
+
+[] Generalize the app running process and split it from the prebuilt model.
+
+[] Make first page work with Wisper
+
+[] Add a page for the dumb bot
+[] Add a page for a smart bot
 
 # Interactivity
 
