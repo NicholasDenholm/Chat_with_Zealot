@@ -1,53 +1,58 @@
-from PIL import Image
-import base64
-import io
-
-from langchain_ollama.llms import OllamaLLM
-from langchain_core.prompts import ChatPromptTemplate
-from Ollama.personality import get_personality_by_name, get_all_personality_names, resolve_personality
-from bots.interface import ChatBotInterface
-
-import torch
-from transformers import LlavaProcessor, LlavaForConditionalGeneration
-
+from interface import ChatBotInterface
+import ollama
+import os
 
 class Multimodal_Bot(ChatBotInterface):
-    def __init__(self, model_name:str, personality:str):
+    def __init__(self, model_name: str, personality: str):
         self.model_name = model_name
-        self.model = OllamaLLM(model=model_name)
+        self.personality = personality  
 
-        self.length, self.style, self.emotionality, personality_name = resolve_personality(personality, "fanatic")
-        # Only set if resolved
-        self.personality = personality_name
+    def reply(self, user_request:str, image_path:str):
+        if not os.path.exists(image_path):
+            raise FileNotFoundError(f"Image not found at: {image_path}")
 
-        self.prompt_template = ChatPromptTemplate.from_template(f"""
-        You must describe this image by using a personality of {personality_name}. 
-                                                                
-        Customize your response according to:
-        - Desired Length: {{length}}
-        - Style: {{style}}
-        - Emotional Tone: {{emotionality}}
+        result = ollama.chat(
+            model = self.model_name,
+            messages=[
+                {'role': 'user',
+                'content': user_request,
+                'images': [image_path]
+                }
+            ]
 
-        image: {{image}}
-        """)
+        ) 
+        return result
 
-        self.chain = self.prompt_template | self.model
+        
+def build_multimodal_bot(model_name: str, personality: str):
+    return Multimodal_Bot(model_name=model_name, personality=personality)
 
-    def encode_image(self, image: Image.Image) -> str:
-        buffered = io.BytesIO()
-        image.save(buffered, format="PNG")
-        return base64.b64encode(buffered.getvalue()).decode("utf-8")
+def get_user_request_array() -> list:
+    return [
+        "Describe this image:",
+        "Count how many objects are in this image:",
+        "Provide 5 keywords describing this image (seperated by commas)",
+        "You are a helpful assistant, answer the question with a short, poetic style, and clam emotional tone. Question: Can you describe this image?"
+    ]
 
-    def reply(self, user_input: str, image_path:str) -> str:
-        image = Image.open(image_path).convert("RGB")
-        image_b64 = self.encode_image(image)
+def main():
 
-        inputs = {
-            "length": self.length,
-            "style": self.style,
-            "emotionality": self.emotionality,
-            "image": image_b64,  # Assume your model supports raw image bytes
-            "user_input": user_input
-        }
+    request_array = get_user_request_array()
+    user_request = request_array[2]
+    image_path = os.path.join("Ollama", "images", "image4.jpg")
 
-        return self.chain.invoke(inputs)
+    bot = build_multimodal_bot(model_name='llava', personality="nice_person")
+
+    try:
+        response = bot.reply(user_request, image_path)
+        print("\n------------------")
+        print(response['message']['content'])
+        print("------------------\n")
+    except Exception as error:
+        print("Error as: {error}")
+
+
+
+if __name__ == "__main__":
+    main()
+
