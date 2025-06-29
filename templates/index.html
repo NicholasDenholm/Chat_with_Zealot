@@ -14,23 +14,31 @@
     <!-- Text to speech -->
     
     <!--<script src="{{ url_for('static', filename='js/chat.js') }}"></script>-->
+    <div class="position-corner" data-pos="top-left">
+        <header class="app-header">
+            <h1>Chat with the Bot</h1>
+        </header>
+    </div>
     
 </head>
 <body>
-    <header class="app-header">
-        <h1>Chat with the Bot</h1>
-    </header>
-
-    <h1 class="position-corner" dat-pos="top-left">Chat with the Bot</h1>
     
-    <div id="chatBox" class="position-corner" data-pos="center"></div>
+    <!-- Big ChatBox -->
+    <div id="chatBox" class="position-corner round-box" data-pos="center"></div>
 
+     <!-- user reply box -->
     <form id="chatForm" class="position-corner" data-pos="bottom-center">
         <input type="text" id="userInput" placeholder="Type your message" required>
         <button type="submit">Send</button>
     </form>
 
-    <div class="theme-toggle-box position-corner" data-pos="bottom-right">
+    <!-- Mic button -->
+    <div class="position-corner round-box" data-pos="bottom-right" style="margin: 10px;">
+        <button id="micButton" style="font-size: 18px;">🎤 Speak</button>
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="position-corner" data-pos="top-right">
         <button id="themeToggleBtn" title="Toggle theme">🌓</button>
     </div>
 
