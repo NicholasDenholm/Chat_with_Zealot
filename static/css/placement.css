@@ -1,14 +1,19 @@
-/* placement.css */
-
 .position-corner {
   position: fixed;
   z-index: 999;
+  /*outline: 2px dashed orange; */ /* For testing */
 }
 
-/* Top Corners */
+/* Top */
 .position-corner[data-pos="top-left"] {
   top: 20px;
   left: 20px;
+}
+
+.position-corner[data-pos="top-center"] {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .position-corner[data-pos="top-right"] {
@@ -16,22 +21,10 @@
   right: 20px;
 }
 
-/* Bottom Corners */
+/* Bottom */
 .position-corner[data-pos="bottom-left"] {
   bottom: 20px;
   left: 20px;
-}
-
-.position-corner[data-pos="bottom-right"] {
-  bottom: 20px;
-  right: 20px;
-}
-
-/* Center Top/Bottom */
-.position-corner[data-pos="top-center"] {
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .position-corner[data-pos="bottom-center"] {
@@ -40,27 +33,61 @@
   transform: translateX(-50%);
 }
 
-/* --------- Edge Safety --------- */
+.position-corner[data-pos="bottom-right"] {
+  bottom: 20px;
+  right: 20px;
+}
 
+/* Center (true center of screen) */
 .position-corner[data-pos="center"] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-/* Safe margin for large elements like <h1> */
-.position-corner[data-pos^="top"] {
-  margin-top: 1rem;
+/* Vertical Center Left/Right */
+.position-corner[data-pos="center-left"] {
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
 }
 
-.position-corner[data-pos^="bottom"] {
-  margin-bottom: 1rem;
+.position-corner[data-pos="center-right"] {
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
 }
 
-.position-corner[data-pos$="left"] {
-  margin-left: 1rem;
+/* Horizontal Center Top/Bottom */
+.position-corner[data-pos="left-center"] {
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
 }
 
-.position-corner[data-pos$="right"] {
-  margin-right: 1rem;
+.position-corner[data-pos="right-center"] {
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
+
+/* Additional options */
+.safe-padding {
+  padding: 8px;
+}
+
+.round-box {
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(4, 4, 4, 0.2);
+}
+
+
+
+/* Flex layout for bottom-center */
+.bottom-center-row {
+  display: flex;
+  gap: 10px; /* space between items */
+  justify-content: center;
+  align-items: center;
 }

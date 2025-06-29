@@ -7,6 +7,7 @@ const SERVER_URL = `${window.location.protocol}//${window.location.hostname}:${P
 const chatBox = document.getElementById('chatBox');
 const form = document.getElementById('chatForm');
 const inputField = document.getElementById('userInput');
+const micButton = document.getElementById("micButton");
 
 // Display a message in the chat box
 function displayMessage(sender, text, className) {
@@ -67,3 +68,114 @@ function handleFormSubmit(event) {
 
 // Attach event listener
 form.addEventListener('submit', handleFormSubmit);
+
+// ---------------- Audio Processing ----------------
+/*
+async function startVoiceInput() {
+    // Request microphone access
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(stream);
+    const audioChunks = [];
+
+    mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+
+    mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append("audio", audioBlob, "speech.wav");
+
+        try {
+            const response = await fetch("/api/audio", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            const userText = data.transcription;
+            const botResponse = data.response;
+
+            displayMessage("You (voice)", userText, "user-message");
+            displayMessage("Bot", botResponse, "bot-message");
+            speak(botResponse); // trigger TTS
+        } catch (err) {
+            displayMessage("Error", err.message, "bot-message");
+        }
+    };
+
+    mediaRecorder.start();
+
+    setTimeout(() => {
+        mediaRecorder.stop();
+    }, 5000); // record for 5 seconds
+}
+*/
+let mediaRecorder;
+let audioChunks = [];
+
+async function startRecording() {
+    // Request microphone access
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = event => {
+        audioChunks.push(event.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append("audio", audioBlob, "speech.wav");
+
+        try {
+            const response = await fetch("/api/audio", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            const userText = data.transcription || "(no transcription)";
+            const botResponse = data.response || "(no response)";
+
+            displayMessage("You (voice)", userText, "user-message");
+            displayMessage("Bot", botResponse, "bot-message");
+            speak(botResponse); // trigger TTS
+        } catch (err) {
+            displayMessage("Error", err.message, "bot-message");
+        }
+    };
+
+    mediaRecorder.start();
+}
+
+function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+    }
+}
+
+// Attach event listeners to micButton
+
+
+micButton.addEventListener("mousedown", () => {
+    startRecording();
+});
+
+micButton.addEventListener("mouseup", () => {
+    stopRecording();
+});
+
+// For touch devices
+micButton.addEventListener("touchstart", (e) => {
+    e.preventDefault(); // Prevent mouse event emulation
+    startRecording();
+});
+
+micButton.addEventListener("touchend", (e) => {
+    e.preventDefault();
+    stopRecording();
+});
+
+
+
+document.getElementById("micButton").addEventListener("click", startVoiceInput);
