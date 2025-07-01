@@ -26,9 +26,24 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
 
         try:
             transcription = whisper_bot.transcribe_audio(audio_path)
+            print("Transcription is: ", transcription, "\n")
             chat_state = current_app.config['state']
+            #print("Chat state from api_audio:", chat_state)
+
+            if chat_state['backend'] == 'huggingface':
+                # Creates or appends the response dictionary, generates ands encodes a new response  
+                bot_response = chat_with_speech(transcription, chat_state)  
             
-            bot_response = chat_with_speech(transcription, chat_state)
+            elif chat_state['backend'] == 'llamacpp':
+                current_bot = chat_state['bot_instance']
+                history = chat_state['chat_history_ids']
+                memory = chat_state['max_memory']
+                
+                bot_response = current_bot.reply(transcription) 
+                print(bot_response)
+
+                # Update the history of responses
+                chat_state['chat_history_ids'] = current_bot.modify_chat_history(bot_response, history, memory)
 
             return jsonify({
                 "transcription": transcription,
@@ -51,13 +66,32 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             return jsonify({"error": "No message provided"}), 400
 
         state = current_app.config['state']
-        response = chat_with_speech(user_input, state)
+
+        if state['backend'] == 'huggingface':
+            response = chat_with_speech(user_input, state)
+
+        elif state['backend'] == 'llamacpp':
+            current_bot = state['bot_instance']
+            history = state['chat_history_ids']
+            memory = state['max_memory']
+            
+            response = current_bot.reply(user_input) 
+            print(response)
+
+            # Update the history of responses
+            state['chat_history_ids'] = current_bot.modify_chat_history(response, history, memory)
+
+        else:
+            print("Deefault respons handle")
+            response = chat_with_speech(user_input, state)
+
 
         return jsonify({
             "response": response,
-            "chat_history_ids": state['chat_history_ids'].tolist()
+            "chat_history_ids": state['chat_history_ids']
         })
 
+    #TODO make this work with the multi bot setup
     @app.route("/run_conversation", methods=["POST"])
     def run_conversation():
         data = request.json
