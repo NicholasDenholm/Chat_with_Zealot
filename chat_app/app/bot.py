@@ -63,6 +63,7 @@ def get_device() -> torch.device:
     # Check if GPU is available, otherwise sets it to CPU
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+# TODO Maybe split the user and bots convo?
 def create_ollama_bot_dict(model_name, bot, backend, max_memory:int=3):
     device = get_device()
     return {
