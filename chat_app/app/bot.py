@@ -16,7 +16,7 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, devic
         
         #bot = bots.build_zealot_bot(model_name, 'fanatic')
         bot = bots.build_zealot_bot(model_name, 'short_answers')
-        max_memory = 3
+        max_memory = 10
         
         state = create_ollama_bot_dict(bot.model_name, bot, backend, max_memory)
         print(state, "\n")
