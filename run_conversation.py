@@ -24,7 +24,7 @@ def build_bots():
     print("Returning dumb and smart")
     return dumb, smart
 
-def build_dumb_bot(name:str):
+def build_dumb_bot(model_name:str):
     """
     Builds a simple prebuilt chatbot using Hugging Face models.
     Available models:
@@ -33,12 +33,12 @@ def build_dumb_bot(name:str):
         - "microsoft/DialoGPT-large"
     """
     supported_models = ["microsoft/DialoGPT-small", "microsoft/DialoGPT-medium", "microsoft/DialoGPT-large"]
-    if name not in supported_models:
-        print(f"{name} not currently supported falling back to default")
-        name = "microsoft/DialoGPT-medium"
-    return Dumb_Bot(name)
+    if model_name not in supported_models:
+        print(f"{model_name} not currently supported falling back to default")
+        model_name = "microsoft/DialoGPT-medium"
+    return Dumb_Bot(model_name)
 
-def build_smart_bot(name:str, personality:str):
+def build_smart_bot(model_name:str, personality:str):
     """
     Builds a smart bot using Ollama or other supported LLMs.
     Available models:
@@ -47,10 +47,15 @@ def build_smart_bot(name:str, personality:str):
     Personality options (name or tuple supported):
         - "fanatic", "nice_person", "expert_coder", "mean_man", etc.
     """
+    supported_models = ["llama3.2", "codellama:7b", "llama3.2:latest"]
+    if model_name not in supported_models:
+        print(f"{model_name} not currently supported falling back to default")
+        model_name = "llama3.2"
+    
     personality = validate_personality_name(personality, fallback="nice_person")
     return Smart_Bot(model_name="llama3.2", personality=personality)
 
-def build_zealot_bot(name:str, personality:str):
+def build_zealot_bot(model_name:str, personality:str):
     """
     Initializes a Zealot-themed chat bot using an Ollama model.
 
@@ -62,6 +67,11 @@ def build_zealot_bot(name:str, personality:str):
         - "fanatic", "preacher", "sermon-lite"
         - Or use a custom personality tuple (length, style, emotionality)
     """
+    supported_models = ["llama3.2", "codellama:7b", "llama3.2:latest"]
+    if model_name not in supported_models:
+        print(f"{model_name} not currently supported falling back to default")
+        model_name = "llama3.2"
+
     personality = validate_personality_name(personality, fallback="fanatic")
     return Zealot_Bot(model_name="llama3.2", personality=personality)
 
@@ -79,6 +89,11 @@ def build_multimodal_bot(model_name: str = "llava-hf/llava-1.5-7b-hf", personali
     Personality options (validated via `validate_personality_name`):
         - "fanatic", "nice_person", "expert_coder", "mean_man", etc.
     """
+    supported_models = ["llava:latest", "llava"]
+    if model_name not in supported_models:
+        print(f"{model_name} not currently supported falling back to default")
+        model_name = "llava"
+
     personality = validate_personality_name(personality, fallback="fanatic")
     return Multimodal_Bot(model_name=model_name, personality=personality)
 

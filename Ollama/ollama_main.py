@@ -84,6 +84,7 @@ def run_model(model, template:str, personality: tuple[str, str, str], content: s
             print("Exiting goodbye...")
             break
 
+### -------------- Images -------------- ###
 
 def describe_image(image_path: str, question: str, length='medium', style='neutral', emotionality='balanced'):
     prompt_template = describe_image_template()

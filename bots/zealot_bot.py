@@ -12,6 +12,7 @@ class Zealot_Bot(ChatBotInterface):
         # Only set if resolved
         self.personality = personality_name
 
+        # TODO make this take from Ollama/prompts warhammer function
         self.prompt_template = ChatPromptTemplate.from_template(f"""
         You are a religious zealot from the Warhammer 40K universe.
         Answer the following using a personality of {personality_name}. 
@@ -61,3 +62,19 @@ class Zealot_Bot(ChatBotInterface):
             "emotionality": self.emotionality
         })
         return result
+    
+    def modify_chat_history(self, user_input:str, chat_history_ids:list, max_memory:int):
+        # Initialize or use existing chat history
+        if chat_history_ids is None:
+            chat_history = []
+        else:
+            print("Appending chat_history_ids..")
+            chat_history = chat_history_ids
+        
+        # Add user message to history
+        chat_history.append({'role': 'user', 'content': user_input})
+
+        if len(chat_history) > max_memory:
+            chat_history = chat_history[-max_memory:]
+
+        return chat_history

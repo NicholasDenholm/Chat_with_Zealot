@@ -2,19 +2,29 @@ import os
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from prebuilt.app.chat_bot import init_chat_state
+import bots
 
 def init_model_state(backend: str = 'huggingface', model_name: str = None, device: str = None):
-    # TODO setup prebuilt 
-    # ##TODO setup whisper speech recog 
     
-
     if backend == "huggingface":
         state = init_chat_state()
         #print("Type of state:", type(state))
         #print("State value:", state)
         return state
+    
+    elif backend == "llamacpp":
+        
+        #bot = bots.build_zealot_bot(model_name, 'fanatic')
+        bot = bots.build_zealot_bot(model_name, 'short_answers')
+        max_memory = 3
+        
+        state = create_ollama_bot_dict(bot.model_name, bot, backend, max_memory)
+        print(state, "\n")
+
+        return state
     else: 
         raise ValueError(f"Unsupported backend: {backend}")
+    
     
     
     # TODO set up zealot bot
@@ -53,8 +63,16 @@ def get_device() -> torch.device:
     # Check if GPU is available, otherwise sets it to CPU
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-'''
-def load_llamacpp_model(model_path):
-    from llama_cpp import Llama
-    return Llama(model_path=model_path)
-    '''
+# TODO Maybe split the user and bots convo?
+def create_ollama_bot_dict(model_name, bot, backend, max_memory:int=3):
+    device = get_device()
+    return {
+            "model": model_name,  # Just the model name string
+            "tokenizer": None,    # Ollama doesn't expose tokenizer
+            "bot_instance": bot,   # Keep reference to actual bot
+            "backend": backend,
+            "device": "ollama",   # Ollama manages devices internally
+            "tts_engine": bot.tts_engine if hasattr(bot, 'tts_engine') else None,
+            "chat_history_ids": None,
+            "max_memory": max_memory,
+        }
