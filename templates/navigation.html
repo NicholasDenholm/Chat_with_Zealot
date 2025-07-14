@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Demo</title>
+
+    <!-- Landing page styles-->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}"> -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/demopage.css') }}">
+
+
+</head>
+<body>
+
+    <!-- Demo content (this would be your actual page content) -->
+    <div class="demo-content position-corner" data-pos="center">
+        <h1>Welcome to Your Chat App</h1>
+        <p>This is your home page content. The navigation component in the top-right corner allows you to easily switch between pages.</p>
+        <p>Click the "Bot Menu" button to access the bot selector, or stay here on the home page.</p>
+        <p>The navigation is responsive and will move to the bottom-right on mobile devices.</p>
+    </div>
+
+    {% include 'includes/pageswitcher.html' %}
+    
+    <!-- Voice selector reference -->
+    
+    <script src="{{ url_for('static', filename='js/activepage.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script>
+
+</body>
+</html>

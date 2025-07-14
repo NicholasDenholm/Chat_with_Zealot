@@ -1,0 +1,16 @@
+<!-- Generalized Page Switcher ./templates/includes/pageswitcher.html -->
+<div class="page-switcher position-corner" 
+     data-pos="top-left"
+     data-config='{{ switcher_js_config | safe }}'>
+    <div class="switcher-toggle">
+        {% for page in pages %}
+        <button class="switch-btn {% if page.active %}active{% endif %}" 
+                data-page="{{ page.key }}" 
+                onclick="switchPage('{{ page.key }}')">
+            <span class="btn-icon">{{ page.icon|safe if page.icon else 'x' }}</span>
+            <span class="btn-text">{{ page.label }}</span>
+        </button>
+        {% endfor %}
+        <div class="switch-indicator"></div>
+    </div>
+</div>

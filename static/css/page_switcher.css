@@ -1,0 +1,153 @@
+.page-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.switcher-toggle {
+    /*background: rgba(255, 255, 255, 0.95);*/
+    background: var(--bg-color);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--input-border);
+    display: flex;
+    position: fixed;
+    overflow: hidden;
+}
+
+.switch-btn {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    /* transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-color);
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.switch-btn:hover {
+    color: #475569;
+    transform: translateY(-1px);
+}
+
+.switch-btn.active {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn-icon {
+    font-size: 16px;
+    display: inline-block;
+}
+
+.btn-text {
+    font-weight: 600;
+}
+
+.switch-indicator {
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    right: 8px;
+    width: 120px; /* mUst match button min-width */
+    height: 46px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    /* transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
+    /* transition: transform 0.3s ease-in-out; */
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    z-index: 1;
+}
+
+/* Directional animation classes */
+.switcher-toggle.slide-left .switch-indicator {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.switcher-toggle.slide-right .switch-indicator {
+    transition: transform 0.6s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+}
+
+
+
+/* Sliding selection indicator */
+/* Traslation distance must be a fraction of the total width coresponding to how big each button is */
+.switcher-toggle[data-active="talk-to-bot"] .switch-indicator {
+    transform: translateX(0px);
+}
+
+
+.switcher-toggle[data-active="bot-selector"] .switch-indicator {
+    transform: translateX(120px);
+}
+
+.switcher-toggle[data-active="home"] .switch-indicator {
+    transform: translateX(245px);
+}
+
+/* This slides from the left to the third button?? How to fix?*/
+
+
+/* Mobile options */
+@media (max-width: 768px) {
+    .page-switcher {
+        top: 5px;
+        bottom: 5px;
+        right: 10px;
+        left: 10px;
+    }
+   
+    .switch-btn {
+        padding: 10px 16px;
+        min-width: 100px; /* Reduced for mobile */
+        font-size: 13px;
+    }
+   
+    .switch-indicator {
+        width: 100px; /* Matches mobile button width */
+    }
+   
+    /* Mobile positioning - adjust based on new button width */
+    .switcher-toggle[data-active="talk-to-bot"] .switch-indicator {
+        transform: translateX(0px);
+    }
+    
+    .switcher-toggle[data-active="bot-selector"] .switch-indicator {
+        transform: translateX(100px);
+    }
+    
+    .switcher-toggle[data-active="home"] .switch-indicator {
+        transform: translateX(200px);
+    }
+}
+
+/* Dark mode support
+@media (prefers-color-scheme: dark) {
+    .switcher-toggle {
+        background: rgba(30, 30, 30, 0.95);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .switch-btn {
+        color: #94a3b8;
+    }
+    
+    .switch-btn:hover {
+        color: #cbd5e1;
+    }
+}
+*/

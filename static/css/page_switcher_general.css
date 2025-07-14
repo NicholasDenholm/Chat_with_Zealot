@@ -1,0 +1,210 @@
+/* Page Switcher Styles - Add to your main CSS file */
+
+.page-switcher {
+    position: fixed;
+    z-index: 1000;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Position variants 
+.page-switcher[data-pos="top-left"] {
+    top: 20px;
+    left: 20px;
+}
+
+.page-switcher[data-pos="top-right"] {
+    top: 20px;
+    right: 20px;
+}
+
+.page-switcher[data-pos="bottom-left"] {
+    bottom: 20px;
+    left: 20px;
+}
+
+.page-switcher[data-pos="bottom-right"] {
+    bottom: 20px;
+    right: 20px;
+}
+
+.page-switcher[data-pos="bottom-center"] {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+    */
+
+/* Switcher toggle container */
+.switcher-toggle {
+    position: relative;
+    display: flex;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
+    padding: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+/* Dark mode variant */
+@media (prefers-color-scheme: dark) {
+    .switcher-toggle {
+        background: rgba(30, 30, 30, 0.95);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+}
+
+/* Switch buttons */
+.switch-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+.switch-btn:hover {
+    color: #333;
+}
+
+.switch-btn.active {
+    color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+    .switch-btn {
+        color: #ccc;
+    }
+    
+    .switch-btn:hover {
+        color: #fff;
+    }
+}
+
+/* Button icons */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+}
+
+/* Button text */
+.btn-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Active indicator */
+.switch-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 18px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dynamic width calculation for indicator */
+.switcher-toggle[data-active="home"] .switch-indicator {
+    width: var(--btn-width, 80px);
+    transform: translateX(0);
+}
+
+.switcher-toggle[data-active="bot-selector"] .switch-indicator {
+    width: var(--btn-width, 120px);
+    transform: translateX(var(--btn-offset, 84px));
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .page-switcher {
+        font-size: 12px;
+    }
+    
+    .switch-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .btn-icon {
+        width: 14px;
+        height: 14px;
+        font-size: 12px;
+    }
+    
+    .page-switcher[data-pos="top-left"],
+    .page-switcher[data-pos="top-right"] {
+        top: 10px;
+    }
+    
+    .page-switcher[data-pos="top-left"] {
+        left: 10px;
+    }
+    
+    .page-switcher[data-pos="top-right"] {
+        right: 10px;
+    }
+}
+
+/* Animation for smooth transitions */
+.switch-btn {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover effects */
+.switcher-toggle:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Focus states for accessibility */
+.switch-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+}
+
+/* Alternative color schemes */
+.page-switcher.theme-dark .switcher-toggle {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.page-switcher.theme-dark .switch-btn {
+    color: #ccc;
+}
+
+.page-switcher.theme-dark .switch-btn:hover {
+    color: #fff;
+}
+
+.page-switcher.theme-dark .switch-btn.active {
+    color: #fff;
+}

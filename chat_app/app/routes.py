@@ -1,14 +1,66 @@
 from flask import request, jsonify, render_template, current_app
 from prebuilt.app.chat_bot import chat_with_speech
 from prebuilt.app.audio_bot import Whisper_Bot
+from .bot import get_current_bot_info, swap_bot, init_bot
+
+#swap_bot, get_current_bot_info, init_bot
 import tempfile
 import os
 
-#from bots import whisper_bot
+# Page configuration presets
+PAGE_CONFIGS = {
+    'chat_bot': {
+        'pages': [
+            {'key': 'home', 'label': 'Home', 'url': '/', 'paths': ['', 'home']},
+            {'key': 'bot-selector', 'label': 'Bot Selector', 'url': '/bot-menu', 'paths': ['bot-menu', 'bot-selector']},
+        ]
+    },
+    'home': {
+        'pages': [
+            {'key': 'home', 'label': 'Chat', 'url': '/talk-to-bot', 'paths': ['talk-to-bot', 'chat']},
+            {'key': 'bot-selector', 'label': 'Bot Selector', 'url': '/bot-menu', 'paths': ['bot-menu', 'bot-selector']},
+        ]
+    },
+    'bot_menu': {
+        'pages': [
+            {'key': 'home', 'label': 'Home', 'url': '/', 'paths': ['', 'home']},
+            {'key': 'home', 'label': 'Chat', 'url': '/talk-to-bot', 'paths': ['talk-to-bot', 'chat']},
+            {'key': 'bot-selector', 'label': 'Bot Selector', 'url': '/bot-menu', 'paths': ['bot-menu', 'bot-selector']},
+        ]
+    }
+}
 
+def get_page_switcher_config(config_name='chat_bot', position='top-left'):
+    """Generate page switcher configuration for templates"""
+    config = PAGE_CONFIGS.get(config_name, PAGE_CONFIGS['chat_bot'])
+    current_path = request.path
+    
+    # Mark active page
+    pages = []
+    js_config = {}
+    
+    for page in config['pages']:
+        page_copy = page.copy()
+        page_copy['active'] = any(path in current_path for path in page['paths'])
+        pages.append(page_copy)
+        
+        # Build JavaScript configuration
+        js_config[page['key']] = {
+            'url': page['url'],
+            'paths': page['paths']
+        }
+    
+    return {
+        'pages': pages,
+        'position': position,
+        'config_name': config_name,
+        'switcher_js_config': js_config  # This is for the JavaScript
+    }
 ### a route is how the app knows what code to run when a user accesses a certain URL.
 
 def register_routes(app): # regester_routes called with __init__, keeps chat and home modular
+    
+    # ----------------- Chatting  ----------------- #
     
     #TODO Make it so that the whisper bot can be swapped out to another language
     whisper_bot = Whisper_Bot(model_name="base")
@@ -24,8 +76,6 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             history = chat_state['chat_history_ids']
             memory = chat_state['max_memory']
 
-            print("History before: ", chat_state['chat_history_ids'])
-
             if history is None:
                 history = []
                 chat_state['chat_history_ids'] = history            
@@ -35,14 +85,33 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             response = current_bot.reply(user_input, chat_history=history)  # reply with context
 
             current_bot.add_bot_message(response, history, memory)  # Add bot response to history
-
-            print("History after: ", chat_state['chat_history_ids'])
             
             return response
         
         else:
             print("Default response handle")
             return chat_with_speech(user_input, chat_state)
+
+    def make_new_bot(app, backend, model):
+        try:
+            
+            if not backend or not model:
+                print("ERROR: NO BACKEND OR MODEL", backend, model)
+                return jsonify({'error': 'backend and model are required'}), 400
+            
+            print("\nbefore init_bot in routes make_new_bot", backend, model)
+            init_bot(current_app, backend, model)
+            print("After init_bot in routes make_new_bot", backend, model, "\n")
+            
+            return jsonify({
+                'success': True,
+                'backend': backend,
+                'model': model,
+                'message': 'Bot initialized successfully'
+            })
+        
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
     @app.route('/api/audio', methods=["POST"])
     def api_audio():
@@ -57,29 +126,10 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
 
         try:
             transcription = whisper_bot.transcribe_audio(audio_path)
-            print("Transcription is: ", transcription, "\n")
             chat_state = current_app.config['state']
-            #print("Chat state from api_audio:", chat_state)
 
-            # Refactored to use common function
             bot_response = generate_response(transcription, chat_state)
             print(bot_response)
-            '''
-            if chat_state['backend'] == 'huggingface':
-                # Creates or appends the response dictionary, generates ands encodes a new response  
-                bot_response = chat_with_speech(transcription, chat_state)  
-            
-            elif chat_state['backend'] == 'llamacpp':
-                current_bot = chat_state['bot_instance']
-                history = chat_state['chat_history_ids']
-                memory = chat_state['max_memory']
-                
-                #bot_response = current_bot.reply(transcription) 
-                
-
-                # Update the history of responses
-                chat_state['chat_history_ids'] = current_bot.modify_chat_history(bot_response, history, memory)
-            '''
 
             return jsonify({
                 "transcription": transcription,
@@ -92,7 +142,6 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
         finally:
             os.remove(audio_path)
 
-
     @app.route("/chat", methods=["POST"])
     def chat():
         data = request.json
@@ -102,25 +151,6 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
 
         state = current_app.config['state']
         response = generate_response(user_input, state)
-        '''
-        if state['backend'] == 'huggingface':
-            response = chat_with_speech(user_input, state)
-
-        elif state['backend'] == 'llamacpp':
-            current_bot = state['bot_instance']
-            history = state['chat_history_ids']
-            memory = state['max_memory']
-            
-            response = current_bot.reply(user_input) 
-            print(response)
-
-            # Update the history of responses
-            state['chat_history_ids'] = current_bot.modify_chat_history(response, history, memory)
-
-        else:
-            print("Deefault respons handle")
-            response = chat_with_speech(user_input, state)
-        '''
 
         return jsonify({
             "response": response,
@@ -144,7 +174,88 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             "chat_history_ids": state['chat_history_ids'].tolist()
         })
 
+    # ----------------- Changing Bots ----------------- # 
+    @app.route('/api/bot/swap', methods=['POST'])
+    def api_swap_bot():
+        try:
+            data = request.json
+            backend = data.get('backend')
+            model = data.get('model')
+            
+            if not backend or not model:
+                return jsonify({'error': 'backend and model are required'}), 400
+            
+            result = swap_bot(current_app, backend, model)
+            print('result from swap bot:', result , "\n\n")
+            #print(result['state'])
+            #app = current_app
+            if (result['success']):
+                backend = result['backend']
+                model = result['model']
+                make_new_bot(current_app, backend, model)
+
+            return jsonify(result)
+        
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    @app.route('/api/bot/current', methods=['GET'])
+    def api_get_current_bot():
+        try:
+            info = get_current_bot_info(current_app)
+            print("current bot info:", info)
+
+            #data = request.json
+            #backend = data.get('backend')
+            #model = data.get('model')
+            #print("backend: ", backend, "and model: ", model)
+
+            return jsonify(info)
+        
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    
+    @app.route('/api/bot/init', methods=['POST'])
+    def api_init_bot():
+        try:
+            data = request.json
+            backend = data.get('backend')
+            model = data.get('model')
+            
+            if not backend or not model:
+                return jsonify({'error': 'backend and model are required'}), 400
+            
+            print("\nbefore init_bot in routes api_init_bot", backend, model)
+            init_bot(current_app, backend, model)
+            print("After init_bot in routes api_init_bot", backend, model, "\n")
+            
+            return jsonify({
+                'success': True,
+                'backend': backend,
+                'model': model,
+                'message': 'Bot initialized successfully'
+            })
+        
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+        
+    # ----------------- Pages ----------------- # 
     @app.route("/")
     def home():
         #return "Chatbot API is running."
-        return render_template("index.html")
+        switcher_config = get_page_switcher_config('home', 'top-left')
+        print("Switcher config:", switcher_config)
+        return render_template("navigation.html")
+    
+    @app.route("/talk-to-bot")
+    def talk_to_bot():
+        switcher_config = get_page_switcher_config('chat_bot', 'top-left')
+        print("Switcher config:", switcher_config)
+        
+        return render_template("talk_to_bot.html", switcher=switcher_config)
+    
+    @app.route('/bot-menu')
+    def bot_menu():
+        switcher_config = get_page_switcher_config('bot_menu', 'top-left')
+        print("Switcher config:", switcher_config)
+        return render_template('bot_menu.html')

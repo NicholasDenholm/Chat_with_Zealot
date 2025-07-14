@@ -5,13 +5,21 @@ from prebuilt.app.chat_bot import init_chat_state
 import bots
 
 def init_model_state(backend: str = 'huggingface', model_name: str = None, device: str = None):
-    
+    '''
+    Creates model with either huggingface or llamacpp backends.
+    Args: backend , model_name, device
+    '''
+    print("\n ---- init_model_state ---- ")
+    print("Backend:", backend, "Model name: ", model_name, "\n")
+
+    # x set up dumb bot
     if backend == "huggingface":
         state = init_chat_state()
         #print("Type of state:", type(state))
-        #print("State value:", state)
+        #print("State value:", state, "\n")
         return state
     
+    # x set up zealot bot
     elif backend == "llamacpp":
         
         #bot = bots.build_zealot_bot(model_name, 'fanatic')
@@ -19,7 +27,7 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, devic
         max_memory = 10
         
         state = create_ollama_bot_dict(bot.model_name, bot, backend, max_memory)
-        print(state, "\n")
+        print("\n Ollama bot here: ", state, "\n")
 
         return state
     else: 
@@ -27,7 +35,6 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, devic
     
     
     
-    # TODO set up zealot bot
     # TODO setup general smart/dumb bots
     # TODO setup multimodal bot
     '''
@@ -52,6 +59,45 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, devic
     '''
     
 
+def init_bot(app, backend: str, model: str):
+    """Initialize the bot model state for the app"""
+    
+    print("Making new bot with a backend of: ", backend, "and a name of: ", model)
+    app.config['state'] = init_model_state(backend, model)
+    print("model state is: ", app.config['state'])
+
+    app.config['current_backend'] = backend
+    app.config['current_model'] = model
+
+
+def swap_bot(app, backend: str, model: str):
+    """Swap out the current bot with a new one"""
+    # Clean up existing state if needed
+    if 'state' in app.config and hasattr(app.config['state'], 'cleanup'):
+        app.config['state'].cleanup()
+    
+    # Initialize new bot
+    #init_bot(app, backend, model)
+
+    print("\n\n---------before init_bot in routes api_init_bot", backend, model)
+    app.config['state'] = init_bot(app, backend, model)
+    print("After init_bot in routes api_init_bot", backend, model, "\n\n\n---------")
+    
+    return {
+        'success': True,
+        'backend': backend,
+        'model': model,
+        'previous_backend': app.config.get('current_backend'),
+        'previous_model': app.config.get('current_model')
+    }
+
+def get_current_bot_info(app):
+    """Get information about the currently active bot"""
+    return {
+        'backend': app.config.get('current_backend'),
+        'model': app.config.get('current_model'),
+        'initialized': 'state' in app.config and app.config['state'] is not None
+    }
 
 
 ### -------------- Setup -------------- ###

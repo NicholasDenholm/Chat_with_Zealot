@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Swap Menu</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bot_menu.css') }}">
+    <!-- Box placement logic -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
+    <!-- Theme changing logic -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    
+    <!-- Page selector button -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
+
+</head>
+
+<body>
+    <div class="bot-menu">
+        <h1>🤖 Bot Selector</h1>
+        
+        <div class="current-bot" id="currentBot">
+            <div>Currently Active: <span id="currentBotName">Loading...</span></div>
+        </div>
+
+        <div class="bot-option" data-backend="huggingface" data-model="microsoft/DialoGPT-medium">
+            <h3>🤗 Hugging Face</h3>
+            <p>DialoGPT-medium - Conversational AI model</p>
+        </div>
+
+        <div class="bot-option" data-backend="llamacpp" data-model="llama3.2">
+            <h3>🦙 LlamaCPP</h3>
+            <p>Llama 3.2 - Advanced language model</p>
+        </div>
+
+        <div class="bot-option" data-backend="openai" data-model="gpt-4">
+            <h3>🔥 OpenAI</h3>
+            <p>GPT-4 - Most capable AI model</p>
+        </div>
+
+        <div class="bot-option" data-backend="anthropic" data-model="claude-3">
+            <h3>🎭 Anthropic</h3>
+            <p>Claude 3 - Constitutional AI assistant</p>
+        </div>
+
+        <button class="swap-button" id="swapButton" onclick="swapBot()">
+            Switch Bot
+        </button>
+
+        <div class="status-message" id="statusMessage" style="display: none;"></div>
+    </div>
+    
+    <!-- Theme Toggle -->
+    <div class="position-corner" data-pos="top-right">
+        <button id="themeToggleBtn" title="Toggle theme">🌓</button>
+    </div>
+
+    <!-- ( Chat / Bot Selector ) navigation bar --> 
+    {% include 'includes/pageswitcher.html' %}
+    
+
+    <script src="{{ url_for('static', filename='js/bot_menu.js') }}"></script>
+    <!-- Load the theme toggle script -->
+    <script src="{{ url_for('static', filename='js/themeToggle.js') }}"></script>
+    <!-- Logic for the bot switcher button -->
+    <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script>
+</body>
+</html>

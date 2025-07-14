@@ -11,14 +11,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
-    <!-- Text to speech -->
+    
+    <!-- Bot selector button -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
+
     
     <!--<script src="{{ url_for('static', filename='js/chat.js') }}"></script>-->
+    
+    <!--
     <div class="position-corner" data-pos="top-left">
         <header class="app-header">
             <h1>Chat with the Bot</h1>
         </header>
     </div>
+    -->
     
 </head>
 <body>
@@ -48,6 +54,10 @@
         <select id="voiceSelect" style="width: 100%; max-width: 250px;"></select>
     </div>
 
+    <!-- ( Chat / Bot Selector ) navigation bar --> 
+    {% include 'includes/pageswitcher.html' %}
+
+
     
     <!-- Voice selector reference-->
     <script src="{{ url_for('static', filename='js/selectVoice.js') }}"></script>
@@ -57,6 +67,8 @@
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
     <!-- Load the theme toggle script -->
     <script src="{{ url_for('static', filename='js/themeToggle.js') }}"></script>
-    
+    <!-- Logic for the bot switcher button -->
+    <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script> 
+
 </body>
 </html>
