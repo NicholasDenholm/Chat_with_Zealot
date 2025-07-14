@@ -1,7 +1,8 @@
 from flask import request, jsonify, render_template, current_app
-from prebuilt.app.chat_bot import chat_with_speech
+from prebuilt.app.chat_bot import chat_with_speech, chat_with_speech_string_version
 from prebuilt.app.audio_bot import Whisper_Bot
 from .bot import get_current_bot_info, swap_bot, init_bot
+
 
 #swap_bot, get_current_bot_info, init_bot
 import tempfile
@@ -69,7 +70,8 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
         """Common logic for generating bot responses"""
 
         if chat_state['backend'] == 'huggingface':
-            return chat_with_speech(user_input, chat_state)
+            response = chat_with_speech(user_input, chat_state)
+            chat_state['chat_history_ids'] = chat_state['chat_history_string']
         
         elif chat_state['backend'] == 'llamacpp':
             current_bot = chat_state['bot_instance']
@@ -85,14 +87,15 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             response = current_bot.reply(user_input, chat_history=history)  # reply with context
 
             current_bot.add_bot_message(response, history, memory)  # Add bot response to history
-            
-            return response
         
         else:
             print("Default response handle")
-            return chat_with_speech(user_input, chat_state)
+            response = chat_with_speech(user_input, chat_state)
 
-    def make_new_bot(app, backend, model):
+        return response
+
+
+    def make_new_bot(current_app, backend, model):
         try:
             
             if not backend or not model:
@@ -101,6 +104,9 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             
             print("\nbefore init_bot in routes make_new_bot", backend, model)
             init_bot(current_app, backend, model)
+            print("here")
+            #print(app['backend'])
+            #app = create_app(backend=model, model=model)
             print("After init_bot in routes make_new_bot", backend, model, "\n")
             
             return jsonify({
@@ -145,13 +151,20 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
     @app.route("/chat", methods=["POST"])
     def chat():
         data = request.json
+
+        print("Chat data is: ",data, "\n\n\n")
+
         user_input = data.get("message", "")
         if not user_input:
             return jsonify({"error": "No message provided"}), 400
 
         state = current_app.config['state']
-        response = generate_response(user_input, state)
+        print("Current state now: ",state, "\n")
 
+        response = generate_response(user_input, state)
+        print('Response from routes function, chat() is: ',response)
+
+        # TODO ERROR HERE for the bot swap then talk, response is good, chat_history_ids is not.
         return jsonify({
             "response": response,
             "chat_history_ids": state['chat_history_ids']
@@ -189,12 +202,19 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             print('result from swap bot:', result , "\n\n")
             #print(result['state'])
             #app = current_app
-            if (result['success']):
-                backend = result['backend']
-                model = result['model']
-                make_new_bot(current_app, backend, model)
+            #if (result['success']):
+                #backend = result['backend']
+                #model = result['model']
 
-            return jsonify(result)
+                #result = make_new_bot(current_app, backend, model)
+                #current_app = create_app(backend=model, model=model)
+
+            return jsonify({
+                'success': result['success'],
+                'backend': result['backend'],
+                'model': result['model'],
+                'message': 'Bot initialized successfully'
+            })
         
         except Exception as e:
             return jsonify({'error': str(e)}), 500
