@@ -14,6 +14,7 @@ def create_app(backend:str=None, model:str=None):
 
     # Initialize bot if parameters provided
     if backend and model:
+        print("backend and model provided... now making a new bot.\n\n")
         init_bot(app, backend, model)
 
     # Register all routes

@@ -15,7 +15,7 @@ def init_chat_state(model_name:str='microsoft/DialoGPT-medium'):
         "device": device,
         "tts_engine": tts_engine,
         "chat_history_ids": None,
-        "max_memory": 3,
+        "max_memory": 6,
         "backend": backend
     }
 
@@ -87,8 +87,11 @@ def chat_with_bot(user_input: str, tokenizer, model, chat_history_ids=None, devi
 
 
     if chat_history_ids is None:
+        print('empty chat_history in prebuilt')
         bot_input_ids = encoded_input
     else:
+        if isinstance(chat_history_ids, str):
+            chat_history_ids = tokenizer.encode(chat_history_ids, return_tensors='pt', add_special_tokens=False).to(device)
         combined = torch.cat([chat_history_ids.to(device), encoded_input], dim=-1)
         bot_input_ids = combined[:, -MAX_INPUT_LENGTH:]
 
@@ -121,6 +124,31 @@ def trim_chat_history(chat_history_ids, tokenizer, max_turns:int):
     trimmed = tokenizer.encode(tokenizer.eos_token.join(segments[-2 * max_turns:]) + tokenizer.eos_token, return_tensors='pt')
     return trimmed
 
+def tensor_to_string_history(chat_history_ids, tokenizer):
+    """
+    Convert tensor chat history to human-readable string format.
+    
+    Args:
+        chat_history_ids: Tensor containing token IDs
+        tokenizer: Tokenizer used to decode the tokens
+    
+    Returns:
+        str: Human-readable chat history
+    """
+    if chat_history_ids is None or chat_history_ids.numel() == 0:
+        return "Empty chat history"
+    
+    # Convert tensor to list of token IDs
+    token_ids = chat_history_ids.squeeze().tolist()
+    
+    # Decode tokens to text
+    try:
+        decoded_text = tokenizer.decode(token_ids, skip_special_tokens=True)
+        return decoded_text
+    except Exception as e:
+        return f"Error decoding tokens: {str(e)}"
+
+
 def chat_with_speech(user_input, state):
     bot_reply, state['chat_history_ids'] = chat_with_bot(
         user_input,
@@ -137,8 +165,46 @@ def chat_with_speech(user_input, state):
         state['max_memory']
     )
     
+    # Convert tensor to string for debugging/logging
+    chat_history_string = tensor_to_string_history(
+        state['chat_history_ids'], 
+        state['tokenizer']
+    )
+    print(f"Updated chat history in chat_with_speech: {chat_history_string}")
+
+    state['chat_history_string'] = chat_history_string
+
     return bot_reply
 
+# Alternative: If you want to completely replace tensor storage with string storage
+def chat_with_speech_string_version(user_input, state):
+    """
+    Version that stores chat history as strings instead of tensors.
+    Note: You'd need to modify chat_with_bot to accept/return strings too.
+    """
+    bot_reply, chat_history_tensor = chat_with_bot(
+        user_input,
+        state['tokenizer'],
+        state['model'],
+        state['chat_history_ids'],
+        state['device']
+    )
+    
+    # Convert to string and store as string
+    state['chat_history_string'] = tensor_to_string_history(
+        chat_history_tensor, 
+        state['tokenizer']
+    )
+    
+    print(f"Updated chat history: {state['chat_history_string']}")
+    
+    # If you still need tensor format for the model, convert back when needed
+    # state['chat_history_ids'] = state['tokenizer'].encode(
+    #     state['chat_history_string'], 
+    #     return_tensors='pt'
+    # ).to(state['device'])
+    
+    return bot_reply
 
 ### -------------- Text to Speech -------------- ###
 

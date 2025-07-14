@@ -64,10 +64,13 @@ def init_bot(app, backend: str, model: str):
     
     print("Making new bot with a backend of: ", backend, "and a name of: ", model)
     app.config['state'] = init_model_state(backend, model)
-    print("model state is: ", app.config['state'])
+    print("\n\n============","model state","============\n\n", app.config['state'], "\n============\n\n")
 
     app.config['current_backend'] = backend
     app.config['current_model'] = model
+
+    #return app
+
 
 
 def swap_bot(app, backend: str, model: str):
@@ -79,16 +82,18 @@ def swap_bot(app, backend: str, model: str):
     # Initialize new bot
     #init_bot(app, backend, model)
 
-    print("\n\n---------before init_bot in routes api_init_bot", backend, model)
-    app.config['state'] = init_bot(app, backend, model)
-    print("After init_bot in routes api_init_bot", backend, model, "\n\n\n---------")
+    print("\n\n--------- before swap_bot in bot.py ---------", backend, model)
+    init_bot(app, backend, model)
+    print("--------- After swap_bot in bot.py", backend, model, "---------\n\n")
+    print("model state at the end of swap_bot:", app.config.get('state'), '\n\n')
     
     return {
         'success': True,
         'backend': backend,
         'model': model,
         'previous_backend': app.config.get('current_backend'),
-        'previous_model': app.config.get('current_model')
+        'previous_model': app.config.get('current_model'),
+        'state': app.config.get('state')
     }
 
 def get_current_bot_info(app):
