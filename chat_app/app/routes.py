@@ -83,9 +83,7 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
                 chat_state['chat_history_ids'] = history            
 
             current_bot.add_user_message(user_input, history, memory)   # Add user message to history
-
             response = current_bot.reply(user_input, chat_history=history)  # reply with context
-
             current_bot.add_bot_message(response, history, memory)  # Add bot response to history
         
         else:
@@ -152,19 +150,19 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
     def chat():
         data = request.json
 
-        print("Chat data is: ",data, "\n\n\n")
+        #print("Chat data is: ",data, "\n\n\n")
 
         user_input = data.get("message", "")
         if not user_input:
             return jsonify({"error": "No message provided"}), 400
 
         state = current_app.config['state']
-        print("Current state now: ",state, "\n")
+        #print("Current state now: ",state, "\n")
 
         response = generate_response(user_input, state)
-        print('Response from routes function, chat() is: ',response)
+        #print('Response from routes function, chat() is: ',response)
 
-        # TODO ERROR HERE for the bot swap then talk, response is good, chat_history_ids is not.
+        # Note, if response above is good, check if chat_history_ids is in string form.
         return jsonify({
             "response": response,
             "chat_history_ids": state['chat_history_ids']
@@ -187,6 +185,7 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             "chat_history_ids": state['chat_history_ids'].tolist()
         })
 
+
     # ----------------- Changing Bots ----------------- # 
     @app.route('/api/bot/swap', methods=['POST'])
     def api_swap_bot():
@@ -199,15 +198,7 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
                 return jsonify({'error': 'backend and model are required'}), 400
             
             result = swap_bot(current_app, backend, model)
-            print('result from swap bot:', result , "\n\n")
-            #print(result['state'])
-            #app = current_app
-            #if (result['success']):
-                #backend = result['backend']
-                #model = result['model']
-
-                #result = make_new_bot(current_app, backend, model)
-                #current_app = create_app(backend=model, model=model)
+            #print('result from swap bot:', result , "\n\n")
 
             return jsonify({
                 'success': result['success'],
@@ -219,22 +210,17 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+
     @app.route('/api/bot/current', methods=['GET'])
     def api_get_current_bot():
         try:
             info = get_current_bot_info(current_app)
             print("current bot info:", info)
-
-            #data = request.json
-            #backend = data.get('backend')
-            #model = data.get('model')
-            #print("backend: ", backend, "and model: ", model)
-
             return jsonify(info)
-        
         except Exception as e:
             return jsonify({'error': str(e)}), 500
-    
+
+    '''
     @app.route('/api/bot/init', methods=['POST'])
     def api_init_bot():
         try:
@@ -258,6 +244,7 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
         
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+    '''
         
     # ----------------- Pages ----------------- # 
     @app.route("/")

@@ -48,29 +48,17 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, devic
             "tts_engine": tts_engine,
         }
 
-    elif backend == "llamacpp":
-        model_path = model_name or "./models/llama.bin"
-        model = load_llamacpp_model(model_path)
-        return {
-            "backend": backend,
-            "model": model,
-            "tts_engine": tts_engine,
-        }
     '''
     
 
 def init_bot(app, backend: str, model: str):
     """Initialize the bot model state for the app"""
-    
     print("Making new bot with a backend of: ", backend, "and a name of: ", model)
     app.config['state'] = init_model_state(backend, model)
-    print("\n\n============","model state","============\n\n", app.config['state'], "\n============\n\n")
+    #print("\n\n============","model state","============\n\n", app.config['state'], "\n============\n\n")
 
     app.config['current_backend'] = backend
     app.config['current_model'] = model
-
-    #return app
-
 
 
 def swap_bot(app, backend: str, model: str):
@@ -78,14 +66,12 @@ def swap_bot(app, backend: str, model: str):
     # Clean up existing state if needed
     if 'state' in app.config and hasattr(app.config['state'], 'cleanup'):
         app.config['state'].cleanup()
-    
-    # Initialize new bot
-    #init_bot(app, backend, model)
 
-    print("\n\n--------- before swap_bot in bot.py ---------", backend, model)
+    #print("\n\n--------- before swap_bot in bot.py ---------", backend, model)
+    # Initialize new bot
     init_bot(app, backend, model)
-    print("--------- After swap_bot in bot.py", backend, model, "---------\n\n")
-    print("model state at the end of swap_bot:", app.config.get('state'), '\n\n')
+    #print("--------- After swap_bot in bot.py", backend, model, "---------\n\n")
+    #print("model state at the end of swap_bot:", app.config.get('state'), '\n\n')
     
     return {
         'success': True,

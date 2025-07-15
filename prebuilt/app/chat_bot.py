@@ -71,23 +71,8 @@ def chat_with_bot(user_input: str, tokenizer, model, chat_history_ids=None, devi
 
     MAX_INPUT_LENGTH = 1024  # or model.config.n_positions
 
-    #bot_input_ids = encoded_input if chat_history_ids is None else torch.cat([chat_history_ids.to(device), encoded_input], dim=-1)
-    '''
-    chat_history_ids = model.generate(
-        bot_input_ids,
-        max_length=2000,
-        pad_token_id=tokenizer.eos_token_id,
-        no_repeat_ngram_size=3,
-        temperature=0.8,
-        top_p=0.9,
-        num_beams=5,
-        length_penalty=1.2,
-        do_sample=True
-    )'''
-
-
     if chat_history_ids is None:
-        print('empty chat_history in prebuilt')
+        #print('empty chat_history in prebuilt')
         bot_input_ids = encoded_input
     else:
         if isinstance(chat_history_ids, str):
@@ -165,6 +150,7 @@ def chat_with_speech(user_input, state):
         state['max_memory']
     )
     
+    # placed after trim so it doesnt repeat user input.
     # Convert tensor to string for debugging/logging
     chat_history_string = tensor_to_string_history(
         state['chat_history_ids'], 

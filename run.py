@@ -7,15 +7,15 @@ model_name = 'llama3.2'
 
 # Create app without bot initialization
 app = create_app()
-print("Made app...\n")
+print("\n================ New app creation ================\n")
 
 # Initialize bot based on backend
 if backend == 'huggingface':
     init_bot(app, 'huggingface', 'microsoft/DialoGPT-medium')
-    print("Initialized Hugging Face bot...\n")
+    #print("Initialized Hugging Face bot...\n")
 elif backend == 'llamacpp':
     init_bot(app, 'llamacpp', 'llama3.2')
-    print("Initialized LlamaCPP bot...\n")
+    #print("Initialized LlamaCPP bot...\n")
 else:
     print("Backend not supported.")
     sys.exit(1)
