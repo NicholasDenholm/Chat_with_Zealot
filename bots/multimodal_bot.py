@@ -1,8 +1,8 @@
-from interface import ChatBotInterface
+#from bots.interface import ChatBotInterface
 import ollama
 import os
 
-class Multimodal_Bot(ChatBotInterface):
+class Multimodal_Bot():
     def __init__(self, model_name: str, personality: str):
         self.model_name = model_name
         self.personality = personality  

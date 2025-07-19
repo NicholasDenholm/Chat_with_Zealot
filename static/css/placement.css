@@ -1,7 +1,7 @@
 .position-corner {
   position: fixed;
   z-index: 999;
-  /*outline: 2px dashed orange; */ /* For testing */
+  /* outline: 2px dashed orange; */ /* For testing */
 }
 
 /* Top */
@@ -35,6 +35,11 @@
 
 .position-corner[data-pos="bottom-right"] {
   bottom: 20px;
+  right: 20px;
+}
+
+.position-corner[data-pos="bottom-right-above"] {
+  bottom: 40px;
   right: 20px;
 }
 
@@ -87,6 +92,7 @@
 /* Flex layout for bottom-center */
 .bottom-center-row {
   display: flex;
+  width: 100px;
   gap: 10px; /* space between items */
   justify-content: center;
   align-items: center;

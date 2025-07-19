@@ -21,8 +21,8 @@ body {
 
 /* --------- Chat Container --------- */
 #chatContainer {
-    width: 80%;
-    max-width: 600px;
+    width: 40%;
+    max-width: 80%;
     background-color: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 8px;
@@ -31,12 +31,30 @@ body {
 }
 
 /* --------- Chat Box --------- */
-#chatBox {
-    width: 80%;
+#chatBoxOG {
+    min-width: 60%;
+    max-width: 90%;
     height: 80%;
     overflow-y: auto;
-    margin-bottom: 15px;
-    padding: 10px;
+    overflow-x: auto;
+    margin-bottom: 10%; 
+    padding: 10%;
+    border-radius: 5px;
+    border: 1px solid var(--input-border);
+    background-color: var(--bg-color);
+}
+
+#chatBox {
+    width: 90%;
+    max-width: 80vw;
+    height: 80vh;
+
+    margin: 0 auto; /* center horizontally */
+    padding: 1rem;
+
+    overflow-y: auto;
+    overflow-x: auto;
+
     border-radius: 5px;
     border: 1px solid var(--input-border);
     background-color: var(--bg-color);

@@ -23,7 +23,10 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, devic
     elif backend == "llamacpp":
         
         #bot = bots.build_zealot_bot(model_name, 'fanatic')
-        bot = bots.build_zealot_bot(model_name, 'short_answers')
+        #bot = bots.build_zealot_bot(model_name, 'short_answers')
+        #bot = bots.build_smart_bot(model_name, 'nice_person')
+        bot = bots.build_smart_bot(model_name, 'short_answers')
+        #bot = bots.build_coding_bot(model_name, 'expert_coder')
         max_memory = 10
         
         state = create_ollama_bot_dict(bot.model_name, bot, backend, max_memory)

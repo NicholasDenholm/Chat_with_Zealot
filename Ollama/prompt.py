@@ -58,3 +58,17 @@ def warhammer_template_conditional() -> str:
     Question: {question}
     """
     return template
+
+def assistant_template() -> str:
+    template = """
+    You are a helpful assistant answer the following question.  
+    Customize your response according to the previous context, desired length, style and emotional tone:
+
+        - **Previous context**: {book}
+        - **Desired Length**: {length}
+        - **Style**: {style}
+        - **Emotional Tone**: {emotionality}
+
+    Question: {question}
+    """
+    return template

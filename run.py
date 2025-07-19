@@ -2,8 +2,8 @@ import os
 import sys
 from chat_app.app import create_app, init_bot
 
-backend = 'llamacpp'
-model_name = 'llama3.2'
+backend = 'llamacpp'        # default bot
+model_name = 'llama3.2'     # default llm name
 
 # Create app without bot initialization
 app = create_app()

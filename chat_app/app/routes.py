@@ -1,6 +1,7 @@
 from flask import request, jsonify, render_template, current_app
 from prebuilt.app.chat_bot import chat_with_speech, chat_with_speech_string_version
 from prebuilt.app.audio_bot import Whisper_Bot
+#from bots.whisper_bot import Whisper_Bot
 from .bot import get_current_bot_info, swap_bot, init_bot
 
 
@@ -57,15 +58,63 @@ def get_page_switcher_config(config_name='chat_bot', position='top-left'):
         'config_name': config_name,
         'switcher_js_config': js_config  # This is for the JavaScript
     }
-### a route is how the app knows what code to run when a user accesses a certain URL.
 
+#TODO Make it so that the whisper bot can be swapped out to another language
+whisper_bot = Whisper_Bot(model_name="base")
+#whisper_bot.set_language('en')
+
+### a route is how the app knows what code to run when a user accesses a certain URL.
 def register_routes(app): # regester_routes called with __init__, keeps chat and home modular
     
+    whisper_bot = Whisper_Bot(model_name="base")
+    
+    @app.route("/set_language", methods=["POST"])
+    def set_language():
+        data = request.json
+        lang = data.get("language_code")
+        print("language code is: ", lang)
+        #print(isinstance(lang, str))
+
+        if not lang:
+            return jsonify({"error": "No language code provided"}), 400
+        #whisper_bot = Whisper_Bot(model_name="medium")
+        whisper_bot.set_language(lang)
+        return jsonify({"message": f"Language set to {lang}."})
+        
+
+
+    @app.route('/api/audio', methods=["POST"])
+    def api_audio():
+        if 'audio' not in request.files:
+            return jsonify({"error": "No audio file provided"}), 400
+        audio_file = request.files['audio']
+
+        # Save to temp file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp:
+            audio_path = temp.name
+            audio_file.save(audio_path)
+
+        try:
+            language = whisper_bot.language_code
+            print("Language used here: ", language)
+            transcription = whisper_bot.transcribe_audio(audio_path, True)
+            print("transcription: ", transcription)
+            chat_state = current_app.config['state']
+
+            bot_response = generate_response(transcription, chat_state)
+            print(bot_response)
+
+            return jsonify({
+                "transcription": transcription,
+                "response": bot_response
+            })
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+        finally:
+            os.remove(audio_path)
+
     # ----------------- Chatting  ----------------- #
     
-    #TODO Make it so that the whisper bot can be swapped out to another language
-    whisper_bot = Whisper_Bot(model_name="base")
-
     def generate_response(user_input, chat_state):
         """Common logic for generating bot responses"""
 
@@ -91,60 +140,6 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             response = chat_with_speech(user_input, chat_state)
 
         return response
-
-
-    def make_new_bot(current_app, backend, model):
-        try:
-            
-            if not backend or not model:
-                print("ERROR: NO BACKEND OR MODEL", backend, model)
-                return jsonify({'error': 'backend and model are required'}), 400
-            
-            print("\nbefore init_bot in routes make_new_bot", backend, model)
-            init_bot(current_app, backend, model)
-            print("here")
-            #print(app['backend'])
-            #app = create_app(backend=model, model=model)
-            print("After init_bot in routes make_new_bot", backend, model, "\n")
-            
-            return jsonify({
-                'success': True,
-                'backend': backend,
-                'model': model,
-                'message': 'Bot initialized successfully'
-            })
-        
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
-
-    @app.route('/api/audio', methods=["POST"])
-    def api_audio():
-        if 'audio' not in request.files:
-            return jsonify({"error": "No audio file provided"}), 400
-        audio_file = request.files['audio']
-
-        # Save to temp file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp:
-            audio_path = temp.name
-            audio_file.save(audio_path)
-
-        try:
-            transcription = whisper_bot.transcribe_audio(audio_path)
-            chat_state = current_app.config['state']
-
-            bot_response = generate_response(transcription, chat_state)
-            print(bot_response)
-
-            return jsonify({
-                "transcription": transcription,
-                "response": bot_response
-            })
-
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
-
-        finally:
-            os.remove(audio_path)
 
     @app.route("/chat", methods=["POST"])
     def chat():
@@ -187,6 +182,32 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
 
 
     # ----------------- Changing Bots ----------------- # 
+    
+    def make_new_bot(current_app, backend, model):
+        try:
+            
+            if not backend or not model:
+                print("ERROR: NO BACKEND OR MODEL", backend, model)
+                return jsonify({'error': 'backend and model are required'}), 400
+            
+            print("\nbefore init_bot in routes make_new_bot", backend, model)
+            init_bot(current_app, backend, model)
+            print("here")
+            #print(app['backend'])
+            #app = create_app(backend=model, model=model)
+            print("After init_bot in routes make_new_bot", backend, model, "\n")
+            
+            return jsonify({
+                'success': True,
+                'backend': backend,
+                'model': model,
+                'message': 'Bot initialized successfully'
+            })
+        
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    
     @app.route('/api/bot/swap', methods=['POST'])
     def api_swap_bot():
         try:

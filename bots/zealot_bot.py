@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from Ollama.personality import get_personality_by_name, get_all_personality_names, resolve_personality
 from Ollama.prompt import warhammer_template
 
-class Zealot_Bot(ChatBotInterface):
+class Zealot_Bot():
     def __init__(self, model_name:str, personality:str):
         self.model_name = model_name
         self.model = OllamaLLM(model=model_name)
@@ -13,7 +13,6 @@ class Zealot_Bot(ChatBotInterface):
         # Only set if resolved
         self.personality = personality_name
 
-        # TODO make this take from Ollama/prompts warhammer function
         self.prompt_template = ChatPromptTemplate.from_template(warhammer_template())
         '''
         self.prompt_template = ChatPromptTemplate.from_template(f"""
@@ -76,7 +75,7 @@ class Zealot_Bot(ChatBotInterface):
                 role = "User" if msg['role'] == 'user' else "Assistant"
                 book_context.append(f"{role}: {msg['content']}")
         
-        print("\nBook content:", book_context, "\n")
+        #print("\nBook content:", book_context, "\n")
 
         result = self.chain.invoke({
             "book": book_context,  # Pass the conversation history as context

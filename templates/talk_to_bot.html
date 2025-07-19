@@ -30,7 +30,7 @@
 <body>
     
     <!-- Big ChatBox -->
-    <div id="chatBox" class="position-corner round-box" data-pos="center"></div>
+    <div id="chatBox" class="position-corner" data-pos="center"></div>
 
      <!-- user reply box -->
     <form id="chatForm" class="position-corner" data-pos="bottom-center">
@@ -54,6 +54,12 @@
         <select id="voiceSelect" style="width: 100%; max-width: 250px;"></select>
     </div>
 
+    <!-- Language selector box setup-->
+    <div class="voice-select-box position-corner" data-pos="bottom-right-above" style="width: 100%; max-width: 350px;">
+        <label for="languageSelect">Language:</label>
+        <select id="languageSelect"></select>
+    </div>
+
     <!-- ( Chat / Bot Selector ) navigation bar --> 
     {% include 'includes/pageswitcher.html' %}
 
@@ -61,14 +67,20 @@
     
     <!-- Voice selector reference-->
     <script src="{{ url_for('static', filename='js/selectVoice.js') }}"></script>
+
     <!-- Text to Speech reference-->
     <script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+    <!-- Language selector reference-->
+    <script src="{{ url_for('static', filename='js/select_language.js') }}"></script>
+    
     <!-- chatbox functions reference -->
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
     <!-- Load the theme toggle script -->
     <script src="{{ url_for('static', filename='js/themeToggle.js') }}"></script>
     <!-- Logic for the bot switcher button -->
     <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script> 
+
+    
 
 </body>
 </html>

@@ -9,10 +9,14 @@ import keyboard
 class Whisper_Bot:
     def __init__(self, model_name: str = "base"):
         self.model = whisper.load_model(model_name)
+        self.language_code = None
 
-    def transcribe_audio(self, audio_path: str, language_code:str, fp16:bool) -> str:
-        result = self.model.transcribe(audio_path, language=language_code, fp16=fp16)
+    def transcribe_audio(self, audio_path: str, fp16:bool) -> str:
+        result = self.model.transcribe(audio_path, language=self.language_code, fp16=fp16)
         return result.get("text", "")
+    
+    def set_language(self, language_code:str): 
+        self.language_code = language_code
 
 # --------------- Language Setup --------------- #
 
@@ -109,9 +113,10 @@ def speak_to_bot(bot, fs:int, language_code:str):
 # --------------- Main --------------- #
 def main():
     
-    language_code = pick_language() # ISO code
-    fs = 16000  # Sample rate
     bot = Whisper_Bot(model_name="medium")
+    fs = 16000  # Sample rate
+    language_code = pick_language() # ISO code
+    bot.set_language(language_code)
     
     speak_to_bot(bot, fs, language_code)
     
