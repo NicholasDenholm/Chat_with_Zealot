@@ -14,21 +14,16 @@ class Zealot_Bot():
         self.personality = personality_name
 
         self.prompt_template = ChatPromptTemplate.from_template(warhammer_template())
-        '''
-        self.prompt_template = ChatPromptTemplate.from_template(f"""
-        You are a religious zealot from the Warhammer 40K universe.
-        Answer the following using a personality of {personality_name}. 
-                                                                
-        Customize your response according to:
-        - Desired Length: {{length}}
-        - Style: {{style}}
-        - Emotional Tone: {{emotionality}}
-
-        Question: {{question}}
-        """)
-        '''
+        
         self.chain = self.prompt_template | self.model
 
+
+    def change_personality(self, personality):
+        """Change the personality of the bot"""
+        self.length, self.style, self.emotionality, personality_name = resolve_personality(personality, "fanatic")
+        self.personality = personality_name
+
+    '''
     def resolve_personality(self, personality_input) -> tuple[str, str, str, str]:
         """
         Resolves a personality input (string or tuple) to a standard format:
@@ -54,6 +49,8 @@ class Zealot_Bot():
         length, style, emotionality = get_personality_by_name('fanatic')
         print(f"[Fallback] Using default personality '{fallback_name}'.")
         return length, style, emotionality, fallback_name
+    '''
+        
 
     def reply_directly(self, user_input: str) -> str:
         # Replies without looking at past conversation history

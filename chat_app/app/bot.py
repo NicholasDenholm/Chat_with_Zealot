@@ -60,6 +60,7 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, perso
     '''
     
 
+
 def init_bot(app, backend: str, model: str):
     """Initialize the bot model state for the app"""
     print("Making new bot with a backend of: ", backend, "and a name of: ", model)
@@ -69,6 +70,8 @@ def init_bot(app, backend: str, model: str):
     app.config['current_backend'] = backend
     app.config['current_model'] = model
 
+
+### -------------- Changing Bots -------------- ###
 
 def swap_bot(app, backend: str, model: str):
     """Swap out the current bot with a new one"""
@@ -93,12 +96,52 @@ def swap_bot(app, backend: str, model: str):
 
 def get_current_bot_info(app):
     """Get information about the currently active bot"""
+    state = app.config.get('state')
+    personality = state.get('personality') if state else None
+
     return {
         'backend': app.config.get('current_backend'),
         'model': app.config.get('current_model'),
+        'personality': personality,
         'initialized': 'state' in app.config and app.config['state'] is not None
     }
 
+
+### -------------- Changing Personalities -------------- ###
+
+def swap_personality(app, backend: str, personality: str):
+    # Check to make sure its a ollama type bot
+    if backend != "llamacpp":
+        print("fails at backend check in change_personality")
+        return {'success': False, 'message': 'Must be llama type model.'}
+    
+    # Clean up existing state if needed
+    #if 'state' in app.config and hasattr(app.config['state'], 'cleanup'):
+        #app.config['state'].cleanup()
+
+    # Is this a copy?   
+    #current_bot = app.config.get['bot_instance']
+    #current_bot.change_template(personality)
+    #app.config['bot_instance'] = current_bot
+
+    state = app.config.get('state')
+    current_bot = state.get('bot_instance')
+    print("State in change personalities: ", state , '\n', "current_bot in change personalities: ", current_bot, '\n')
+    
+    current_bot.change_personality(personality)
+    
+    #current_bot = state.get('bot_instance')
+    print('Current bot now after cahnging personality:', current_bot)
+    print('Current personality now after: ', current_bot.personality)
+    app.config['bot_instance'] = current_bot
+    app.config['state']['personality'] = personality
+
+    
+    return {
+        'success': True,
+        'backend': backend,
+        'state': app.config.get('state')
+    }
 
 ### -------------- Setup -------------- ###
 
@@ -116,8 +159,9 @@ def create_ollama_bot_dict(model_name, bot, backend, max_memory:int=3):
             "model": model_name,  # Just the model name string
             "tokenizer": None,    # Ollama doesn't expose tokenizer
             "bot_instance": bot,   # Keep reference to actual bot
+            "personality" : bot.personality,
             "backend": backend,
-            "device": "ollama",   # Ollama manages devices internally
+            "device": device,   # Ollama manages devices internally
             "tts_engine": bot.tts_engine if hasattr(bot, 'tts_engine') else None,
             "chat_history_ids": None,
             "max_memory": max_memory,

@@ -2,7 +2,7 @@ from flask import request, jsonify, render_template, current_app
 from prebuilt.app.chat_bot import chat_with_speech, chat_with_speech_string_version
 from prebuilt.app.audio_bot import Whisper_Bot
 #from bots.whisper_bot import Whisper_Bot
-from .bot import get_current_bot_info, swap_bot, init_bot
+from .bot import get_current_bot_info, swap_bot, init_bot, swap_personality
 
 
 #swap_bot, get_current_bot_info, init_bot
@@ -266,24 +266,53 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     '''
-        
+
+    # ----------------- Changing Personalities ----------------- #
+
+    @app.route('/api/bot/personality_change', methods=['POST'])
+    def api_personality_change():
+        try:
+            data = request.json
+            backend = data.get('backend')
+            personality = data.get('personality')
+            print("data here: ", data)
+            #bot_instance = data.get('bot_instance')
+
+            if not backend or not personality:
+                return jsonify({'error': 'backend and personality are required'}), 400
+
+            result = swap_personality(current_app, backend, personality)
+            print("result: ", result)
+
+            return jsonify({
+                'success': result['success'],
+                'backend': result['backend'],
+                'personality': result['state']['personality'],
+                'message': 'Bots personality changed successfully'
+            })
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+
     # ----------------- Pages ----------------- # 
     @app.route("/")
     def home():
         #return "Chatbot API is running."
         switcher_config = get_page_switcher_config('home', 'top-left')
-        print("Switcher config:", switcher_config)
+        #print("Switcher config:", switcher_config)
         return render_template("navigation.html")
     
     @app.route("/talk-to-bot")
     def talk_to_bot():
         switcher_config = get_page_switcher_config('chat_bot', 'top-left')
-        print("Switcher config:", switcher_config)
+        #print("Switcher config:", switcher_config)
         
         return render_template("talk_to_bot.html", switcher=switcher_config)
     
     @app.route('/bot-menu')
     def bot_menu():
         switcher_config = get_page_switcher_config('bot_menu', 'top-left')
-        print("Switcher config:", switcher_config)
-        return render_template('bot_menu.html')
+        #print("Switcher config:", switcher_config)
+        #return render_template('bot_menu.html')
+        return render_template('personality_menu.html')

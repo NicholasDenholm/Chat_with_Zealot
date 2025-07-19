@@ -15,18 +15,7 @@ class Smart_Bot():
         
         # Build the dynamic prompt, ! needs to be double curly brackets !
         self.prompt_template = ChatPromptTemplate.from_template(assistant_template())
-        '''
-        self.prompt_template = ChatPromptTemplate.from_template(f"""
-        You are a personality-driven assistant with the persona of '{personality}'.
         
-        Customize your response according to:
-        - Desired Length: {{length}}
-        - Style: {{style}}
-        - Emotional Tone: {{emotionality}}
-        
-        Question: {{question}}
-        """)
-        '''
         self.chain = self.prompt_template | self.model
 
     '''
@@ -53,6 +42,12 @@ class Smart_Bot():
         return length, style, emotionality, fallback_name
 
     '''
+
+    def change_personality(self, personality):
+        """Change the personality of the bot"""
+        self.length, self.style, self.emotionality, personality_name = resolve_personality(personality, "short_answers")
+        self.personality = personality_name
+
 
     def reply_directly(self, user_input: str) -> str:
         result = self.chain.invoke({
