@@ -4,7 +4,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from prebuilt.app.chat_bot import init_chat_state
 import bots
 
-def init_model_state(backend: str = 'huggingface', model_name: str = None, device: str = None):
+def init_model_state(backend: str = 'huggingface', model_name: str = None, personality: str = None):
     '''
     Creates model with either huggingface or llamacpp backends.
     Args: backend , model_name, device
@@ -22,11 +22,17 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, devic
     # x set up zealot bot
     elif backend == "llamacpp":
         
-        #bot = bots.build_zealot_bot(model_name, 'fanatic')
-        #bot = bots.build_zealot_bot(model_name, 'short_answers')
-        #bot = bots.build_smart_bot(model_name, 'nice_person')
-        bot = bots.build_smart_bot(model_name, 'short_answers')
-        #bot = bots.build_coding_bot(model_name, 'expert_coder')
+        if personality is None:
+            # Default bot creation.
+            bot = bots.build_smart_bot(model_name, 'short_answers')
+            #bot = bots.build_zealot_bot(model_name, 'fanatic')
+            #bot = bots.build_zealot_bot(model_name, 'short_answers')
+            #bot = bots.build_smart_bot(model_name, 'nice_person')
+            #bot = bots.build_coding_bot(model_name, 'expert_coder')
+        else:
+            bot = bots.build_smart_bot(model_name, personality=personality)
+
+        
         max_memory = 10
         
         state = create_ollama_bot_dict(bot.model_name, bot, backend, max_memory)
