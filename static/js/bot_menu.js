@@ -64,6 +64,31 @@ function setupEventListeners() {
     });
 }
 
+async function switchToChatPage() {
+    try {
+        const response = await fetch('/talk-to-bot');
+        if (response.ok) {
+            // This will redirect to the personality menu page
+            window.location.href = '/talk-to-bot';
+        }
+    } catch (error) {
+        showStatus(`Error: ${error.message}`, 'error');
+    }
+}
+
+async function switchToPersonalityMenu() {
+    try {
+        const response = await fetch('/personality-menu');
+        if (response.ok) {
+            // This will redirect to the personality menu page
+            window.location.href = '/personality-menu';
+        }
+    } catch (error) {
+        showStatus(`Error: ${error.message}`, 'error');
+    }
+}
+
+
 // Swap bot function
 async function swapBot() {
     if (!selectedBot) {
@@ -97,6 +122,11 @@ async function swapBot() {
             currentBot = selectedBot;
             document.getElementById('currentBotName').textContent = 
                 `${selectedBot.backend} (${selectedBot.model})`;
+
+            // If switched to llamacpp, switch page
+            if (selectedBot.backend === 'llamacpp') {
+                await switchToPersonalityMenu();
+            }
         } else {
             showStatus(`Error: ${data.error}`, 'error');
         }
@@ -109,6 +139,8 @@ async function swapBot() {
     }
 }
 
+
+
 // Show status message
 function showStatus(message, type) {
     const statusElement = document.getElementById('statusMessage');
@@ -116,10 +148,20 @@ function showStatus(message, type) {
     statusElement.className = `status-message status-${type}`;
     statusElement.style.display = 'block';
     
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-        statusElement.style.display = 'none';
-    }, 5000);
+    
+
+    // if successful then swap to main chat page
+    if (type === 'success') {
+        setTimeout(() => {
+            statusElement.style.display = 'none';    
+            switchToChatPage();
+        }, 2000);
+    } else {
+        // Auto-hide error message after 5 seconds
+        setTimeout(() => {
+            statusElement.style.display = 'none';
+        }, 5000);
+    }
 }
 
 // Initialize when page loads

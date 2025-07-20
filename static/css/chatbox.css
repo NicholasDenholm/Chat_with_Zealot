@@ -68,10 +68,69 @@ body {
 
 .user-message {
     color: var(--user-color);
+    align-self: flex-end;
 }
 
 .bot-message {
     color: var(--bot-color);
+    align-self: flex-start;
+}
+
+/* Styling for the formatted content */
+.message.bot strong {
+    color: #0056b3; /* A nice blue for bold */
+}
+
+.message.bot em {
+    font-style: italic;
+    color: #555;
+}
+
+.message.bot ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.message.bot li {
+    margin-bottom: 3px;
+}
+
+.message.bot code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #c7254e; /* A reddish color for inline code */
+}
+
+.message.bot pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto; /* For long lines of code */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.message.bot pre code {
+    background-color: transparent; /* Override inline code style */
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Basic paragraph styling for readability */
+.message.bot p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.message.bot p:last-child {
+    margin-bottom: 0;
 }
 
 /* --------- Form --------- */

@@ -295,6 +295,31 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
             return jsonify({'error': str(e)}), 500
 
 
+    @app.route('/api/page/switch', methods=['POST'])
+    def switch_page():
+        try:
+            data = request.json
+            page = data.get('page')
+            backend = data.get('backend')
+             
+            if backend == 'llamacpp':
+                return jsonify({
+                    'success': True,
+                    'redirect_url': '/llamacpp',  # Your llamacpp page route
+                    'message': 'Switching to LlamaCPP interface'
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': 'Invalid backend for page switch'
+                })
+                
+        except Exception as e:
+            return jsonify({
+                'success': False,
+                'error': str(e)
+            })
+
     # ----------------- Pages ----------------- # 
     @app.route("/")
     def home():
@@ -314,5 +339,11 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
     def bot_menu():
         switcher_config = get_page_switcher_config('bot_menu', 'top-left')
         #print("Switcher config:", switcher_config)
-        #return render_template('bot_menu.html')
+        return render_template('bot_menu.html')
+        #return render_template('personality_menu.html')
+    
+    @app.route('/personality-menu')
+    def personality_menu():
+        #switcher_config = get_page_switcher_config('bot_menu', 'top-left')
+        #print("Switcher config:", switcher_config)
         return render_template('personality_menu.html')

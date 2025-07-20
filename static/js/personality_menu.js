@@ -64,6 +64,18 @@ function setupEventListeners() {
     });
 }
 
+async function switchToChatPage() {
+    try {
+        const response = await fetch('/talk-to-bot');
+        if (response.ok) {
+            // This will redirect to the personality menu page
+            window.location.href = '/talk-to-bot';
+        }
+    } catch (error) {
+        showStatus(`Error: ${error.message}`, 'error');
+    }
+}
+
 // Swap bot function
 async function swapPersonality() {
     if (!selectedBot) {
@@ -115,11 +127,16 @@ function showStatus(message, type) {
     statusElement.textContent = message;
     statusElement.className = `status-message status-${type}`;
     statusElement.style.display = 'block';
-    
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
+   
+    // Auto-hide after 7 seconds, then redirect
+    setTimeout(async () => {
         statusElement.style.display = 'none';
-    }, 5000);
+        try {
+            await switchToChatPage();
+        } catch (error) {
+            console.error('Error switching to chat page:', error);
+        }
+    }, 3000);
 }
 
 // Initialize when page loads

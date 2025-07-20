@@ -8,7 +8,7 @@ function getCurrentPage() {
     const currentPath = window.location.pathname;
     let activePage = '';
     
-    if (currentPath.includes('bot-menu') || currentPath.includes('bot-selector')) {
+    if (currentPath.includes('bot-menu') || currentPath.includes('bot-selector') || currentPath.includes('personality-menu')) {
         activePage = 'bot-selector';
     } else if (currentPath.includes('talk-to-bot')) {
         activePage = 'talk-to-bot';

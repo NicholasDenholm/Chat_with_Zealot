@@ -136,12 +136,22 @@ def swap_personality(app, backend: str, personality: str):
     app.config['bot_instance'] = current_bot
     app.config['state']['personality'] = personality
 
+    lobotomize_bot(app)
     
     return {
         'success': True,
         'backend': backend,
         'state': app.config.get('state')
     }
+
+def lobotomize_bot(app):
+    """Deletes the current chat_history_ids or memory of the bot initialized in a given app"""
+    chat_memory = app.config['state']['chat_history_ids']
+    #print("Deleting this memory: ", chat_memory, "\n... Lobotomizing bot ...")
+    app.config['state']['chat_history_ids'] = None
+    #state = app.config.get('state')
+    #chat_memory_post = state.get('chat_history_ids')
+    #print("Memory now: ", chat_memory_post)
 
 ### -------------- Setup -------------- ###
 
