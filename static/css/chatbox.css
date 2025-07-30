@@ -1,12 +1,5 @@
-/* --------- Global Reset & Base Styles --------- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: inherit;
     display: flex;
     
     justify-content: center;
@@ -68,19 +61,83 @@ body {
 
 .user-message {
     color: var(--user-color);
+    align-self: flex-end;
 }
 
 .bot-message {
     color: var(--bot-color);
+    align-self: flex-start;
+}
+
+/* Styling for the formatted content */
+.message.bot strong {
+    color: #0056b3; /* A nice blue for bold */
+}
+
+.message.bot em {
+    font-style: italic;
+    color: #555;
+}
+
+.message.bot ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.message.bot li {
+    margin-bottom: 3px;
+}
+
+.message.bot code {
+    font-family: inherit;
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #c7254e; /* A reddish color for inline code */
+}
+
+.message.bot pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto; /* For long lines of code */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.message.bot pre code {
+    background-color: transparent; /* Override inline code style */
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Basic paragraph styling for readability */
+.message.bot p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.message.bot p:last-child {
+    margin-bottom: 0;
 }
 
 /* --------- Form --------- */
+/* Where the user types */
 #chatForm {
     display: flex;
+    flex-direction: row;
     gap: 10px;
+    width: 50%;
+    margin: 20px;
 }
 
 #userInput {
+    font-family: inherit;
     flex: 1;
     padding: 10px;
     font-size: 1rem;
@@ -91,16 +148,26 @@ body {
 }
 
 button {
+    align-self: right;
+    width: 15%;
     padding: 10px 20px;
     font-size: 1rem;
-    border: none;
+    border: 1px;
     border-radius: 5px;
     background-color: var(--button-bg);
     color: var(--button-text);
     cursor: pointer;
-    transition: background-color 0.3s;
+    /* transition: background-color 0.3s */;
 }
 
 button:hover {
     background-color: darken(var(--button-bg), 10%);
+}
+
+textarea {
+    resize: vertical; /* Allows vertical resizing */
+    overflow: auto;   /* Shows scrollbar only when content overflows */
+    min-height: 40px; /* Or whatever your initial desired height is */
+    width: 100%;      /* Or your desired width */
+    box-sizing: border-box; /* Important for consistent sizing */
 }

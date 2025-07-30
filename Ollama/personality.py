@@ -1,14 +1,19 @@
 # ----------------- Presets ----------------- #
 
+# Add any personalities here.
 def personality_presets() -> dict[str, tuple[str, str, str]]:
+    '''personality: {length, style, emotionality}'''
     return {
         "fanatic": ("medium", "aggressive", "wrathful"),
         "preacher": ("long", "formal", "passionate"),
         "sermon-lite": ("short", "poetic", "calm"),
         "nice_person": ("medium", "friendly", "cheerful"),
-        "expert_coder": ("long", "technical", "neutral"),
         "short_answers": ("short", "blunt", "flat"),
         "mean_person": ("medium", "rude", "irritable"),
+        "expert_coder": ("long", "technical", "flat"),
+        "senior_dev": ("long", "precise", "neutral"),
+        "python_expert": ("long", "simple", "helpful"),
+        "frontend_master": ("long", "creative", "happy")
     }
 
 

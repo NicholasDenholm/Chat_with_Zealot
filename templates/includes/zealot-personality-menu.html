@@ -1,0 +1,30 @@
+<div class="personality-menu">
+    <h1>Personality Selector</h1>
+    
+    <div class="current-personality" id="currentPersonality">
+        <div>Currently Active: <span id="currentPersonalityName">Loading...</span></div>
+    </div>
+
+    <!-- Options -->
+    <div class="personality-option" data-backend="llamacpp" data-personality="fanatic">
+        <h3>Fanatic</h3>
+        <p>fanatic : medium aggressive and wrathful</p>
+    </div>
+
+    <div class="personality-option" data-backend="llamacpp" data-personality="preacher">
+        <h3>Preacher</h3>
+        <p>preacher : long formal and passionate</p>
+    </div>
+
+    <div class="personality-option" data-backend="llamacpp" data-personality="sermon-lite">
+        <h3>Sermon-lite</h3>
+        <p>sermon-lite : short poetic and calm</p>
+    </div>
+
+    <!-- Select option button -->
+    <button class="swap-button" id="swapButton" onclick="swapPersonality()">
+        Switch Personality
+    </button>
+
+    <div class="status-message" id="statusMessage" style="display: none;"></div>
+</div>

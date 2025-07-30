@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Menu</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/personality_menu.css') }}">
+    <!-- Box placement logic -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
+    <!-- Theme changing logic -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    
+    <!-- Page selector button -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
+
+</head>
+
+<body>
+
+    {% include 'includes/zealot-personality-menu.html' %}
+
+    <!-- Theme Toggle -->
+    <div class="position-corner" data-pos="top-right">
+        <button id="themeToggleBtn" title="Toggle theme">🌓</button>
+    </div>
+
+    <!-- ( Chat / Bot Selector ) navigation bar --> 
+    {% include 'includes/pageswitcher.html' %}
+    
+    <!-- Load the personality menu scripts-->
+    <script src="{{ url_for('static', filename='js/personality_menu.js') }}"></script>
+    <!-- Load the theme toggle script -->
+    <script src="{{ url_for('static', filename='js/themeToggle.js') }}"></script>
+    <!-- Logic for the bot switcher button -->
+    <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script>
+</body>
+</html>

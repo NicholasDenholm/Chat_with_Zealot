@@ -1,0 +1,36 @@
+<div class="personality-menu">
+    <h1>Assistant's Personalities</h1>
+    
+    <div class="current-personality" id="currentPersonality">
+        <div>Currently Active: <span id="currentPersonalityName">Loading...</span></div>
+    </div>
+
+    <!-- Options -->
+    
+    <div class="personality-option" data-backend="llamacpp" data-personality="expert_coder">
+        <h3>Expert-coder</h3>
+        <p>expert_coder : long, technical and flat</p>
+    </div> 
+
+    <div class="personality-option" data-backend="llamacpp" data-personality="senior_dev">
+        <h3>Senior-Dev</h3>
+        <p>senior_Dev : long, precise and neutral</p>
+    </div> 
+
+    <div class="personality-option" data-backend="llamacpp" data-personality="python_expert">
+        <h3>Python_expert</h3>
+        <p>fython_expert : long, simple and helpful</p>
+    </div>
+
+    <div class="personality-option" data-backend="llamacpp" data-personality="frontend_master">
+        <h3>Frontend-master</h3>
+        <p>frontend_master : long, creative and happy</p>
+    </div>
+
+    <!-- Select option button -->
+    <button class="swap-button" id="swapButton" onclick="swapPersonality()">
+        Switch Personality
+    </button>
+
+    <div class="status-message" id="statusMessage" style="display: none;"></div>
+</div>

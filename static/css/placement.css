@@ -1,7 +1,7 @@
 .position-corner {
-  position: fixed;
+  position: absolute;
   z-index: 999;
-  /* outline: 2px dashed orange; */ /* For testing */
+  /*outline: 2px dashed orange;   For testing */
 }
 
 /* Top */

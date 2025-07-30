@@ -2,14 +2,13 @@ from flask import request, jsonify, render_template, current_app
 from prebuilt.app.chat_bot import chat_with_speech, chat_with_speech_string_version
 from prebuilt.app.audio_bot import Whisper_Bot
 #from bots.whisper_bot import Whisper_Bot
-from .bot import get_current_bot_info, swap_bot, init_bot
+from .bot import get_current_bot_info, swap_bot, init_bot, swap_personality
 
-
-#swap_bot, get_current_bot_info, init_bot
 import tempfile
 import os
 
 # Page configuration presets
+'''
 PAGE_CONFIGS = {
     'chat_bot': {
         'pages': [
@@ -33,7 +32,6 @@ PAGE_CONFIGS = {
 }
 
 def get_page_switcher_config(config_name='chat_bot', position='top-left'):
-    """Generate page switcher configuration for templates"""
     config = PAGE_CONFIGS.get(config_name, PAGE_CONFIGS['chat_bot'])
     current_path = request.path
     
@@ -58,13 +56,13 @@ def get_page_switcher_config(config_name='chat_bot', position='top-left'):
         'config_name': config_name,
         'switcher_js_config': js_config  # This is for the JavaScript
     }
+'''
 
-#TODO Make it so that the whisper bot can be swapped out to another language
 whisper_bot = Whisper_Bot(model_name="base")
 #whisper_bot.set_language('en')
 
 ### a route is how the app knows what code to run when a user accesses a certain URL.
-def register_routes(app): # regester_routes called with __init__, keeps chat and home modular
+def register_routes(app):
     
     whisper_bot = Whisper_Bot(model_name="base")
     
@@ -81,8 +79,6 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
         whisper_bot.set_language(lang)
         return jsonify({"message": f"Language set to {lang}."})
         
-
-
     @app.route('/api/audio', methods=["POST"])
     def api_audio():
         if 'audio' not in request.files:
@@ -183,6 +179,7 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
 
     # ----------------- Changing Bots ----------------- # 
     
+    # TODO check if this method is used 
     def make_new_bot(current_app, backend, model):
         try:
             
@@ -209,22 +206,24 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
 
     
     @app.route('/api/bot/swap', methods=['POST'])
-    def api_swap_bot():
+    def api_swap_bot(): 
         try:
             data = request.json
             backend = data.get('backend')
             model = data.get('model')
+            botType = data.get('botType')
             
             if not backend or not model:
                 return jsonify({'error': 'backend and model are required'}), 400
             
-            result = swap_bot(current_app, backend, model)
+            result = swap_bot(current_app, backend, model, botType)
             #print('result from swap bot:', result , "\n\n")
 
             return jsonify({
                 'success': result['success'],
                 'backend': result['backend'],
                 'model': result['model'],
+                'botType': result['botType'],
                 'message': 'Bot initialized successfully'
             })
         
@@ -266,24 +265,82 @@ def register_routes(app): # regester_routes called with __init__, keeps chat and
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     '''
-        
+
+    # ----------------- Changing Personalities ----------------- #
+
+    @app.route('/api/bot/personality_change', methods=['POST'])
+    def api_personality_change():
+        try:
+            data = request.json
+            backend = data.get('backend')
+            personality = data.get('personality')
+            #print("data here: ", data)
+            #bot_instance = data.get('bot_instance')
+
+            if not backend or not personality:
+                return jsonify({'error': 'backend and personality are required'}), 400
+
+            result = swap_personality(current_app, backend, personality)
+            #print("result after personality swap : ", result, "\n")
+
+            return jsonify({
+                'success': result['success'],
+                'backend': result['backend'],
+                'personality': result['state']['personality'],
+                'message': 'Bots personality changed successfully'
+            })
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    # ----------------- Conditional Page Switching ----------------- # 
+    @app.route('/api/page/switch', methods=['POST'])
+    def switch_page():
+        try:
+            data = request.json
+            page = data.get('page')
+            backend = data.get('backend')
+             
+            if backend == 'llamacpp':
+                return jsonify({
+                    'success': True,
+                    'redirect_url': '/llamacpp',  # Your llamacpp page route
+                    'message': 'Switching to LlamaCPP interface'
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': 'Invalid backend for page switch'
+                })
+                
+        except Exception as e:
+            return jsonify({
+                'success': False,
+                'error': str(e)
+            })
+
     # ----------------- Pages ----------------- # 
     @app.route("/")
     def home():
-        #return "Chatbot API is running."
-        switcher_config = get_page_switcher_config('home', 'top-left')
-        print("Switcher config:", switcher_config)
         return render_template("navigation.html")
     
     @app.route("/talk-to-bot")
     def talk_to_bot():
-        switcher_config = get_page_switcher_config('chat_bot', 'top-left')
-        print("Switcher config:", switcher_config)
-        
-        return render_template("talk_to_bot.html", switcher=switcher_config)
+        return render_template("talk_to_bot.html")
     
     @app.route('/bot-menu')
     def bot_menu():
-        switcher_config = get_page_switcher_config('bot_menu', 'top-left')
-        print("Switcher config:", switcher_config)
         return render_template('bot_menu.html')
+    
+    # Personality menus
+    @app.route('/personality-menu-assistant')
+    def personality_menu_assistant():
+        return render_template('personality_menu_assistant.html')
+    
+    @app.route('/personality-menu-coder')
+    def personality_menu_coder():
+        return render_template('personality_menu_coder.html')
+    
+    @app.route('/personality-menu-zealot')
+    def personality_menu_zealot():
+        return render_template('personality_menu_zealot.html')

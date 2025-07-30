@@ -1,14 +1,16 @@
 // ./static/js/page_switcher.js
 
 // Define page order for directional animation
-const pageOrder = ['talk-to-bot', 'bot-selector', 'home'];
+// This should be what is in the bar from left to right!
+//const pageOrder = ['talk-to-bot', 'bot-selector', 'home'];
+const pageOrder = ['home', 'talk-to-bot', 'bot-selector'];
 let currentPageIndex = 0;
 
 function getCurrentPage() {
     const currentPath = window.location.pathname;
     let activePage = '';
     
-    if (currentPath.includes('bot-menu') || currentPath.includes('bot-selector')) {
+    if (currentPath.includes('bot-menu') || currentPath.includes('bot-selector') || currentPath.includes('personality-menu')) {
         activePage = 'bot-selector';
     } else if (currentPath.includes('talk-to-bot')) {
         activePage = 'talk-to-bot';
