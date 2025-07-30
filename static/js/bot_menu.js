@@ -3,7 +3,7 @@ let currentBot = null;
 
 // Initialize the menu
 async function initMenu() {
-    await getCurrentBot();
+    await getCurrentBotPlusType();
     setupEventListeners();
 }
 
@@ -29,11 +29,33 @@ async function getCurrentBot() {
     }
 }
 
+async function getCurrentBotPlusType() {
+    try {
+        const response = await fetch('/api/bot/current');
+        const data = await response.json();
+        
+        if (data.backend && data.model && data.botType) {
+            currentBot = { backend: data.backend, model: data.model, bot_type: data.botType };
+            document.getElementById('currentBotName').textContent = 
+                `${data.backend} (${data.model}) (${data.botType})`;
+            
+            // Mark current bot as active
+            updateActiveBot(data.backend, data.model, data.botType);
+        } else {
+            document.getElementById('currentBotName').textContent = 'None';
+        }
+    } catch (error) {
+        console.error('Error getting current bot:', error);
+        document.getElementById('currentBotName').textContent = 'Error loading';
+    }
+}
+
+
 // Update active bot display
-function updateActiveBot(backend, model) {
+function updateActiveBot(backend, model, botType) {
     document.querySelectorAll('.bot-option').forEach(option => {
         option.classList.remove('active');
-        if (option.dataset.backend === backend && option.dataset.model === model) {
+        if (option.dataset.backend === backend && option.dataset.model === model && option.dataset.botType === botType) {
             option.classList.add('active');
         }
     });
@@ -54,7 +76,8 @@ function setupEventListeners() {
             // Store selection
             selectedBot = {
                 backend: this.dataset.backend,
-                model: this.dataset.model
+                model: this.dataset.model,
+                botType: this.dataset.botType
             };
             
             // Update button text
@@ -76,16 +99,49 @@ async function switchToChatPage() {
     }
 }
 
-async function switchToPersonalityMenu() {
+async function switchToPersonalityMenu(page_choice) {
+    
+    const personality_pages = ["/personality-menu-assistant", "personality-menu-zealot", "personality-menu-coder"];
+    // Validate page_choice
+    if (page_choice < 0 || page_choice >= personality_pages.length) {
+        showStatus('Invalid personality choice', 'error');
+        return;
+    }
+    let choice = personality_pages[page_choice]
+
+    // How to put into fetch the choice?
     try {
-        const response = await fetch('/personality-menu');
+        const response = await fetch(choice);
         if (response.ok) {
             // This will redirect to the personality menu page
-            window.location.href = '/personality-menu';
+            window.location.href = choice;
+        } else {
+            showStatus(`Failed to load personality menu: ${response.status}`, 'error');
         }
     } catch (error) {
         showStatus(`Error: ${error.message}`, 'error');
     }
+}
+
+
+// Function to determine and switch to the appropriate personality menu
+async function switchToCorrespondingPersonalityMenu(bot) {
+    // Map bot configurations to personality menu indices
+    const botToPersonalityMap = {
+        'llamacpp-llama3.2-smart_bot': 0,      // assistant
+        'llamacpp-llama3.2-zealot_bot': 1,     // zealot
+        'llamacpp-codellama:7b-smart_bot': 2       // coder
+    };
+    
+    // Create a key from bot properties
+    const botKey = `${bot.backend}-${bot.model}-${bot.botType}`;
+    
+    // Check if this bot configuration should trigger a personality menu switch
+    if (botToPersonalityMap.hasOwnProperty(botKey)) {
+        const personalityIndex = botToPersonalityMap[botKey];
+        await switchToPersonalityMenu(personalityIndex);
+    }
+    // If no mapping exists, don't switch personality menus
 }
 
 
@@ -111,7 +167,8 @@ async function swapBot() {
             },
             body: JSON.stringify({
                 backend: selectedBot.backend,
-                model: selectedBot.model
+                model: selectedBot.model,
+                botType: selectedBot.botType
             })
         });
 
@@ -121,12 +178,11 @@ async function swapBot() {
             showStatus(`Successfully switched to ${selectedBot.backend} (${selectedBot.model})`, 'success');
             currentBot = selectedBot;
             document.getElementById('currentBotName').textContent = 
-                `${selectedBot.backend} (${selectedBot.model})`;
+                `${selectedBot.backend} (${selectedBot.model} ${selectedBot.botType})`;
 
-            // If switched to llamacpp, switch page
-            if (selectedBot.backend === 'llamacpp') {
-                await switchToPersonalityMenu();
-            }
+            // Switch to corresponding personality page
+            await switchToCorrespondingPersonalityMenu(selectedBot);
+
         } else {
             showStatus(`Error: ${data.error}`, 'error');
         }
@@ -148,8 +204,6 @@ function showStatus(message, type) {
     statusElement.className = `status-message status-${type}`;
     statusElement.style.display = 'block';
     
-    
-
     // if successful then swap to main chat page
     if (type === 'success') {
         setTimeout(() => {

@@ -8,6 +8,7 @@ class Zealot_Bot():
     def __init__(self, model_name:str, personality:str):
         self.model_name = model_name
         self.model = OllamaLLM(model=model_name)
+        self.bot_type = "zealot_bot"
 
         self.length, self.style, self.emotionality, personality_name = resolve_personality(personality, "fanatic")
         # Only set if resolved

@@ -1,41 +1,82 @@
 .voice-select-box {
-  position: relative;
-  bottom: 20px;
-  left: 15px;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--bg-color);
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   padding: 10px 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   font-family: "Segoe UI", sans-serif;
   z-index: 1000;
-  width: 40vw;   
-  max-width: 100px;
+  width: fit-content;  
 }
 
 .voice-select-box label {
   font-weight: 500;
-  font-size: 10px;
-  color: #333;
+  font-size: 16px;
+  color: var(--text-color); /* Use CSS variable instead of hardcoded #333 */
   margin-bottom: 4px;
   display: block;
 }
 
 .voice-select-box select {
-  width: 40vw;   
-  max-width: 150px;
-  padding: 6px 10px;
-  font-size: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  /* Reset and base styles */
   appearance: none;
-  box-sizing: border-box;
+  background: var(--bg-color); /* Use CSS variable for consistency */
+  border: 2px solid var(--border-color); /* Use CSS variable */
+  cursor: pointer;
+  
+  /* Layout */
+  width: fit-content;
+  padding: 10px 20px;
+  box-sizing: border-box; /* Changed from content-box for better control */
+  
+  /* Typography */
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--text-color);
+  
+  /* Visual styling */
+  border-radius: 6px;
+  transition: all 0.2s ease; /* Enhanced transition */
+  
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px; /* Make room for the arrow */
 }
 
+/* Hover state */
+.voice-select-box select:hover {
+  border-color: var(--border-color);
+  background-color: rgba(0, 0, 0, 0.02); /* Subtle hover background */
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus state */
 .voice-select-box select:focus {
   outline: none;
-  border-color: #4a90e2;
+  border-color: var(--accent-color, #4a90e2); /* Use accent color variable if available */
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  background-color: var(--bg-color);
+}
+
+/* Active/pressed state */
+.voice-select-box select:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Disabled state */
+.voice-select-box select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Option styling (limited browser support) */
+.voice-select-box select option {
+  color: var(--text-color);
+  background: var(--bg-color);
+  border: 1px solid var(--input-border);
+  padding: 4px 8px;
 }

@@ -1,12 +1,5 @@
-/* --------- Global Reset & Base Styles --------- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: inherit;
     display: flex;
     
     justify-content: center;
@@ -99,7 +92,7 @@ body {
 }
 
 .message.bot code {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: inherit;
     background-color: #f0f0f0;
     padding: 2px 4px;
     border-radius: 3px;
@@ -134,12 +127,17 @@ body {
 }
 
 /* --------- Form --------- */
+/* Where the user types */
 #chatForm {
     display: flex;
+    flex-direction: row;
     gap: 10px;
+    width: 50%;
+    margin: 20px;
 }
 
 #userInput {
+    font-family: inherit;
     flex: 1;
     padding: 10px;
     font-size: 1rem;
@@ -150,16 +148,26 @@ body {
 }
 
 button {
+    align-self: right;
+    width: 15%;
     padding: 10px 20px;
     font-size: 1rem;
-    border: none;
+    border: 1px;
     border-radius: 5px;
     background-color: var(--button-bg);
     color: var(--button-text);
     cursor: pointer;
-    transition: background-color 0.3s;
+    /* transition: background-color 0.3s */;
 }
 
 button:hover {
     background-color: darken(var(--button-bg), 10%);
+}
+
+textarea {
+    resize: vertical; /* Allows vertical resizing */
+    overflow: auto;   /* Shows scrollbar only when content overflows */
+    min-height: 40px; /* Or whatever your initial desired height is */
+    width: 100%;      /* Or your desired width */
+    box-sizing: border-box; /* Important for consistent sizing */
 }

@@ -14,44 +14,24 @@
     
     <!-- Bot selector button -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
+   
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/voiceSelectStyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/language_box.css') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/placement2.css') }}">
 
-    
-    <!--<script src="{{ url_for('static', filename='js/chat.js') }}"></script>-->
-    
-    <!--
-    <div class="position-corner" data-pos="top-left">
-        <header class="app-header">
-            <h1>Chat with the Bot</h1>
-        </header>
-    </div>
-    -->
-    
 </head>
 <body>
     
     <!-- Big ChatBox -->
     <div id="chatBox" class="position-corner" data-pos="center"></div>
 
-     <!-- user reply box -->
-    <form id="chatForm" class="position-corner" data-pos="bottom-center">
-        <input type="text" id="userInput" placeholder="Type your message" required>
+    <!-- user reply box -->
+    <form id="chatForm" class="position-corner " data-pos="bottom-center">
+        <textarea id="userInput" placeholder="Type your message..."></textarea>
+        <!--<input type="text" id="userInput" placeholder="Type your message" required>-->
         <button type="submit">Send</button>
     </form>
-
-    <!-- Figure out how to intergrate the div around the form up here ^^^-->
-    <div id="chat-container" class="position-corner" data-pos="bottom-center">
-        <div id="messages">
-            </div>
-        <form id="message-form">
-            <input type="text" id="user-input" placeholder="Type your message...">
-            <button type="submit">Send</button>
-        </form>
-    </div>
-
-    <!-- Mic button -->
-    <div class="position-corner round-box" data-pos="bottom-right" style="margin: 10px;">
-        <button id="micButton" style="font-size: 18px;">🎤 Speak</button>
-    </div>
 
     <!-- Theme Toggle -->
     <div class="position-corner" data-pos="top-right">
@@ -59,22 +39,23 @@
     </div>
 
     <!-- Voice selector box setup-->
-    <div class="voice-select-box position-corner" data-pos="bottom-left" style="width: 100%; max-width: 350px;">
+    <div class="voice-select-box position-corner" data-pos="bottom-left">
         <label for="voiceSelect">Voice:</label>
         <select id="voiceSelect" style="width: 100%; max-width: 250px;"></select>
     </div>
 
     <!-- Language selector box setup-->
-    <div class="voice-select-box position-corner" data-pos="bottom-right-above" style="width: 100%; max-width: 350px;">
+    <div class="language-select-box position-corner" data-pos="bottom-right">
         <label for="languageSelect">Language:</label>
         <select id="languageSelect"></select>
+        <button id="micButton">🎤 Speak</button>
+        <!--<button id="micButton" class="micButton" style="font-size: 18px;">🎤 Speak</button>-->
     </div>
 
     <!-- ( Chat / Bot Selector ) navigation bar --> 
     {% include 'includes/pageswitcher.html' %}
 
 
-    
     <!-- Voice selector reference-->
     <script src="{{ url_for('static', filename='js/selectVoice.js') }}"></script>
 
@@ -87,9 +68,12 @@
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
     <!-- Load the theme toggle script -->
     <script src="{{ url_for('static', filename='js/themeToggle.js') }}"></script>
-    <!-- Logic for the bot switcher button -->
+    
+    <!-- Logic for the page switcher button -->
     <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script> 
 
+    <!-- Logic for popup windows -->
+    <script src="{{ url_for('static', filename='js/popup_window.js') }}"></script> 
     
 
 </body>

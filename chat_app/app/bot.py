@@ -4,13 +4,13 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from prebuilt.app.chat_bot import init_chat_state
 import bots
 
-def init_model_state(backend: str = 'huggingface', model_name: str = None, personality: str = None):
+def init_model_state(backend: str = 'huggingface', model_name: str = None, personality: str = None, botType: str = None):
     '''
     Creates model with either huggingface or llamacpp backends.
     Args: backend , model_name, device
     '''
     print("\n ---- init_model_state ---- ")
-    print("Backend:", backend, "Model name: ", model_name, "\n")
+    print("Backend:", backend, "Model name: ", model_name, "personality is: ", personality)
 
     # x set up dumb bot
     if backend == "huggingface":
@@ -22,21 +22,26 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, perso
     # x set up zealot bot
     elif backend == "llamacpp":
         
-        if personality is None:
-            # Default bot creation.
-            bot = bots.build_smart_bot(model_name, 'short_answers')
-            #bot = bots.build_zealot_bot(model_name, 'fanatic')
-            #bot = bots.build_zealot_bot(model_name, 'short_answers')
-            #bot = bots.build_smart_bot(model_name, 'nice_person')
-            #bot = bots.build_coding_bot(model_name, 'expert_coder')
-        else:
-            bot = bots.build_smart_bot(model_name, personality=personality)
+        if botType == "smart_bot":
+            if personality is None:
+                # Default bot creation.
+                bot = bots.build_smart_bot(model_name, 'short_answers')
+                #bot = bots.build_smart_bot(model_name, 'short_answers')
+                #bot = bots.build_smart_bot(model_name, 'nice_person')
+            else:
+                bot = bots.build_smart_bot(model_name, personality=personality)
+        
+        if botType == "zealot_bot":
+            if personality is None:
+                # Default bot creation.
+                bot = bots.build_zealot_bot(model_name, 'fanatic')
+                
+            else:
+                bot = bots.build_zealot_bot(model_name, personality=personality)
 
-        
         max_memory = 10
-        
         state = create_ollama_bot_dict(bot.model_name, bot, backend, max_memory)
-        print("\n Ollama bot here: ", state, "\n")
+        #print("\n Ollama bot here: ", state, "\n")
 
         return state
     else: 
@@ -61,11 +66,11 @@ def init_model_state(backend: str = 'huggingface', model_name: str = None, perso
     
 
 
-def init_bot(app, backend: str, model: str):
+def init_bot(app, backend: str, model: str, botType: str):
     """Initialize the bot model state for the app"""
     print("Making new bot with a backend of: ", backend, "and a name of: ", model)
-    app.config['state'] = init_model_state(backend, model)
-    #print("\n\n============","model state","============\n\n", app.config['state'], "\n============\n\n")
+    app.config['state'] = init_model_state(backend, model, botType=botType)
+    print("\n\n============","init_bot result vvv","============\n\n", app.config['state'], "\n============\n\n")
 
     app.config['current_backend'] = backend
     app.config['current_model'] = model
@@ -73,17 +78,21 @@ def init_bot(app, backend: str, model: str):
 
 ### -------------- Changing Bots -------------- ###
 
-def swap_bot(app, backend: str, model: str):
+def swap_bot(app, backend: str, model: str, botType: str):
     """Swap out the current bot with a new one"""
     # Clean up existing state if needed
     if 'state' in app.config and hasattr(app.config['state'], 'cleanup'):
         app.config['state'].cleanup()
 
     #print("\n\n--------- before swap_bot in bot.py ---------", backend, model)
-    # Initialize new bot
-    init_bot(app, backend, model)
+    
+    #TODO pass the personality argument to init_bot
+    
+    init_bot(app, backend, model, botType)      # Initialize new bot
     #print("--------- After swap_bot in bot.py", backend, model, "---------\n\n")
     #print("model state at the end of swap_bot:", app.config.get('state'), '\n\n')
+    state = app.config.get('state')
+    botType = state.get('botType')
     
     return {
         'success': True,
@@ -91,17 +100,22 @@ def swap_bot(app, backend: str, model: str):
         'model': model,
         'previous_backend': app.config.get('current_backend'),
         'previous_model': app.config.get('current_model'),
-        'state': app.config.get('state')
+        'state': app.config.get('state'),
+        'botType': botType
     }
 
 def get_current_bot_info(app):
     """Get information about the currently active bot"""
     state = app.config.get('state')
+    #print("state is: ", state)
     personality = state.get('personality') if state else None
+    bot_type = state.get('bot-type') if state else None
+    #print("in current bot info function: ", bot_type)
 
     return {
         'backend': app.config.get('current_backend'),
         'model': app.config.get('current_model'),
+        'botType' : bot_type,
         'personality': personality,
         'initialized': 'state' in app.config and app.config['state'] is not None
     }
@@ -126,12 +140,12 @@ def swap_personality(app, backend: str, personality: str):
 
     state = app.config.get('state')
     current_bot = state.get('bot_instance')
-    print("State in change personalities: ", state , '\n', "current_bot in change personalities: ", current_bot, '\n')
+    print("\nState in change personalities: ", state , '\n', "current_bot in change personalities: ", current_bot, '\n')
     
     current_bot.change_personality(personality)
     
     #current_bot = state.get('bot_instance')
-    print('Current bot now after cahnging personality:', current_bot)
+    print('Current bot now after changing personality:', current_bot)
     print('Current personality now after: ', current_bot.personality)
     app.config['bot_instance'] = current_bot
     app.config['state']['personality'] = personality
@@ -170,6 +184,7 @@ def create_ollama_bot_dict(model_name, bot, backend, max_memory:int=3):
             "tokenizer": None,    # Ollama doesn't expose tokenizer
             "bot_instance": bot,   # Keep reference to actual bot
             "personality" : bot.personality,
+            "bot-type" : bot.bot_type,
             "backend": backend,
             "device": device,   # Ollama manages devices internally
             "tts_engine": bot.tts_engine if hasattr(bot, 'tts_engine') else None,

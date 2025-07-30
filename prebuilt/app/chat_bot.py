@@ -8,6 +8,7 @@ def init_chat_state(model_name:str='microsoft/DialoGPT-medium'):
     model, tokenizer = load_model_and_tokenizer(model_name, device)
     tts_engine = init_tts_engine(0, rate=200)
     backend = 'huggingface'
+    bot_type = "dumb_bot"
 
     return {
         "model": model,
@@ -16,7 +17,8 @@ def init_chat_state(model_name:str='microsoft/DialoGPT-medium'):
         "tts_engine": tts_engine,
         "chat_history_ids": None,
         "max_memory": 6,
-        "backend": backend
+        "backend": backend,
+        "bot-type": bot_type
     }
 
 ### -------------- Setup -------------- ###

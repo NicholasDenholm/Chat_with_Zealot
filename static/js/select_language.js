@@ -2,14 +2,21 @@
 const languageSelect = document.getElementById('languageSelect');
 const whisperLanguages = {
   en: "English",
-  es: "Spanish",
-  fr: "French",
-  de: "German",
-  it: "Italian",
-  zh: "Chinese",
-  ja: "Japanese",
-  ko: "Korean",
-  ru: "Russian"
+  es: "Spanish", 
+  fr: "French", 
+  de: "German", 
+  it: "Italian", 
+  pt: "Portuguese", 
+  ru: "Russian", 
+  zh: "Chinese (Simplified)", 
+  ja: "Japanese", 
+  ko: "Korean", 
+  hi: "Hindi", 
+  ar: "Arabic", 
+  tr: "Turkish", 
+  nl: "Dutch", 
+  vi: "Vietnamese", 
+  None: "Auto-detect"
 };
 
 // Populate Whisper language dropdown

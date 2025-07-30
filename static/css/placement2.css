@@ -1,0 +1,262 @@
+/* ===== CONFIGURATION VARIABLES ===== */
+:root {
+  /* Grid spacing from edges */
+  --grid-margin: 20px;
+  --grid-margin-sm: 12px;
+  --grid-margin-lg: 32px;
+  
+  /* Stacking offsets */
+  --stack-offset: 20px;
+  --stack-offset-sm: 12px;
+  --stack-offset-lg: 32px;
+  
+  /* Button bar spacing */
+  --button-gap: 8px;
+  --button-gap-sm: 4px;
+  --button-gap-lg: 12px;
+  
+  /* Z-index layers */
+  --z-overlay: 999;
+  --z-modal: 1000;
+  --z-tooltip: 1001;
+  
+  /* Debug outline (set to 'none' for production) */
+  --debug-outline: 2px dashed orange;
+}
+
+/* ===== BASE POSITIONING SYSTEM ===== */
+.position-grid {
+  position: absolute;
+  z-index: var(--z-overlay);
+  outline: var(--debug-outline);
+}
+
+/* ===== CORNER & EDGE POSITIONS ===== */
+/* Top edge */
+.position-grid[data-pos="top-left"] {
+  top: var(--grid-margin);
+  left: var(--grid-margin);
+}
+
+.position-grid[data-pos="top-center"] {
+  top: var(--grid-margin);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.position-grid[data-pos="top-right"] {
+  top: var(--grid-margin);
+  right: var(--grid-margin);
+}
+
+/* Bottom edge */
+.position-grid[data-pos="bottom-left"] {
+  bottom: var(--grid-margin);
+  left: var(--grid-margin);
+}
+
+.position-grid[data-pos="bottom-center"] {
+  bottom: var(--grid-margin);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.position-grid[data-pos="bottom-right"] {
+  bottom: var(--grid-margin);
+  right: var(--grid-margin);
+}
+
+/* Side edges */
+.position-grid[data-pos="center-left"] {
+  top: 50%;
+  left: var(--grid-margin);
+  transform: translateY(-50%);
+}
+
+.position-grid[data-pos="center-right"] {
+  top: 50%;
+  right: var(--grid-margin);
+  transform: translateY(-50%);
+}
+
+/* True center */
+.position-grid[data-pos="center"] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ===== STACKED POSITIONS ===== */
+.position-grid[data-stack="1"] {
+  --stack-multiplier: 1;
+}
+
+.position-grid[data-stack="2"] {
+  --stack-multiplier: 2;
+}
+
+.position-grid[data-stack="3"] {
+  --stack-multiplier: 3;
+}
+
+/* Apply stacking offsets */
+.position-grid[data-pos*="bottom"][data-stack] {
+  bottom: calc(var(--grid-margin) + (var(--stack-offset) * var(--stack-multiplier)));
+}
+
+.position-grid[data-pos*="top"][data-stack] {
+  top: calc(var(--grid-margin) + (var(--stack-offset) * var(--stack-multiplier)));
+}
+
+.position-grid[data-pos*="left"][data-stack]:not([data-pos*="center"]) {
+  left: calc(var(--grid-margin) + (var(--stack-offset) * var(--stack-multiplier)));
+}
+
+.position-grid[data-pos*="right"][data-stack]:not([data-pos*="center"]) {
+  right: calc(var(--grid-margin) + (var(--stack-offset) * var(--stack-multiplier)));
+}
+
+/* ===== SIZE VARIANTS ===== */
+.position-grid[data-size="sm"] {
+  --grid-margin: var(--grid-margin-sm);
+  --stack-offset: var(--stack-offset-sm);
+}
+
+.position-grid[data-size="lg"] {
+  --grid-margin: var(--grid-margin-lg);
+  --stack-offset: var(--stack-offset-lg);
+}
+
+/* ===== BUTTON BAR LAYOUTS ===== */
+.button-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--button-gap);
+}
+
+/* Horizontal bars */
+.button-bar[data-direction="horizontal"] {
+  flex-direction: row;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="start"] {
+  justify-content: flex-start;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="center"] {
+  justify-content: center;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="end"] {
+  justify-content: flex-end;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="space-between"] {
+  justify-content: space-between;
+}
+
+/* Vertical bars */
+.button-bar[data-direction="vertical"] {
+  flex-direction: column;
+}
+
+.button-bar[data-direction="vertical"][data-justify="start"] {
+  justify-content: flex-start;
+}
+
+.button-bar[data-direction="vertical"][data-justify="center"] {
+  justify-content: center;
+}
+
+.button-bar[data-direction="vertical"][data-justify="end"] {
+  justify-content: flex-end;
+}
+
+.button-bar[data-direction="vertical"][data-justify="space-between"] {
+  justify-content: space-between;
+}
+
+/* Button bar size variants */
+.button-bar[data-gap="sm"] {
+  gap: var(--button-gap-sm);
+}
+
+.button-bar[data-gap="lg"] {
+  gap: var(--button-gap-lg);
+}
+
+/* Custom gap using CSS custom property */
+.button-bar[data-gap="custom"] {
+  gap: var(--custom-gap, var(--button-gap));
+}
+
+/* ===== INDIVIDUAL BUTTON SPACING ===== */
+.button-item {
+  flex-shrink: 0;
+}
+
+.button-item[data-margin-start] {
+  margin-inline-start: var(--item-margin-start, 0);
+}
+
+.button-item[data-margin-end] {
+  margin-inline-end: var(--item-margin-end, 0);
+}
+
+.button-item[data-margin-block] {
+  margin-block: var(--item-margin-block, 0);
+}
+
+/* ===== VISUAL STYLING ===== */
+.panel {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.panel[data-style="minimal"] {
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.panel[data-style="prominent"] {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+@media (max-width: 768px) {
+  :root {
+    --grid-margin: 12px;
+    --stack-offset: 12px;
+    --button-gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --grid-margin: 8px;
+    --stack-offset: 8px;
+    --button-gap: 4px;
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.z-modal { z-index: var(--z-modal); }
+.z-tooltip { z-index: var(--z-tooltip); }
+
+.no-debug { outline: none !important; }
+
+/* Animation utilities */
+.fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

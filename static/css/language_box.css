@@ -1,0 +1,73 @@
+.language-select-box {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    font-family: "Segoe UI", sans-serif;
+    z-index: 1000;
+}
+
+/* Style the select dropdown */
+.language-select-box select {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+/* Style the microphone button */
+.language-select-box button,
+#micButton {
+    /* Reset button defaults */
+    background: none;
+    border: none;
+    cursor: pointer;
+    
+    /* Add smooth transitions */
+    transition: all 0.2s ease;
+    
+    /* Your existing styles */
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-color);
+    border-radius: 3px;
+    margin-bottom: 4px;
+    display: block;
+    min-width: 120px;
+    padding: 8px 12px; /* Add some padding for better click area */
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Hover state */
+.language-select-box button:hover,
+#micButton:hover {
+    color: #475569;
+    transform: translateY(-1px);
+    background: rgba(0, 0, 0, 0.05); /* Add subtle background */
+}
+
+/* Active state (when pressed) */
+.language-select-box button:active,
+#micButton:active {
+    color: rgb(235, 10, 10);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transform: translateY(0); /* Reset transform when pressed */
+    background: rgba(235, 10, 10, 0.1); /* Add background when active */
+}
+
+/* Recording state (you can add this class via JavaScript) */
+.language-select-box button.recording,
+#micButton.recording {
+    color: rgb(235, 10, 10);
+    background: rgba(235, 10, 10, 0.1);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}

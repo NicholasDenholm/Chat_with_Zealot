@@ -128,6 +128,7 @@ function showStatus(message, type) {
     statusElement.className = `status-message status-${type}`;
     statusElement.style.display = 'block';
    
+    /*
     // Auto-hide after 7 seconds, then redirect
     setTimeout(async () => {
         statusElement.style.display = 'none';
@@ -137,6 +138,19 @@ function showStatus(message, type) {
             console.error('Error switching to chat page:', error);
         }
     }, 3000);
+    */
+    // if successful then swap to main chat page
+    if (type === 'success') {
+        setTimeout(() => {
+            statusElement.style.display = 'none';    
+            switchToChatPage();
+        }, 2000);
+    } else {
+        // Auto-hide error message after 5 seconds
+        setTimeout(() => {
+            statusElement.style.display = 'none';
+        }, 5000);
+    }
 }
 
 // Initialize when page loads

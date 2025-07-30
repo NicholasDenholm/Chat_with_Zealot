@@ -86,17 +86,21 @@
 
 /* Sliding selection indicator */
 /* Traslation distance must be a fraction of the total width coresponding to how big each button is */
-.switcher-toggle[data-active="talk-to-bot"] .switch-indicator {
-    transform: translateX(0px);
-}
+/* Top option with 0px translated should be the leftmost option on the bar! */
 
-
-.switcher-toggle[data-active="bot-selector"] .switch-indicator {
-    transform: translateX(120px);
-}
+/* Home -- talk-to-bot -- bot-selector*/
+/* 0px ----  120 px -----  245 px*/
 
 .switcher-toggle[data-active="home"] .switch-indicator {
-    transform: translateX(245px);
+    transform: translateX(0%);
+}
+
+.switcher-toggle[data-active="talk-to-bot"] .switch-indicator {
+    transform: translateX(100%);
+}
+
+.switcher-toggle[data-active="bot-selector"] .switch-indicator {
+    transform: translateX(200%);
 }
 
 /* This slides from the left to the third button?? How to fix?*/

@@ -4,6 +4,7 @@ from chat_app.app import create_app, init_bot
 
 backend = 'llamacpp'        # default bot
 model_name = 'llama3.2'     # default llm name
+bot_type = 'smart_bot'
 
 # Create app without bot initialization
 app = create_app()
@@ -11,10 +12,10 @@ print("\n================ New app creation ================\n")
 
 # Initialize bot based on backend
 if backend == 'huggingface':
-    init_bot(app, 'huggingface', 'microsoft/DialoGPT-medium')
+    init_bot(app, backend, 'microsoft/DialoGPT-medium')
     #print("Initialized Hugging Face bot...\n")
 elif backend == 'llamacpp':
-    init_bot(app, 'llamacpp', 'llama3.2')
+    init_bot(app, backend, 'llama3.2', bot_type)
     #print("Initialized LlamaCPP bot...\n")
 else:
     print("Backend not supported.")

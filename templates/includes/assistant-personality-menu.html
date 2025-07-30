@@ -1,0 +1,30 @@
+<div class="personality-menu">
+    <h1>Assistant's Personalities</h1>
+    
+    <div class="current-personality" id="currentPersonality">
+        <div>Currently Active: <span id="currentPersonalityName">Loading...</span></div>
+    </div>
+
+    <!-- Options -->
+    <div class="personality-option" data-backend="llamacpp" data-personality="nice_person">
+        <h3>Nice-person</h3>
+        <p>nice_person : medium, friendly and cheerful</p>
+    </div> 
+
+    <div class="personality-option" data-backend="llamacpp" data-personality="short_answers">
+        <h3>Short-answers</h3>
+        <p>short_answers : short, blunt and flat</p>
+    </div>
+
+    <div class="personality-option" data-backend="llamacpp" data-personality="mean_person">
+        <h3>Mean-person</h3>
+        <p>mean_person : medium, rude and irritable</p>
+    </div>
+
+    <!-- Select option button -->
+    <button class="swap-button" id="swapButton" onclick="swapPersonality()">
+        Switch Personality
+    </button>
+
+    <div class="status-message" id="statusMessage" style="display: none;"></div>
+</div>
