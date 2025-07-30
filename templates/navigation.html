@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/demopage.css') }}">
@@ -28,6 +28,12 @@
         <p>The navigation is responsive and will move to the bottom-right on mobile devices.</p>
     </div>
 
+    <!-- Theme Toggle -->
+    <div class="position-corner" data-pos="top-right">
+        <button id="themeToggleBtn" title="Toggle theme">🌓</button>
+    </div>
+
+
     {% include 'includes/pageswitcher.html' %}
     
     <!-- Voice selector reference -->
@@ -35,6 +41,8 @@
     <script src="{{ url_for('static', filename='js/activepage.js') }}"></script>
     
     <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/themeToggle.js') }}"></script>
 
 </body>
 </html>

@@ -3,57 +3,103 @@
 :root {
     --bg-color: #f4f4f4;
     --text-color: #111;
+
     --user-color: #1a73e8;
     --bot-color: #34a853;
+    
     --input-bg: #fff;
     --input-border: #ccc;
+    
     --button-bg: #1a73e8;
+    --button-hover-color: #1669c1; /* darker version */
+    
     --button-text: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+
+    --page-switcher-color: linear-gradient(135deg, var(--border-color) 0%, var(--button-bg) 100%);
+}
+/*
+.theme-warm-tones {
+  --bg-color: #1C1C1C;
+  --text-color: #F5E8D8;
+  --accent1-color: #FF6F61;
+  --accent2-color: #DAA520;
+  --hover-color: #FF4500;
 }
 
+.theme-muted-pastels {
+  --bg-color: #2C2C2C;
+  --text-color: #E4E4E4;
+  --accent1-color: #A8DADC;
+  --accent2-color: #FFC1CC;
+  --button-color: #B39CD0;
+} */
+
 [data-theme="dark"] {
-    --bg-color: #1e1e1e;
+    --bg-color: #1C1C1C;
+    --menu-color: #F5E8D8;
+
     --text-color: #f4f4f4;
+    --heading-color: var(--border-color);
+
+    --user-color: #F5E8D8;
+    --bot-color: #FF6F61;
+
     --input-bg: #2c2c2c;
     --input-border: #444;
-    --button-bg: #3a78ff;
+    
+    --button-bg: #FF4500;
+    --button-hover-color: #FF6F61; /* darker version */
+    
     --button-text: #fff;
+    --border-color: #DAA520;
+
+    --page-switcher-color: linear-gradient(135deg, var(--border-color) 0%, var(--button-bg) 100%);
+    
+    
 }
 
 [data-theme="light"] {
     --bg-color: #f4f4f4;
+    --menu-color: #E4E4E4;
+
     --text-color: #111;
+    --heading-color: var(--border-color);
+    
     --user-color: #1a73e8;
     --bot-color: #31882d;
+    
     --input-bg: #fff;
     --input-border: #ccc;
-    --button-bg: #1a73e8;
+    --button-bg: #8874cf;
+    
     --button-text: #fff;
+    --border-color: #8874cf;
+
+    --page-switcher-color: linear-gradient(135deg, var(--border-color) 0%, var(--button-bg) 100%);
 }
 
 /* --------- Theme Toggle Button --------- */
 .theme-toggle-box {
-  position: relative;
-  bottom: 20px;
-  right: 20px;
-  z-index: 999;
-  background: var(--toggle-bg, #f0f0f0);
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  background: none; /* Remove background from container */
+  border: none;
+  padding: 0;
 }
 
 #themeToggleBtn {
-  background: none;
+  background: var(--button-bg);
+  color: var(--button-text);
   border: none;
   font-size: 20px;
   cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 4px;
-  transition: background 0.3s;
+  padding: 10px 10px; /* make the clickable area larger */
+  border-radius: 8px;
+  width: 100%; /* fill container */
+  display: block;
 }
 
 #themeToggleBtn:hover {
-  background-color: #ddd;
+  filter: brightness(80%);
+  transform: translateY(-1px);
 }

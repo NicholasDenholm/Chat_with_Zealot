@@ -80,3 +80,23 @@
   border: 1px solid var(--input-border);
   padding: 4px 8px;
 }
+
+
+
+/* popup window toggle button */
+#voiceToggleButton {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px 10px; /* make the clickable area larger */
+  border-radius: 8px;
+  width: 100%; /* fill container */
+  display: block;
+}
+
+#voiceToggleButton:hover {
+  filter: brightness(80%);
+  transform: translateY(-1px);
+}
