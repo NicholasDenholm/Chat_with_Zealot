@@ -1,0 +1,96 @@
+/* ===== CONFIGURATION VARIABLES ===== */
+:root {
+  /* Button bar spacing */
+  --button-gap: 8px;
+  --button-gap-sm: 4px;
+  --button-gap-lg: 12px;
+  
+  /* Z-index layers */
+  --z-overlay: 999;
+  --z-modal: 1000;
+  --z-tooltip: 1001;
+  
+  /* Debug outline (set to 'none' for production) */
+  --debug-outline: 2px dashed orange;
+}
+
+
+/* ===== BUTTON BAR LAYOUTS ===== */
+.button-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--button-gap);
+}
+
+/* Horizontal bars */
+.button-bar[data-direction="horizontal"] {
+  flex-direction: row;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="start"] {
+  justify-content: flex-start;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="center"] {
+  justify-content: center;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="end"] {
+  justify-content: flex-end;
+}
+
+.button-bar[data-direction="horizontal"][data-justify="space-between"] {
+  justify-content: space-between;
+}
+
+/* Vertical bars */
+.button-bar[data-direction="vertical"] {
+  flex-direction: column;
+}
+
+.button-bar[data-direction="vertical"][data-justify="start"] {
+  justify-content: flex-start;
+}
+
+.button-bar[data-direction="vertical"][data-justify="center"] {
+  justify-content: center;
+}
+
+.button-bar[data-direction="vertical"][data-justify="end"] {
+  justify-content: flex-end;
+}
+
+.button-bar[data-direction="vertical"][data-justify="space-between"] {
+  justify-content: space-between;
+}
+
+/* Button bar size variants */
+.button-bar[data-gap="sm"] {
+  gap: var(--button-gap-sm);
+}
+
+.button-bar[data-gap="lg"] {
+  gap: var(--button-gap-lg);
+}
+
+/* Custom gap using CSS custom property */
+.button-bar[data-gap="custom"] {
+  gap: var(--custom-gap, var(--button-gap));
+}
+
+/* ===== INDIVIDUAL BUTTON SPACING ===== */
+.button-item {
+  flex-shrink: 0;
+}
+
+.button-item[data-margin-start] {
+  margin-inline-start: var(--item-margin-start, 0);
+}
+
+.button-item[data-margin-end] {
+  margin-inline-end: var(--item-margin-end, 0);
+}
+
+.button-item[data-margin-block] {
+  margin-block: var(--item-margin-block, 0);
+}

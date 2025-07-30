@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(30deg, var(--bg-color) 10%, var(--button-bg) 100%);
     margin: 0;
     padding: 20px;
     min-height: 100vh;
@@ -10,7 +10,7 @@ body {
 }
 
 .bot-menu {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--menu-color);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 30px;
@@ -33,17 +33,17 @@ body {
 
 h1 {
     text-align: center;
-    color: #333;
+    color:  var(--button-text);
     margin-bottom: 30px;
     font-size: 2.5em;
-    background: linear-gradient(45deg, #667eea, #764ba2);
+    background: linear-gradient(70deg, var(--bg-color) 0%, var(--heading-color) 50%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
 .current-bot {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
+    background: linear-gradient(135deg, var(--border-color), var(--button-bg));
     color: white;
     padding: 15px;
     border-radius: 10px;
@@ -66,21 +66,21 @@ h1 {
 }
 
 .bot-option:hover {
-    border-color: #667eea;
+    border-color: var(--menu-color);
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .bot-option.active {
-    border-color: #4CAF50;
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
+    border-color: var(--menu-color);
+    background: linear-gradient(235deg, var(--bot-color) 0%, var(--border-color) 100%);
+    color: var(--text-color);
 }
 
 .bot-option h3 {
     margin: 0 0 10px 0;
     font-size: 1.4em;
-    color: #333;
+    color: var(--heading-color);
 }
 
 .bot-option.active h3 {
@@ -98,7 +98,7 @@ h1 {
 }
 
 .swap-button {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, var(--border-color), var(--button-bg));
     color: white;
     border: none;
     padding: 15px 30px;

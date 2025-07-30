@@ -7,7 +7,7 @@
     z-index: 1000;
     display: flex;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.95);
+    background: linear-gradient(30deg, var(--bg-color) 10%, var(--button-bg) 100%);;
     backdrop-filter: blur(10px);
     border-radius: 50px;
     padding: 8px;
@@ -16,7 +16,7 @@
 }
 
 .nav-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(30deg, var(--bg-color) 10%, var(--button-bg) 100%);
     color: white;
     border: none;
     padding: 12px 20px;
@@ -71,7 +71,7 @@
 /* Demo page styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(30deg, var(--button-bg) 0%, var(--bg-color) 40%, var(--bg-color) 60%, var(--button-bg) 90%);
     margin: 0;
     padding: 40px 20px;
     min-height: 100vh;
@@ -80,20 +80,25 @@ body {
 .demo-content {
     max-width: 800px;
     margin: 0 auto;
-    background: white;
+    background: var(--menu-color);
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .demo-content h1 {
-    color: #333;
     text-align: center;
+    color: var(--text-color);
     margin-bottom: 30px;
+    font-size: 2.5em;
+    background: var(--heading-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .demo-content p {
-    color: #666;
+    color: black;
     line-height: 1.6;
     margin-bottom: 20px;
 }
