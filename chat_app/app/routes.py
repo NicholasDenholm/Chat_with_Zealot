@@ -163,17 +163,18 @@ def register_routes(app):
     @app.route("/run_conversation", methods=["POST"])
     def run_conversation():
         data = request.json
+
         user_input = data.get("message", "")
 
         if not user_input:
             return jsonify({"error": "No message provided"}), 400
 
         state = current_app.config['state']
-        response = chat_with_speech(user_input, state)
+        response = generate_response(user_input, state)
 
         return jsonify({
             "response": response,
-            "chat_history_ids": state['chat_history_ids'].tolist()
+            "chat_history_ids": state['chat_history_ids']
         })
 
 
@@ -332,7 +333,11 @@ def register_routes(app):
     def bot_menu():
         return render_template('bot_menu.html')
     
-    # Personality menus
+    @app.route('/bot-convo')
+    def bot_convo():
+        return render_template('bot_convo.html')
+    
+    # ----------------- Personality menus ----------------- #
     @app.route('/personality-menu-assistant')
     def personality_menu_assistant():
         return render_template('personality_menu_assistant.html')

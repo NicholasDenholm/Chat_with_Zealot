@@ -13,8 +13,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
-
+    
+    <!-- TODO change this so its a unique styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/demopage.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbox.css') }}">
 
 
     <!-- Popup buttons for toolbars -->
@@ -28,12 +31,13 @@
 <body>
 
     <!-- Demo content (this would be your actual page content) -->
-    <div class="demo-content position-corner" data-pos="center">
-        <h1>Welcome to Your Chat App</h1>
-        <p>This is your home page content. The navigation component in the top-right corner allows you to easily switch between pages.</p>
-        <p>Click the "Bot Menu" button to access the bot selector, or stay here on the home page.</p>
-        <p>The navigation is responsive and will move to the bottom-right on mobile devices.</p>
+    <div class="demo-content position-corner" data-pos="left-top">
+        <h1>Bot Convo Page</h1>
+        <p>This is your Bot Convo Page. </p>
     </div>
+
+    <!-- Big ChatBox -->
+    <div id="chatBox" class="position-corner" data-pos="center"></div>
 
     <!-- Theme Toggle -->
     <div class="position-corner" data-pos="top-right">

@@ -8,6 +8,8 @@
 
     <!-- chatbox and theme toggle css references -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbox.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_form.css') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
@@ -24,7 +26,7 @@
     <!-- Popup buttons for toolbars -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/popup_windows.css') }}">
 
-    <!-- Toolbar class -->
+    <!-- Modular boxes class -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/button_bar.css') }}">
     
 
@@ -42,38 +44,26 @@
     </form>
 
     <!-- Theme Toggle -->
-    <div class="position-corner button-bar" data-pos="top-right" data-direction="vertical" data-justify="start">
+    <div class="position-corner button-bar" data-pos="top-right" data-direction="vertical" data-justify="end">
         <button id="themeToggleBtn" title="Toggle theme">🌓</button>
-        
+        <!-- Animation styles: scale, bounce, slide-scale, blur, flip, elastic -->
         <button id="languageToggleButton" title="Toggle language selction" onclick="toggleLanguageSelector('elastic')">🎤</button>
         <button id="voiceToggleButton" title="Toggle tts voice selction" onclick="toggleVoiceSelector('bounce')">🔊</button>
     </div>
 
     <!-- Voice selector box setup-->
-    <div id="voiceSelector" class="voice-select-box position-corner popup-scale" data-pos="bottom-left">
+    <div id="voiceSelector" class="voice-select-box position-corner popup-scale button-bar" data-pos="bottom-left" data-direction="vertical" data-justify="end">
         <label for="voiceSelect">Voice:</label>
         <select id="voiceSelect" style="width: 100%; max-width: 250px;"></select>
     </div>
 
     <!-- Language selector box setup-->
-    <div id="languageSelector" class="language-select-box position-corner popup-slide-scale" data-pos="bottom-right">
+    <div id="languageSelector" class="language-select-box position-corner popup-slide-scale button-bar" data-pos="bottom-right" data-direction="vertical" data-justify="end">
         <label for="languageSelect">Language:</label>
         <select id="languageSelect"></select>
         <button id="micButton">🎤 Speak</button>
         <!--<button id="micButton" class="micButton" style="font-size: 18px;">🎤 Speak</button>-->
     </div>
-
-
-    
-    <!-- Different animation examples 
-    <div style="position: fixed; top: 20px; left: 400px;">
-        <button onclick="showLanguageSelector('scale')">Scale</button>
-        <button onclick="showLanguageSelector('bounce')">Bounce</button>
-        <button onclick="showLanguageSelector('slide-scale')">Slide+Scale</button>
-        <button onclick="showLanguageSelector('blur')">Blur</button>
-        <button onclick="showLanguageSelector('flip')">Flip</button>
-        <button onclick="showLanguageSelector('elastic')">Elastic</button>
-    </div> -->
 
     <!-- ( Chat / Bot Selector ) navigation bar --> 
     {% include 'includes/pageswitcher.html' %}

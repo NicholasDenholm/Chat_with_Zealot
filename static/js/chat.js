@@ -7,6 +7,7 @@ const SERVER_URL = `${window.location.protocol}//${window.location.hostname}:${P
 const chatBox = document.getElementById('chatBox');
 const form = document.getElementById('chatForm');
 const inputField = document.getElementById('userInput');
+
 const micButton = document.getElementById("micButton");
 
 // Display a message in the chat box
@@ -170,7 +171,6 @@ function formatBotReply(rawText) {
 
 
 
-
 /* */
 // Handle form submission
 function handleFormSubmit(event) {
@@ -185,6 +185,14 @@ function handleFormSubmit(event) {
 
 // Attach event listener
 form.addEventListener('submit', handleFormSubmit);
+
+
+inputField.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // prevent newline
+        form.requestSubmit();   // trigger form submission
+    }
+});
 
 // ---------------- Audio Processing ----------------
 /*

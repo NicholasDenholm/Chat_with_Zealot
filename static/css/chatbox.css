@@ -9,7 +9,7 @@ body {
     padding: 20px;
     background-color: var(--bg-color);
     color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
+    transition: var(--bg-color) 0.3s, color 0.3s;
 }
 
 /* --------- Chat Container --------- */
@@ -17,7 +17,7 @@ body {
     width: 40%;
     max-width: 80%;
     background-color: var(--input-bg);
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
@@ -33,13 +33,13 @@ body {
     margin-bottom: 10%; 
     padding: 10%;
     border-radius: 5px;
-    border: 1px solid var(--input-border);
+    border: 1px solid var(--border-border);
     background-color: var(--bg-color);
 }
 
 #chatBox {
-    width: 90%;
-    max-width: 80vw;
+    width: 80%;
+    max-width: 75vw;
     height: 80vh;
 
     margin: 0 auto; /* center horizontally */
@@ -48,8 +48,8 @@ body {
     overflow-y: auto;
     overflow-x: auto;
 
-    border-radius: 5px;
-    border: 1px solid var(--input-border);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
     background-color: var(--bg-color);
 }
 
@@ -124,50 +124,4 @@ body {
 
 .message.bot p:last-child {
     margin-bottom: 0;
-}
-
-/* --------- Form --------- */
-/* Where the user types */
-#chatForm {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    width: 50%;
-    margin: 20px;
-}
-
-#userInput {
-    font-family: inherit;
-    flex: 1;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid var(--input-border);
-    border-radius: 5px;
-    background-color: var(--input-bg);
-    color: var(--text-color);
-}
-
-button {
-    align-self: right;
-    width: 15%;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: 1px;
-    border-radius: 5px;
-    background-color: var(--button-bg);
-    color: var(--button-text);
-    cursor: pointer;
-    /* transition: background-color 0.3s */;
-}
-
-button:hover {
-    background-color: darken(var(--button-bg), 10%);
-}
-
-textarea {
-    resize: vertical; /* Allows vertical resizing */
-    overflow: auto;   /* Shows scrollbar only when content overflows */
-    min-height: 40px; /* Or whatever your initial desired height is */
-    width: 100%;      /* Or your desired width */
-    box-sizing: border-box; /* Important for consistent sizing */
 }
