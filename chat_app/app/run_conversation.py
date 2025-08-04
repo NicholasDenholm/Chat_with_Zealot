@@ -5,7 +5,7 @@ from bots.smart_bot import Smart_Bot
 from bots.zealot_bot import Zealot_Bot
 from bots.multimodal_bot import Multimodal_Bot
 from Ollama.personality import setup_prompts, setup_named_personality, get_all_personality_names, validate_personality_name
-from conversation_engine import get_log_path, converse, converse_streaming
+from .conversation_engine import get_log_path, converse, converse_streaming
 
 # -------------- Bot Builders -------------- #
 

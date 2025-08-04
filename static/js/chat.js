@@ -1,8 +1,8 @@
 let chatHistoryIds = null;
 
-// Change to Flask port number
-const PORT_NUM = '5000';
-const SERVER_URL = `${window.location.protocol}//${window.location.hostname}:${PORT_NUM}`;
+// Change to Flask port number for wordpress website.
+//const PORT_NUM = '5000';
+//const SERVER_URL = `${window.location.protocol}//${window.location.hostname}:${PORT_NUM}`;
 
 const chatBox = document.getElementById('chatBox');
 const form = document.getElementById('chatForm');
@@ -18,10 +18,10 @@ function displayMessage(sender, text, className) {
 
 // Send the message to the backend and get a response
 async function sendMessageToAPI(message, history) {
-    // Use http://xxx.x.x.xx:PORT/chat or http://xxx.x.x.xx:PORT/chat-stream
+    // If using wordpress Use http://xxx.x.x.xx:PORT/chat or http://xxx.x.x.xx:PORT/chat-stream
     // need to concat str ex: fetch(serverUrl + '/chat', { ... });
     // or us `` not: '' . Then {} not ()
-    const response = await fetch(`${SERVER_URL}/chat`, {
+    const response = await fetch(`/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, chat_history_ids: history })
@@ -195,45 +195,7 @@ inputField.addEventListener('keydown', function(event) {
 });
 
 // ---------------- Audio Processing ----------------
-/*
-async function startVoiceInput() {
-    // Request microphone access
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mediaRecorder = new MediaRecorder(stream);
-    const audioChunks = [];
 
-    mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
-
-    mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-        const formData = new FormData();
-        formData.append("audio", audioBlob, "speech.wav");
-
-        try {
-            const response = await fetch("/api/audio", {
-                method: "POST",
-                body: formData
-            });
-
-            const data = await response.json();
-            const userText = data.transcription;
-            const botResponse = data.response;
-
-            displayMessage("You (voice)", userText, "user-message");
-            displayMessage("Bot", botResponse, "bot-message");
-            speak(botResponse); // trigger TTS
-        } catch (err) {
-            displayMessage("Error", err.message, "bot-message");
-        }
-    };
-
-    mediaRecorder.start();
-
-    setTimeout(() => {
-        mediaRecorder.stop();
-    }, 5000); // record for 5 seconds
-}
-*/
 let mediaRecorder;
 let audioChunks = [];
 

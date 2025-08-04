@@ -4,20 +4,17 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navigation Demo</title>
+    <title>Bot conversation</title>
 
-    <!-- Landing page styles-->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}"> -->
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbox.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_form.css') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/placement.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/page_switcher.css') }}">
-    
-    <!-- TODO change this so its a unique styling -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/demopage.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbox.css') }}">
 
 
     <!-- Popup buttons for toolbars -->
@@ -30,32 +27,37 @@
 </head>
 <body>
 
-    <!-- Demo content (this would be your actual page content) -->
-    <div class="demo-content position-corner" data-pos="left-top">
-        <h1>Bot Convo Page</h1>
-        <p>This is your Bot Convo Page. </p>
-    </div>
-
     <!-- Big ChatBox -->
     <div id="chatBox" class="position-corner" data-pos="center"></div>
+
+    <!-- User reply box -->
+    <form id="chatForm" class="position-corner" data-pos="bottom-center">
+        <textarea id="userInput" placeholder="Provide a starting message..."></textarea>
+        <!--<input type="text" id="userInput" placeholder="Type your message" required>-->
+        <button type="submit">Send</button>
+    </form>
 
     <!-- Theme Toggle -->
     <div class="position-corner" data-pos="top-right">
         <button id="themeToggleBtn" title="Toggle theme">🌓</button>
     </div>
 
+    <!-- bot init button -->
+    <div class="position-corner" data-pos="bottom-right">
+        <button id="botInitButton" title="Toggle bots">▶️</button>
+    </div>
+
 
     {% include 'includes/pageswitcher.html' %}
-    
-    <!-- Voice selector reference -->
-    
-    <script src="{{ url_for('static', filename='js/activepage.js') }}"></script>
-    
-    <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script>
-
+        
     <script src="{{ url_for('static', filename='js/themeToggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/page_switcher.js') }}"></script>
     <!-- Logic for popup windows -->
     <script src="{{ url_for('static', filename='js/popup_window.js') }}"></script> 
+
+    <!-- Chatting functions -->
+    <script src="{{ url_for('static', filename='js/bot_convo.js') }}"></script>
+    
 
 </body>
 </html>
