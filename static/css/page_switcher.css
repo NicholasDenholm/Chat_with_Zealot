@@ -108,6 +108,11 @@
     transform: translateY(220%);
 }
 
+.switcher-toggle[data-active="bot-convo"] .switch-indicator {
+    /*transform: translateX(200%);*/
+    transform: translateY(320%);
+}
+
 /* This slides from the left to the third button?? How to fix?*/
 
 

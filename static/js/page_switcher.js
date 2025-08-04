@@ -3,7 +3,7 @@
 // Define page order for directional animation
 // This should be what is in the bar from left to right!
 //const pageOrder = ['talk-to-bot', 'bot-selector', 'home'];
-const pageOrder = ['home', 'talk-to-bot', 'bot-selector'];
+const pageOrder = ['home', 'talk-to-bot', 'bot-selector', 'bot-convo'];
 let currentPageIndex = 0;
 
 function getCurrentPage() {
@@ -14,6 +14,8 @@ function getCurrentPage() {
         activePage = 'bot-selector';
     } else if (currentPath.includes('talk-to-bot')) {
         activePage = 'talk-to-bot';
+    } else if (currentPath.includes('bot-convo')) {
+        activePage = 'bot-convo'; 
     } else {
         activePage = 'home';
     }
@@ -55,7 +57,7 @@ function switchPage(page) {
     // Remove direction class after animation completes
     setTimeout(() => {
         switcherToggle.classList.remove('slide-left', 'slide-right');
-    }, 500);
+    }, 5000);
     
     // Update current page index
     currentPageIndex = newIndex;
@@ -67,6 +69,8 @@ function switchPage(page) {
         window.location.href = '/bot-menu';
     } else if (page === 'talk-to-bot') {
         window.location.href = '/talk-to-bot';
+    } else if (page === 'bot-convo') {
+        window.location.href = '/bot-convo';
     }
 }
 

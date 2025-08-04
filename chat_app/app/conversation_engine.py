@@ -51,11 +51,12 @@ def make_header(log_path: str, start_message: str, rounds:str, extension:str, bo
             f.write(f"\n\n")
         
 def describe_bot(bot):
-        name = getattr(bot, "model_name", "unknown_model")
-        persona = getattr(bot, "personality", None)
-        if isinstance(persona, tuple):
-            persona = ", ".join(persona)
-        return f"{bot.__class__.__name__} (model: {name}, personality: {persona})"
+    """Returns the name and persona of a given bot"""
+    name = getattr(bot, "model_name", "unknown_model")
+    persona = getattr(bot, "personality", None)
+    if isinstance(persona, tuple):
+        persona = ", ".join(persona)
+    return f"{bot.__class__.__name__} (model: {name}, personality: {persona})"
 
 ### --------------- Chatting --------------- ###
 
@@ -87,6 +88,25 @@ def converse(bot1, bot2, rounds:int, start_message:str, log_to_file:str, log_pat
                     f.write(f"### {sender_name}\n")
                     f.write(f"> {response.strip()}\n\n")
 
+
+        # Alternate between bots
+        current_bot = bot2 if current_bot == bot1 else bot1
+
+    return messages
+
+
+def converse_no_log(bot1, bot2, rounds:int, start_message:str):
+    messages = [{"sender": "user", "message": start_message}]
+    current_bot = bot1
+
+    for i in range(rounds):
+        last_message = messages[-1]["message"]
+        response = current_bot.reply(last_message)
+
+        sender_name = current_bot.__class__.__name__
+        messages.append({"sender": sender_name, "message": response})
+
+        print(f"{sender_name}: {response}\n")
 
         # Alternate between bots
         current_bot = bot2 if current_bot == bot1 else bot1

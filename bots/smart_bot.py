@@ -113,3 +113,14 @@ class Smart_Bot():
         if len(chat_history_ids) > max_memory:
             # Keep only the last max_memory messages
             chat_history_ids[:] = chat_history_ids[-max_memory:]
+
+
+    def to_dict(self):
+        return {
+            "bot_type": self.bot_type,
+            "model_name": self.model_name,
+            "personality": self.personality,
+            "length": self.length,
+            "style": self.style,
+            "emotionality": self.emotionality
+        }

@@ -9,3 +9,10 @@ class Dumb_Bot(ChatBotInterface):
 
     def reply(self, user_input: str) -> str:
         return chat_with_speech(user_input, self.state)
+    
+    def to_dict(self):
+        return {
+            "bot_type": self.type,
+            "model_name": self.model_name
+            
+        }

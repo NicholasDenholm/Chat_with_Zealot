@@ -1,8 +1,11 @@
 from flask import request, jsonify, render_template, current_app
+
 from prebuilt.app.chat_bot import chat_with_speech, chat_with_speech_string_version
 from prebuilt.app.audio_bot import Whisper_Bot
-#from bots.whisper_bot import Whisper_Bot
 from .bot import get_current_bot_info, swap_bot, init_bot, swap_personality
+
+from .run_conversation import build_bots, build_dumb_bot, build_smart_bot
+from .conversation_engine import converse, converse_no_log, describe_bot
 
 import tempfile
 import os
@@ -159,24 +162,75 @@ def register_routes(app):
             "chat_history_ids": state['chat_history_ids']
         })
 
+    # ----------------- Multibot Setup ----------------- # 
+    def get_active_bots():
+        state = current_app.config['state']
+        bot1 = state.get('bot1')
+        bot2 = state.get('bot2')
+        return bot1, bot2
+
+
     #TODO make this work with the multi bot setup
     @app.route("/run_conversation", methods=["POST"])
     def run_conversation():
         data = request.json
+        starting_message = data.get("userInput")
+        print("starting message:", starting_message)
 
-        user_input = data.get("message", "")
+        bot1, bot2 = get_active_bots()
 
-        if not user_input:
-            return jsonify({"error": "No message provided"}), 400
+        if not bot1:
+            return jsonify({"error": "Bot 1 not found"}), 404
+        if not bot2:
+            return jsonify({"error": "Bot 2 not found"}), 404
 
-        state = current_app.config['state']
-        response = generate_response(user_input, state)
+        conversation = converse_no_log(bot1, bot2, 4, start_message=starting_message)
+        #state = current_app.config['state']
+        #response = generate_response(user_input, state)
 
         return jsonify({
-            "response": response,
-            "chat_history_ids": state['chat_history_ids']
+            "conversation": conversation
         })
 
+    @app.route("/setup_bot_convo", methods=["POST"])
+    def setup_bots():
+
+        state = current_app.config['state']
+
+        if 'bot1' in state and 'bot2' in state:
+            # Return existing bots if already set up
+            return jsonify({
+                "bot1": state['bot1'].to_dict(),
+                "bot2": state['bot2'].to_dict()
+            })
+        
+        # Otherwise set up new bots
+        dumb, smart = build_bots()
+
+        #dumb = build_dumb_bot("microsoft/DialoGPT-medium")
+        #smart = build_smart_bot()
+        #smart = build_dumb_bot("microsoft/DialoGPT-medium")
+        print("dumb and smart: ", dumb, smart)
+
+        state['bot1'] = dumb
+        state['bot2'] = smart
+
+        return jsonify({
+            "bot1": dumb.to_dict(),
+            "bot2": smart.to_dict()
+        })
+    
+    @app.route("/check_bots", methods=["GET"])
+    def check_active_bots():
+        state = current_app.config.get('state')
+        print("state of app: ", state)
+        bot1 = state.get('bot1')
+        bot2 = state.get('bot2')
+
+        return jsonify({
+            "bot1_exists": bot1 is not None,
+            "bot2_exists": bot2 is not None
+        })
 
     # ----------------- Changing Bots ----------------- # 
     
@@ -335,6 +389,7 @@ def register_routes(app):
     
     @app.route('/bot-convo')
     def bot_convo():
+        
         return render_template('bot_convo.html')
     
     # ----------------- Personality menus ----------------- #
