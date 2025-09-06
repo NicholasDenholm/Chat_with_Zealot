@@ -1,3 +1,6 @@
+import dumb_bot, smart_bot, whisper_bot, multimodal_bot
+import bots
+
 class Coordinator:
     def __init__(self, vision_bot=None, dumb_bot=None, smart_bot=None):
         self.vision_bot = vision_bot
@@ -33,3 +36,16 @@ class Coordinator:
             responses["smart"] = smart_response
 
         return responses
+
+def main():
+    
+    smart = bots.build_smart_bot()
+    dumb = dumb_bot.Dumb_Bot("microsoft/DialoGPT-large")
+    sound = bots.build_whisper_bot()
+    vision = bots.build_vision_bot()
+
+
+    Coordinator()
+
+if __name__ == "__main__":
+    main()

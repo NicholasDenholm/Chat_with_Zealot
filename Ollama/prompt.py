@@ -30,6 +30,23 @@ def rag_template() -> str:
     """
     return template
 
+def flash_card_template() -> str:
+    template = """
+    You are a helpful tutor that makes great flash cards from these pages.
+
+    Pages:
+    {book}
+
+    Give me formated flash cards for each page, that are seperated by questions and answers. Customize your response according to these conditions:
+
+        - **Desired Length**: {length}
+        - **Style**: {style}
+        - **Emotional Tone**: {emotionality}
+
+    Question: {question}
+    """
+    return template
+
 def describe_image_template() -> str:
     template = """You are a helpful assistant with
         {{length}} length, 

@@ -1,0 +1,369 @@
+
+=============== Number of pages: 38 ===============
+
+=============== Page 1 ===============
+Announcements:
+Prof. Rees Kassen starts lecturing 
+Thursday, Sept. 10
+=============== Page 2 ===============
+Lecture 4: Evolution and Biodiversity 
+of Single -celled Eukarya
+
+=============== Page 3 ===============
+Origin of  Eukaryotes
+•Cells existing prior to 2.2 byawere all  
+prokaryotes: Bacteria andArchaea.
+•Eukaryotes appear in the fossil record ca.
+1.7 - 2.1bya. (Grypania  sp.)
+•Chemical markers (steranes) produced  
+only by eukaryotes are detected inrocks
+~2.7 bya.
+•How did eukaryotes differ?
+
+=============== Page 4 ===============
+Prokaryotes have no nucleus, organelles, or microtubules and  
+have 70Sribosomes. They have an outer cell wall composed  
+ofpeptidoglycan. They are generally small, <2 µm in  
+diameter.  DNA in single chromosome. Divide by binary fission.
+=============== Page 5 ===============
+Generalized eukaryotic cell (animal)CytoskeletonCapable of 
+endocytosis
+80S Ribosomes
+Mitochondria, chloroplast, nucleusMitosis
+=============== Page 6 ===============
+Endosymbiotic Theory of Origin of  
+Eukaryotes
+•Theory advanced by Lynn Margulis.
+•Mitochondria and chloroplasts of  
+eucaryotes were at one time free-living  
+bacteria that were engulfed by an Archae on
+and evolved from an obligatory symbiosis.
+•Mitochondria –proteobacterium
+•Chloroplast -cyanobacterium
+•Theory very strongly supported bydata
+=============== Page 7 ===============
+First  endosymbiotic  
+event that led to  
+eukaryotesAncestor of Lokiarchaeota
+Second  
+endosymbiotic 
+event led to 
+photosynthetic 
+eukaryote
+=============== Page 8 ===============
+Lokiarchaeota
+•A newly discovered group of organisms first 
+identified near deep -sea vents off the coast of 
+Norway
+
+=============== Page 9 ===============
+https://www.nature.com/articles/d41586 -019-
+02430 -w
+Thought to be closely 
+related to the ancestral 
+Archaeon that gave rise to 
+EukaryotesPrometheoarchaeum
+syntropicum
+=============== Page 10 ===============
+Evidence for Endosymbiotic Theory
+Organelles (chloroplasts and mitochondria):
+1.contain their own DNA that is similar to  
+bacterial DNA: no histones, circular.
+2.are surrounded by a double membrane 
+– the inner one looks like a  bacterial 
+membrane
+Host (Archaea)Endosymbiont (Bacteria)Mitochondrion
+Ancestral Eukaryote
+=============== Page 11 ===============
+Organelles (chloroplasts and mitochondria):
+3.electron transport chain of mitochondria is 
+located in  the inner membrane and is in 
+the outer membrane of bacteria
+4.show antibiotic sensitivity
+5.have ribosomes (70S) like bacteriaEvidence for Endosymbiotic  Theory
+=============== Page 12 ===============
+Secondary Endosymbiosis
+In 2 groups of  
+protists we can 
+see the evidence 
+of  a second  
+endosymbiotic
+event.  
+THE  
+NUCLEOMORPH
+:remnant of the  
+nucleus of the  
+endosymbiont in
+the chloroplast!!Endosymbiont nucleus Host nucleusEukaryote host
+(1o symbiont) (2o symbiont)
+=============== Page 13 ===============
+Classification
+•Method for organizing information
+–Grouping similar organisms together.
+–Historically, it involved grouping organisms into  
+different categories based on their physical  
+characteristics (hard formicrobes).
+•Ideally it should reflect the evolutionary  
+distances and relationships among organisms.
+–Predict characteristics of newly described organisms
+–Understand the history oflife
+=============== Page 14 ===============
+Difficulty in Classifying  Microorganisms
+•Morphologically simple –they have fewer  
+obvious features that can be used to  
+measure relatedness ofspecies.
+–DNA proposed because it is found in all  
+organisms
+–Transmission of genetic information captures  
+ancestral relationships  (parents pass genes 
+to offspring – ancestral organisms pass 
+genes to descendants) 
+–Slowly changing  (e.g. low copying error)
+–DNA is l arge enough molecule to 
+record useful info. on evolutionary
+change
+=============== Page 15 ===============
+Molecular Phylogeny
+•RNA gene sequence analysis identifies 3 major  
+lineages (Called domains )(Carl Woese 1977):
+–Bacteria (prokaryote)
+–Archaea (prokaryote)
+–Eukarya (eukaryote)
+Classification within each domain is based on rRNA or  
+more recently using a number ofdifferent genes .
+=============== Page 16 ===============
+The Universal Tree of Life  
+based on SSU rRNA  
+sequences.
+NR Pace, 1997
+
+=============== Page 17 ===============
+Two Domains Instead of Three??
+Eukaryotes and 
+Archaea evolved 
+from a common 
+ancestor - An
+ancestral 
+“prokaryote” 
+that gave rise to 
+eukaryotes and 
+archaeaEukaryotes 
+evolved from 
+Archaea and 
+share a common 
+ancestor with 
+Lochiarcheota3 2
+=============== Page 18 ===============
+Horizontal Gene Transfer (HGT)  
+and the Tree of Life
+•What if genes were not only transferred vertically  
+from parent to offspring (ancestor to  
+descendent)?
+•During endosymbiosis genes were transferred  
+from the endosymbiont to the host genome  
+(EGT)
+•HGT is also effected by a virus or a small,  
+circular DNA particle known as a plasmid that  
+contains a foreign gene that can be transferred.
+–20% of the E. coli genome can be traced toHGT
+–1/3 of the genome of some prokaryotic organisms has  
+been acquired through HGT
+=============== Page 19 ===============
+Eukarya
+•Originated 2.7 - 1.7bya 
+Historically considered to 
+contain  the 4 Kingdoms: 
+Plants , Animals , Fungi ,
+Protists
+•Protists -
+–Mostly unicellular  
+eukaryotes
+–Include parasitic,  
+photosynthetic,  
+heterotrophic forms.
+–Between 12 -32 phyla are  
+described.
+–Artificial group
+
+=============== Page 20 ===============
+Adapted from Keeling, P.J., et al., Trends Ecol. Evol. 20 (2005): 670-676.PLANTAE EXCAVATES
+RHIZARIA
+UNIKONTS CHROMALVEOLATESphotoautotrophs
+=============== Page 21 ===============
+1.EXCAVATES
+•Diverse group –unicells, no single 
+morphological feature common toall 
+(many have a feeding groove)
+•Originally thought to be ancestral to other  
+eukaryotes (some spp. lack 
+mitochondria, but are now known to have 
+relic mito. –mito. proteins are present )
+•Parasitic organisms
+•Flagellated, obligate anaerobes
+=============== Page 22 ===============
+Excavates –well known representatives
+•Trichonympha –a  
+symbiotic inhabitant  of 
+termite guts which 
+contains cellulose -
+degrading bacteria
+•Entamoeba hystolytica  
+– causative agent of 
+amoebic dysentery
+=============== Page 23 ===============
+Trypanosoma –causative agent 
+of  sleeping sickness
+KINETOPLASTIDS
+have a unique  
+structure known as  
+kinetoplast (mass  
+of mitochondrial  
+DNA, near  base of
+flagellum)
+=============== Page 24 ===============
+2.CHROMALVEOLATES
+•A supergroup that contains 23 previous groups
+–Algae (all of which acquired chloroplasts by  
+secondary [or tertiary] endosymbiosis)
+–Some non -photosynthetic groups
+•Includes: dinoflagellates, apicomplexa , ciliates,  
+brown algae,  diatoms
+•Important primary producers and consumers of  
+planktonic communities of lakes and oceans.
+=============== Page 25 ===============
+Adapted Cracraft, J. and M. J. Donoghue (Eds). Assembling the Tree of  
+Life. Oxford University Press, 2004.ChromalveoatesHigher plants
+=============== Page 26 ===============
+Avelolates: Dinoflagellates
+•Heterotrophic and  
+phototrophic species
+•Many form dormant  
+cyststage
+•Some species are  
+symbionts of  
+invertebrates (corals)
+
+=============== Page 27 ===============
+Red tides ( this one is caused by Gonyaulax )
+A redtide  bloom  
+off  Baja, CA
+Dinoflagellates are 
+causative agents of:  
+1. Paralytic  shellfish 
+poisoning
+2. Hemolytic
+shellfish poisoning
+=============== Page 28 ===============
+Avelolates: Apicomplexa
+•Obligate parasites of
+animals :complex life
+cycles
+•They have an apical  
+complex of organelles  
+(microtubules, etc) that  
+helps them attach to or  
+penetrate their host.
+•Malaria –Plasmodium
+sp.
+=============== Page 29 ===============
+Stramenopiles :Diatoms
+•10000 species found  
+in all aquatic  
+environments
+•Responsible for  
+roughly 25% of  
+global primary  
+production
+•Produce a silica  
+(glass) exoskeleton  
+known as a frustule
+•Only male gametes  
+have flagellum
+=============== Page 30 ===============
+Stremenopiles : Oomycetes
+•Water molds (formerly  
+classified with the fungi).
+•Filamentous growth form,  
+but produce flagellated  
+zoospores (asexual spores  
+that give rise to filaments)
+•Cause many agricultural  
+diseases:
+–Downy mildew of grapes
+–Potato blight
+
+=============== Page 31 ===============
+Stremenopiles : Phaeophyta
+This brown 
+algae contains 
+no unicellular  
+representatives
+=============== Page 32 ===============
+3.RHIZARIA
+•United only by  
+molecular data (no  
+distinguishing  
+morphological  
+features )
+•Heterotrophic cells  
+that consume  
+prokaryotes and  
+eucaryotes
+
+=============== Page 33 ===============
+Many rhizaria  produce pseudopodia that 
+are used in feeding
+
+=============== Page 34 ===============
+Worldwide contribution of giant Rhizaria  to zooplankton communities (>600  μm) 
+in the top 500 m of the water column
+T Biard et al. Natur e532, 504–507 (2016) doi:10.1038/nature17652
+=============== Page 35 ===============
+4.PLANTAE ( ARCHAEPLASTIDA )
+•Include redandgreen
+algae, land plants and
+Charophytes
+•All contain plastids that  
+arose by primary  
+endosymbiosis
+•Sexual reproduction  
+common: isogamy (equal  
+sized gametes) and  
+oogamy (large egg  
+fertilized by small motile  
+sperm).
+•Unicellular, colonial and  
+multicellular forms
+=============== Page 36 ===============
+Chlorophyta
+•Chlamydomonas –unicellular - a model 
+organism for evolution , molecular, physiological 
+and biochemical studi es. Volvox -colonial form
+•The most advanced forms have reproductive  
+features like those of higher plants
+•Chara –has distinct reproductive structures that  
+contain eggs (oocyte)
+
+=============== Page 37 ===============
+5.UNIKONTS
+•Contains parasitic protists,  
+slime molds, amoebae,  
+animals and fungi.
+•includes the  
+CHOANOFLAGELLATES –
+that resemble cells of  
+sponges (among the simplest  
+and most ancient of animals)
+•600 mya multicellular  
+organisms appear  
+(coinciding with dramatic rise  
+in O2 inatmosphere)
+Sponge grade body fossil with 
+cellular resolution dating 60 Myr  
+before the Cambrian
+Yin et al. 2015
+=============== Page 38 ===============
+Origin of Multicellular Organisms
+Urmetazoan  (earliest metazoan)
+=============== END ===============
+

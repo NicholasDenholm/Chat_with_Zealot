@@ -1,6 +1,7 @@
 from bots.zealot_bot import Zealot_Bot
 from bots.smart_bot import Smart_Bot
-from bots.whisper_bot import Whisper_Bot
+from bots.whisper_bot import Whisper_Bot, pick_language
+from bots.multimodal_bot import build_multimodal_bot
 from Ollama.personality import validate_personality_name
 
 def build_zealot_bot(model_name:str, personality:str):
@@ -66,3 +67,18 @@ def build_coding_bot(model_name:str, personality:str):
     personality = validate_personality_name(personality, fallback="expert_coder")
     return Smart_Bot(model_name="codellama:7b", personality=personality)
 
+
+# TODO test and add params to these two functions!
+def build_whisper_bot():
+    
+    bot = Whisper_Bot(model_name="medium")
+    fs = 16000  # Sample rate
+    language_code = pick_language() # ISO code
+    bot.set_language(language_code)
+
+    return bot
+
+def build_vision_bot():
+
+    bot = build_multimodal_bot(model_name='llava', user_request=2)
+    return bot

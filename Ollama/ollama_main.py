@@ -12,7 +12,7 @@ from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 from personality import setup_named_personality, get_all_personality_names, enum_personality_options
 from book_retrival import load_all_books, handle_dynamic_file_loading, get_script_directory, load_images, make_dir_path, read_from_list
-from prompt import warhammer_template, rag_template, describe_image_template
+from prompt import warhammer_template, rag_template, describe_image_template, flash_card_template
 
 ### -------------- Setup -------------- ###
 
@@ -202,6 +202,13 @@ def talk_to_warhammer_bot(test:bool):
     content = ""
     run_model(model, template, personality, content)
 
+def talk_to_study_bot(retreive_from:str, test:bool):
+    model = OllamaLLM(model="llama3.2")
+    personality = setup_modifiers(test=test)
+    template = flash_card_template()
+    content = create_text_for_bot(retreive_from)
+    run_model(model, template, personality, content)
+
 def talk_to_code_bot(retreive_from:str, test:bool):
     '''
     ARGS
@@ -254,7 +261,7 @@ def talk_to_image_bot(retrieve_from:str, test:bool):
 
 def main():
 
-    choice = 3  # Change to switch bots
+    choice = 4  # Change to switch bots
     test = False
 
     if choice == 1:
@@ -265,6 +272,9 @@ def main():
     elif choice == 3:
         retreive_from = "images"
         talk_to_image_bot(retreive_from, test)
+    elif choice == 4:
+        retreive_from = "study"
+        talk_to_study_bot(retreive_from, test)
     else:
         print("Error choose 1 or 2")
 
