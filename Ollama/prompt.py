@@ -47,6 +47,31 @@ def flash_card_template() -> str:
     """
     return template
 
+def anki_flash_card_template() -> str:
+    template = """
+    You are a helpful tutor that makes great flash cards from these pages.
+
+    Pages:
+    {book}
+
+    Generate formatted flash cards for each page, suitable for direct import into Anki.
+
+    Use the following format for each flash card:
+    Question;Answer
+
+    For example: What is the capital of France?;Paris
+
+    Conditions:
+    - Desired Length: {length}
+    - Style: {style}
+    - Emotional Tone: {emotionality}
+
+    Only output flash cards in the format above, with no extra text.
+
+    Question: {question}
+    """
+    return template
+
 def describe_image_template() -> str:
     template = """You are a helpful assistant with
         {{length}} length, 

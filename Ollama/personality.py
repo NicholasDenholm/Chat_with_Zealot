@@ -13,7 +13,8 @@ def personality_presets() -> dict[str, tuple[str, str, str]]:
         "expert_coder": ("long", "technical", "flat"),
         "senior_dev": ("long", "precise", "neutral"),
         "python_expert": ("long", "simple", "helpful"),
-        "frontend_master": ("long", "creative", "happy")
+        "frontend_master": ("long", "creative", "happy"),
+        "anki_flashcard_expert": ("long", "tutoring", "helpful")
     }
 
 

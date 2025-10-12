@@ -8,6 +8,7 @@ temp/
 book/
 images/
 audio/
+study/
 
 # Bytecode files
 __pycache__/

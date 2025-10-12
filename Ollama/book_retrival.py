@@ -54,7 +54,7 @@ def read_content(book_path: str) -> str:
         return f.read()
 
 def read_from_list(book_list:list[str]) -> str:
-    content = ["===== Start of content =====\n"]
+    content = [f"\nlength of file list: {len(book_list)}\n===== Start of content =====\n"]
 
     for book_path in book_list:
         try:
@@ -74,7 +74,7 @@ def get_script_directory():
     return os.path.dirname(os.path.abspath(__file__))
 
 def make_dir_path(sub_dir:str, dir:str) -> str:
-    return os.path.join(sub_dir, dir)
+    return os.path.join(dir, sub_dir)
 
 def make_book_path(file_name:str, dir:str) -> str:
     """Concats a file_name and this scripts directory name"""

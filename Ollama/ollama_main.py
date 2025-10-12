@@ -5,14 +5,16 @@ import os
 import requests
 import json
 from typing import List, Dict
+from datetime import datetime
 
 from jinja2 import Template
 import ollama
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
+
 from personality import setup_named_personality, get_all_personality_names, enum_personality_options
 from book_retrival import load_all_books, handle_dynamic_file_loading, get_script_directory, load_images, make_dir_path, read_from_list
-from prompt import warhammer_template, rag_template, describe_image_template, flash_card_template
+from prompt import warhammer_template, rag_template, describe_image_template, flash_card_template, anki_flash_card_template
 
 ### -------------- Setup -------------- ###
 
@@ -32,7 +34,7 @@ def setup_modifiers(test:bool):
             print("Using settings:", length, style, emotionality)
         else:
             personalities = get_all_personality_names()
-            default_personality = personalities[3]
+            default_personality = personalities[10]
             #print(f"list: {personalities} \n default: {default_personality}")
             personality = setup_named_personality(default_personality)
     except ValueError as val_err:
@@ -83,6 +85,71 @@ def run_model(model, template:str, personality: tuple[str, str, str], content: s
         except KeyboardInterrupt:
             print("Exiting goodbye...")
             break
+
+
+def run_model_and_save(
+    model,
+    template: str,
+    personality: tuple[str, str, str],
+    content: str,
+    output_path: str
+) -> None:
+    """
+    Run an interactive chatbot session and save the Q&A to a file.
+
+    Args:
+        model: The language model to use.
+        template (str): Prompt template string.
+        personality (tuple): (length, style, emotionality) for prompt control.
+        content (str): Book or reference content to pass into the model.
+        output_path (str): File path to save the conversation.
+    """
+
+    length, style, emotionality = personality
+    prompt = ChatPromptTemplate.from_template(template)
+    chain = prompt | model
+
+    print("Press q to quit")
+
+    conversation = []  # Collect Q&A here
+
+    while True:
+        try:
+            print("\n\n______________________________")
+            question = input("You: ")
+            print("\n\n")
+            if question.strip().lower() == 'q':
+                break
+
+            result = chain.invoke({
+                "book": content,
+                "question": question,
+                "length": length,
+                "style": style,
+                "emotionality": emotionality
+            })
+
+            print(result)
+
+            # Save pair
+            conversation.append(f"Q: {question}\nA: {result}\n")
+
+        except KeyboardInterrupt:
+            print("Exiting. Goodbye...")
+            break
+
+    # Write conversation to file
+    try:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"conversation_{timestamp}.txt"
+        save_path = os.path.join(output_path, "output_cards", filename)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        with open(save_path, "w", encoding="utf-8") as f:
+            f.writelines("\n".join(conversation))
+        print(f"\n Conversation saved to: {save_path}")
+    except Exception as e:
+        print(f"\n Failed to save conversation: {e}")
+
 
 ### -------------- Images -------------- ###
 
@@ -156,10 +223,21 @@ def add_content(question):
 def create_text_for_bot(retreive_from:str):
     base_dir = get_script_directory()   # gets directory of this script
     target_dir = make_dir_path(retreive_from, base_dir)
+    #print("This is the target dir: ", target_dir)
     book_list = load_all_books(target_dir)
     content = read_from_list(book_list)
     return content
 
+def create_output_path(retreive_from:str):
+    base_dir = get_script_directory()   # gets directory of this script
+    target_dir = make_dir_path(retreive_from, base_dir)
+    # Define path to flash cards directory
+    flash_cards_dir = os.path.join(target_dir, "output_cards")
+    # Make the directory if it doesn't exist
+    if not os.path.exists(flash_cards_dir):
+        os.makedirs(flash_cards_dir)
+    return  flash_cards_dir
+    
 def create_image_content(retreive_from:str):
     base_dir = get_script_directory()   # gets directory of this script
     target_dir = make_dir_path(base_dir, retreive_from)
@@ -205,9 +283,14 @@ def talk_to_warhammer_bot(test:bool):
 def talk_to_study_bot(retreive_from:str, test:bool):
     model = OllamaLLM(model="llama3.2")
     personality = setup_modifiers(test=test)
-    template = flash_card_template()
+    #template = flash_card_template()
+    template = anki_flash_card_template()
     content = create_text_for_bot(retreive_from)
-    run_model(model, template, personality, content)
+    #print(content) Now this is fixed.
+    output_path = create_output_path(retreive_from) 
+    # TODO now make a function to save a text file in the output path
+    #run_model(model, template, personality, content)
+    run_model_and_save(model, template, personality, content, output_path)
 
 def talk_to_code_bot(retreive_from:str, test:bool):
     '''
