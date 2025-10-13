@@ -64,6 +64,39 @@ class Zealot_Bot():
         })
         return result
     
+
+    def reply_from_dictionary(self, context: dict, chat_history: list = None) -> str:
+        # Grab all values that look like strings or have a `.message.content`
+        texts = []
+
+        for value in context.values():
+            if hasattr(value, "message") and hasattr(value.message, "content"):
+                texts.append(value.message.content)
+            elif isinstance(value, str):
+                texts.append(value)
+
+        user_input = "\n".join(texts)
+
+        # Format chat history for the book parameter
+        book_context = []
+        if chat_history:
+            for msg in chat_history:
+                # Convert the chat history into a readable format for context
+                role = "User" if msg['role'] == 'user' else "Assistant"
+                book_context.append(f"{role}: {msg['content']}")
+        
+        #print("\nBook content:", book_context, "\n")
+
+        result = self.chain.invoke({
+            "book": book_context,  # Pass the conversation history as context
+            "question": user_input,
+            "length": self.length,
+            "style": self.style,
+            "emotionality": self.emotionality
+        })
+        return result
+
+
     def reply(self, user_input: str, chat_history: list = None) -> str:
         # Format chat history for the book parameter
         book_context = []

@@ -158,7 +158,7 @@ def chat_with_speech(user_input, state):
         state['chat_history_ids'], 
         state['tokenizer']
     )
-    print(f"Updated chat history in chat_with_speech: {chat_history_string}")
+    #print(f"Updated chat history in chat_with_speech: {chat_history_string}")
 
     state['chat_history_string'] = chat_history_string
 

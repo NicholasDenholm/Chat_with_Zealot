@@ -22,10 +22,29 @@ class Multimodal_Bot():
 
         ) 
         return result
+    
+    def reply_from_dictionary(self, context: dict):
+        user_request = context.get("user_input")
+        image_path = context.get("image")
+
+        if not os.path.exists(image_path):
+            raise FileNotFoundError(f"Image not found at: {image_path}")
+
+        result = ollama.chat(
+            model=self.model_name,
+            messages=[
+                {
+                    'role': 'user',
+                    'content': self.request,
+                    'images': [image_path]
+                }
+            ]
+        )
+        return result.message.content
 
         
 def build_multimodal_bot(model_name: str, user_request: int):
-    return Multimodal_Bot(model_name=model_name, user_request=2)
+    return Multimodal_Bot(model_name=model_name, user_request=user_request)
 
 def get_user_request_from_array(user_request: int = 2) -> list:
     request_array = [

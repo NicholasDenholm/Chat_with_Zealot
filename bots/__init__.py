@@ -78,7 +78,7 @@ def build_whisper_bot():
 
     return bot
 
-def build_vision_bot():
+def build_vision_bot(model_name:str, user_request:int):
 
-    bot = build_multimodal_bot(model_name='llava', user_request=2)
+    bot = build_multimodal_bot(model_name=model_name, user_request=user_request)
     return bot
